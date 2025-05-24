@@ -73,7 +73,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <div style={{ background: 'var(--bg-secondary)' }} className="rounded-xl p-6 border" style={{ borderColor: 'var(--border-subtle)' }}>
+      <div className="rounded-xl p-6 border" style={{ background: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
         <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
           Observatoire - {user.full_name || 'Excellence Flash'} 👁️
         </h1>
@@ -94,8 +94,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
           style={{ 
             backgroundColor: 'var(--bg-secondary)',
             borderColor: 'var(--border-subtle)',
-            color: 'var(--text-primary)',
-            focusRingColor: 'var(--gauge-blue)'
+            color: 'var(--text-primary)'
           }}
         >
           {Object.entries(timePeriods).map(([value, label]) => (
@@ -106,7 +105,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
 
       {/* Key Metrics - All gauges in BLUE */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div style={{ backgroundColor: 'var(--bg-secondary)' }} className="rounded-xl p-6 border" style={{ borderColor: 'var(--border-subtle)' }}>
+        <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
           <div className="flex items-center justify-between">
             <div>
               <p style={{ color: 'var(--text-muted)' }} className="text-sm">Total Excellences</p>
@@ -118,7 +117,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
           </div>
         </div>
 
-        <div style={{ backgroundColor: 'var(--bg-secondary)' }} className="rounded-xl p-6 border" style={{ borderColor: 'var(--border-subtle)' }}>
+        <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
           <div className="flex items-center justify-between">
             <div>
               <p style={{ color: 'var(--text-muted)' }} className="text-sm">Total Expériences</p>
@@ -130,7 +129,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
           </div>
         </div>
 
-        <div style={{ backgroundColor: 'var(--bg-secondary)' }} className="rounded-xl p-6 border" style={{ borderColor: 'var(--border-subtle)' }}>
+        <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
           <div className="flex items-center justify-between">
             <div>
               <p style={{ color: 'var(--text-muted)' }} className="text-sm">Cette période</p>
@@ -142,7 +141,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
           </div>
         </div>
 
-        <div style={{ backgroundColor: 'var(--bg-secondary)' }} className="rounded-xl p-6 border" style={{ borderColor: 'var(--border-subtle)' }}>
+        <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
           <div className="flex items-center justify-between">
             <div>
               <p style={{ color: 'var(--text-muted)' }} className="text-sm">Moyenne/Excellence</p>
@@ -160,7 +159,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Excellences for period */}
-        <div style={{ backgroundColor: 'var(--bg-secondary)' }} className="rounded-xl p-6 border" style={{ borderColor: 'var(--border-subtle)' }}>
+        <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
           <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
             Top 5 Excellences - {timePeriods[timePeriod]}
           </h3>
@@ -202,7 +201,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
         </div>
 
         {/* Category Distribution */}
-        <div style={{ backgroundColor: 'var(--bg-secondary)' }} className="rounded-xl p-6 border" style={{ borderColor: 'var(--border-subtle)' }}>
+        <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
           <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
             Répartition par Catégorie
           </h3>
@@ -234,7 +233,7 @@ export const Observatoire: React.FC<ObservatoireProps> = ({
       </div>
 
       {/* Quick Actions */}
-      <div style={{ backgroundColor: 'var(--bg-secondary)' }} className="rounded-xl p-6 border" style={{ borderColor: 'var(--border-subtle)' }}>
+      <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
         <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
           Actions Rapides
         </h3>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanBoard } from '../components/KanbanBoard';
@@ -103,8 +102,7 @@ const Index = () => {
                   style={{
                     backgroundColor: 'var(--bg-tertiary)',
                     borderColor: 'var(--border-subtle)',
-                    color: 'var(--text-primary)',
-                    placeholderColor: 'var(--text-muted)'
+                    color: 'var(--text-primary)'
                   }}
                 />
               </div>
