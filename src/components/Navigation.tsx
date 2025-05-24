@@ -2,7 +2,7 @@
 import React from 'react';
 import { Eye, BarChart3, List, Zap } from 'lucide-react';
 
-type ViewType = 'kanban' | 'list' | 'dashboard' | 'experiences';
+type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 
 interface NavigationProps {
   currentView: ViewType;
@@ -19,8 +19,8 @@ export const Navigation: React.FC<NavigationProps> = ({
 }) => {
   const navItems = [
     {
-      id: 'dashboard' as ViewType,
-      label: 'Dashboard',
+      id: 'observatoire' as ViewType,
+      label: 'Observatoire',
       icon: BarChart3,
       description: 'Vue d\'ensemble'
     },
@@ -57,11 +57,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               <button
                 key={item.id}
                 onClick={() => onViewChange(item.id)}
-                className={`flex flex-col items-center space-y-1 py-2 px-3 transition-colors ${
-                  isActive 
-                    ? 'text-[#0195ee]' 
-                    : 'text-gray-400 hover:text-white'
-                }`}
+                className={`nav-item ${isActive ? 'nav-item-active' : ''} flex flex-col items-center space-y-1 py-2 px-3 transition-colors`}
               >
                 <Icon size={20} />
                 <span className="text-xs font-medium">{item.label}</span>
@@ -80,11 +76,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               <button
                 key={item.id}
                 onClick={() => onViewChange(item.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                  isActive 
-                    ? 'bg-[#0195ee]/20 text-[#0195ee] border border-[#0195ee]/30' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
+                className={`nav-item ${isActive ? 'nav-item-active' : ''} flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200`}
               >
                 <Icon size={18} />
                 <span className="font-medium">{item.label}</span>

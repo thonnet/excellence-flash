@@ -30,6 +30,8 @@ export interface Experience {
   excellence_id: string;
   title: string;
   description: string;
+  image_url?: string;           // NOUVEAU: URL de l'image uploadée
+  image_caption?: string;       // NOUVEAU: Légende optionnelle
   date_experienced: string;
   tags: string[];
   created_at: string;

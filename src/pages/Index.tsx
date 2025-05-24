@@ -2,14 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanBoard } from '../components/KanbanBoard';
-import { Dashboard } from '../components/Dashboard';
-import { ExperiencesList } from '../components/ExperiencesList';
+import { Observatoire } from '../components/Observatoire';
+import { ExperiencesDisplay } from '../components/ExperiencesDisplay';
+import { ExperienceForm } from '../components/ExperienceForm';
 import { Navigation } from '../components/Navigation';
 import { UserProfile } from '../components/UserProfile';
 import { Excellence, Experience, User } from '../types';
 import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
+import { Plus } from 'lucide-react';
 
-type ViewType = 'kanban' | 'list' | 'dashboard' | 'experiences';
+type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
@@ -17,6 +19,7 @@ const Index = () => {
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
   const [user, setUser] = useState<User>(mockUser);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
 
   const filteredExcellences = excellences.filter(excellence => 
     excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -61,17 +64,23 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] text-white">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       {/* Header */}
-      <header className="bg-[#16213e] border-b border-white/10 sticky top-0 z-50">
+      <header 
+        className="border-b sticky top-0 z-50"
+        style={{ 
+          backgroundColor: 'var(--bg-secondary)',
+          borderColor: 'var(--border-subtle)'
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo & Brand */}
             <div className="flex items-center space-x-3">
               <ExcellenceFlashLogo size={40} />
               <div>
-                <h1 className="text-xl font-bold text-white">Excellence Flash</h1>
-                <p className="text-xs text-gray-400">Révélez vos talents</p>
+                <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Excellence Flash</h1>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Révélez vos talents</p>
               </div>
             </div>
 
@@ -90,7 +99,13 @@ const Index = () => {
                   placeholder="Rechercher..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-64 px-4 py-2 bg-[#2a2a3e] border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0195ee]/50"
+                  className="w-64 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2"
+                  style={{
+                    backgroundColor: 'var(--bg-tertiary)',
+                    borderColor: 'var(--border-subtle)',
+                    color: 'var(--text-primary)',
+                    placeholderColor: 'var(--text-muted)'
+                  }}
                 />
               </div>
               <UserProfile user={user} />
@@ -99,7 +114,7 @@ const Index = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden border-t border-white/10 bg-[#16213e]">
+        <div className="md:hidden border-t" style={{ borderColor: 'var(--border-subtle)', backgroundColor: 'var(--bg-secondary)' }}>
           <Navigation 
             currentView={currentView} 
             onViewChange={setCurrentView}
@@ -111,8 +126,8 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {currentView === 'dashboard' && (
-          <Dashboard 
+        {currentView === 'observatoire' && (
+          <Observatoire 
             excellences={excellences}
             experiences={experiences}
             user={user}
@@ -123,8 +138,8 @@ const Index = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-white">Vos Excellences</h2>
-                <p className="text-gray-400 mt-1">Organisez et développez vos compétences</p>
+                <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Excellences</h2>
+                <p style={{ color: 'var(--text-muted)' }} className="mt-1">Organisez et développez vos compétences</p>
               </div>
             </div>
             
@@ -142,14 +157,13 @@ const Index = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-white">Liste des Excellences</h2>
-                <p className="text-gray-400 mt-1">Vue détaillée de toutes vos excellences</p>
+                <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Liste des Excellences</h2>
+                <p style={{ color: 'var(--text-muted)' }} className="mt-1">Vue détaillée de toutes vos excellences</p>
               </div>
             </div>
             
-            {/* Liste des excellences - à implémenter */}
-            <div className="bg-[#2a2a3e] rounded-xl p-6 border border-white/10">
-              <p className="text-gray-400">Vue liste à implémenter dans la prochaine itération</p>
+            <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
+              <p style={{ color: 'var(--text-muted)' }}>Vue liste à implémenter dans la prochaine itération</p>
             </div>
           </div>
         )}
@@ -158,19 +172,35 @@ const Index = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-3xl font-bold text-white">Vos Expériences</h2>
-                <p className="text-gray-400 mt-1">Toutes vos expériences d'excellence</p>
+                <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Expériences</h2>
+                <p style={{ color: 'var(--text-muted)' }} className="mt-1">Toutes vos expériences d'excellence</p>
               </div>
+              <button 
+                onClick={() => setIsExperienceFormOpen(true)}
+                className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors"
+                style={{ backgroundColor: 'var(--accent-orange)' }}
+              >
+                <Plus size={16} />
+                <span>Nouvelle expérience</span>
+              </button>
             </div>
             
-            <ExperiencesList
+            <ExperiencesDisplay
               experiences={experiences}
               excellences={excellences}
-              onAddExperience={handleAddExperience}
             />
           </div>
         )}
       </main>
+
+      {/* Experience Form Modal */}
+      {isExperienceFormOpen && (
+        <ExperienceForm
+          excellences={excellences}
+          onAdd={handleAddExperience}
+          onClose={() => setIsExperienceFormOpen(false)}
+        />
+      )}
     </div>
   );
 };
