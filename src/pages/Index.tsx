@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanBoard } from '../components/KanbanBoard';
@@ -11,6 +10,7 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import { Excellence, Experience, User } from '../types';
 import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
 import { Plus } from 'lucide-react';
+import { DataImportExport } from '../components/DataImportExport';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 
@@ -64,6 +64,29 @@ const Index = () => {
     return experiences.filter(exp => exp.excellence_id === excellenceId).length;
   };
 
+  const handleImportData = (importedExcellences: Excellence[], importedExperiences: Experience[]) => {
+    // Fusionner avec les données existantes en évitant les doublons
+    const newExcellences = [...excellences];
+    const newExperiences = [...experiences];
+
+    importedExcellences.forEach(importedExc => {
+      if (!newExcellences.find(exc => exc.id === importedExc.id)) {
+        newExcellences.push(importedExc);
+      }
+    });
+
+    importedExperiences.forEach(importedExp => {
+      if (!newExperiences.find(exp => exp.id === importedExp.id)) {
+        newExperiences.push(importedExp);
+      }
+    });
+
+    setExcellences(newExcellences);
+    setExperiences(newExperiences);
+    
+    console.log(`Importé: ${importedExcellences.length} excellences, ${importedExperiences.length} expériences`);
+  };
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       {/* Header */}
@@ -92,7 +115,7 @@ const Index = () => {
               className="hidden md:flex"
             />
 
-            {/* Search, Theme Toggle & Profile */}
+            {/* Search, Import/Export, Theme Toggle & Profile */}
             <div className="flex items-center space-x-4">
               <div className="relative hidden sm:block">
                 <input
@@ -108,6 +131,11 @@ const Index = () => {
                   }}
                 />
               </div>
+              <DataImportExport
+                excellences={excellences}
+                experiences={experiences}
+                onImportData={handleImportData}
+              />
               <ThemeToggle />
               <UserProfile user={user} />
             </div>
