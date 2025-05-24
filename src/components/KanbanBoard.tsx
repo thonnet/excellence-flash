@@ -41,42 +41,58 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           const categoryExcellences = getExcellencesByCategory(categoryKey as 'manifestee' | 'principe' | 'quete');
           
           return (
-            <div key={categoryKey} className="space-y-4">
-              {/* Column Header */}
+            <div key={categoryKey} className="kanban-column">
+              {/* Column Header - Style barre de menu */}
               <div 
-                className="p-4 rounded-xl border"
+                className="kanban-header"
                 style={{
-                  backgroundColor: category.bgColor,
-                  borderColor: category.borderColor
+                  backgroundColor: 'var(--bg-tertiary)',
+                  borderBottom: '2px solid var(--border-medium)'
                 }}
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 
-                      className="font-semibold text-lg"
-                      style={{ color: category.color }}
+                      className="font-bold text-lg"
+                      style={{ color: 'var(--text-primary)' }}
                     >
                       {category.title}
                     </h3>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
                       {category.description}
                     </p>
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs mt-2" style={{ color: 'var(--text-secondary)' }}>
                       {categoryExcellences.length} excellence{categoryExcellences.length !== 1 ? 's' : ''}
                     </p>
                   </div>
                   <button
                     onClick={() => handleAddClick(categoryKey as 'manifestee' | 'principe' | 'quete')}
-                    className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                    style={{ color: category.color }}
+                    className="p-2 rounded-lg transition-colors"
+                    style={{ 
+                      color: 'var(--text-secondary)',
+                      backgroundColor: 'transparent'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
                   >
                     <Plus size={20} />
                   </button>
                 </div>
               </div>
 
-              {/* Excellence Cards */}
-              <div className="space-y-3 min-h-[200px]">
+              {/* Excellence Cards Container */}
+              <div 
+                className="kanban-content"
+                style={{
+                  backgroundColor: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-subtle)',
+                  borderTop: 'none'
+                }}
+              >
                 {categoryExcellences.map(excellence => (
                   <ExcellenceCard
                     key={excellence.id}
@@ -88,12 +104,12 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 ))}
                 
                 {categoryExcellences.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
                     <p className="text-sm">Aucune excellence pour le moment</p>
                     <button
                       onClick={() => handleAddClick(categoryKey as 'manifestee' | 'principe' | 'quete')}
                       className="text-xs mt-2 hover:underline"
-                      style={{ color: category.color }}
+                      style={{ color: 'var(--text-secondary)' }}
                     >
                       Ajouter la première
                     </button>

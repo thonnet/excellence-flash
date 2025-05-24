@@ -130,23 +130,65 @@
   }
 }
 
-/* Excellence Cards - Minimal by default, details on hover */
-.excellence-card-minimal {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
+/* Kanban Board Styling */
+.kanban-column {
+  display: flex;
+  flex-direction: column;
   border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.kanban-header {
+  padding: 16px;
+  border-radius: 8px 8px 0 0;
+  /* Style barre de menu - contraste fort */
+  background-color: var(--bg-tertiary);
+  border-bottom: 2px solid var(--border-medium);
+}
+
+.kanban-content {
+  padding: 12px;
+  min-height: 200px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Excellence Cards - Minimal par défaut, détails au survol */
+.excellence-card-minimal {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
   padding: 12px;
   position: relative;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-height: 60px; /* Zone tactile minimum */
+  min-height: 50px;
   touch-action: manipulation;
 }
 
 .excellence-card-minimal:hover {
   background: var(--bg-tertiary);
   border-color: var(--border-medium);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.experience-counter-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  z-index: 5;
 }
 
 .excellence-description-overlay {
@@ -156,12 +198,13 @@
   right: 0;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-medium);
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px;
   font-size: 0.8rem;
   color: var(--text-secondary);
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  margin-top: 4px;
 }
 
 .excellence-actions-overlay {
@@ -173,20 +216,22 @@
   background: rgba(0,0,0,0.8);
   border-radius: 4px;
   padding: 4px;
+  z-index: 15;
 }
 
 .action-btn {
   background: none;
   border: none;
-  font-size: 0.9rem;
+  color: var(--text-secondary);
   cursor: pointer;
-  padding: 2px;
+  padding: 4px;
   border-radius: 2px;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .action-btn:hover {
   background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 /* Navigation avec orange pour actif */
@@ -220,13 +265,6 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-  
-  .kanban-column {
-    min-height: 120px;
-    border: 2px dashed var(--border-subtle);
-    border-radius: 8px;
-    padding: 12px;
   }
   
   .kanban-column.drag-over {

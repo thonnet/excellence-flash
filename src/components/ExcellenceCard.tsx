@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Excellence } from '../types';
-import { EXCELLENCE_CATEGORIES } from '../types';
 import { Eye, Edit2, X } from 'lucide-react';
 
 interface ExcellenceCardProps {
@@ -18,7 +17,6 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
   onDelete
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const category = EXCELLENCE_CATEGORIES[excellence.category];
 
   return (
     <div 
@@ -26,32 +24,21 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* AFFICHAGE MINIMAL par défaut */}
-      <h4 className="font-medium mb-2 line-clamp-2" style={{ color: 'var(--text-primary)' }}>
+      {/* AFFICHAGE MINIMAL - Nom uniquement */}
+      <h4 className="font-medium text-sm line-clamp-2" style={{ color: 'var(--text-primary)' }}>
         {excellence.name}
       </h4>
-      
-      {/* Experience Counter */}
-      <div className="flex items-center space-x-2">
-        <div 
-          className="px-2 py-1 rounded text-xs font-medium"
-          style={{
-            backgroundColor: category.bgColor,
-            color: category.color
-          }}
-        >
-          {experienceCount} expérience{experienceCount !== 1 ? 's' : ''}
-        </div>
-        
-        <div 
-          className="w-2 h-2 rounded-full"
-          style={{ backgroundColor: category.color }}
-        />
-      </div>
 
       {/* DÉTAILS au survol UNIQUEMENT */}
       {isHovered && (
         <>
+          {/* Compteur d'expériences au survol */}
+          <div className="experience-counter-overlay">
+            <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+              {experienceCount} expérience{experienceCount !== 1 ? 's' : ''}
+            </span>
+          </div>
+
           {excellence.description && (
             <div className="excellence-description-overlay">
               {excellence.description}
