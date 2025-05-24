@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanBoard } from '../components/KanbanBoard';
@@ -6,6 +7,7 @@ import { ExperiencesDisplay } from '../components/ExperiencesDisplay';
 import { ExperienceForm } from '../components/ExperienceForm';
 import { Navigation } from '../components/Navigation';
 import { UserProfile } from '../components/UserProfile';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { Excellence, Experience, User } from '../types';
 import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
 import { Plus } from 'lucide-react';
@@ -90,7 +92,7 @@ const Index = () => {
               className="hidden md:flex"
             />
 
-            {/* Search & Profile */}
+            {/* Search, Theme Toggle & Profile */}
             <div className="flex items-center space-x-4">
               <div className="relative hidden sm:block">
                 <input
@@ -106,6 +108,7 @@ const Index = () => {
                   }}
                 />
               </div>
+              <ThemeToggle />
               <UserProfile user={user} />
             </div>
           </div>
