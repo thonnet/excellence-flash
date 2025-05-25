@@ -12,7 +12,7 @@ export const ExcellenceFlashLogo: React.FC<ExcellenceFlashLogoProps> = ({
 }) => {
   return (
     <img 
-      src="https://example.com/excellence-flash-logo.svg" 
+      src="https://www.entrepreneur-multipotentiel.com/wp-content/uploads/2025/05/Source-Logo-anime-442x420-carre-seul.gif" 
       alt="Excellence Flash"
       width={size}
       height={size}

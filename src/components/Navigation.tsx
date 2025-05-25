@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Eye, BarChart3, List, Zap } from 'lucide-react';
+import { Eye, BarChart3, List, Star, Zap } from 'lucide-react';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 
@@ -21,20 +21,14 @@ export const Navigation: React.FC<NavigationProps> = ({
     {
       id: 'observatoire' as ViewType,
       label: 'Observatoire',
-      icon: BarChart3,
+      icon: Eye,
       description: 'Vue d\'ensemble'
     },
     {
       id: 'kanban' as ViewType,
       label: 'Excellences',
-      icon: Eye,
+      icon: Star,
       description: 'Vue Kanban'
-    },
-    {
-      id: 'list' as ViewType,
-      label: 'Liste',
-      icon: List,
-      description: 'Vue détaillée'
     },
     {
       id: 'experiences' as ViewType,
@@ -57,10 +51,17 @@ export const Navigation: React.FC<NavigationProps> = ({
               <button
                 key={item.id}
                 onClick={() => onViewChange(item.id)}
-                className={`nav-item ${isActive ? 'nav-item-active' : ''} flex flex-col items-center space-y-1 py-2 px-3 transition-colors`}
+                className={`flex flex-col items-center space-y-1 py-2 px-3 transition-colors relative ${isActive ? 'active-nav-item' : ''}`}
+                style={{ color: 'var(--text-secondary)' }}
               >
                 <Icon size={20} />
                 <span className="text-xs font-medium">{item.label}</span>
+                {isActive && (
+                  <div 
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5"
+                    style={{ backgroundColor: 'var(--accent-orange)' }}
+                  />
+                )}
               </button>
             );
           })}
@@ -76,10 +77,20 @@ export const Navigation: React.FC<NavigationProps> = ({
               <button
                 key={item.id}
                 onClick={() => onViewChange(item.id)}
-                className={`nav-item ${isActive ? 'nav-item-active' : ''} flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200`}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 relative ${isActive ? 'active-nav-item' : ''}`}
+                style={{ 
+                  color: 'var(--text-secondary)',
+                  backgroundColor: isActive ? 'rgba(255, 255, 255, 0.05)' : 'transparent'
+                }}
               >
                 <Icon size={18} />
                 <span className="font-medium">{item.label}</span>
+                {isActive && (
+                  <div 
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-0.5"
+                    style={{ backgroundColor: 'var(--accent-orange)' }}
+                  />
+                )}
               </button>
             );
           })}

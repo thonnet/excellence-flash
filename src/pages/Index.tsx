@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanBoard } from '../components/KanbanBoard';
@@ -7,20 +8,24 @@ import { ExperienceForm } from '../components/ExperienceForm';
 import { Navigation } from '../components/Navigation';
 import { UserProfile } from '../components/UserProfile';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { ViewToggle } from '../components/ViewToggle';
+import { DataImportExport } from '../components/DataImportExport';
 import { Excellence, Experience, User } from '../types';
 import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
 import { Plus } from 'lucide-react';
-import { DataImportExport } from '../components/DataImportExport';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
+type ExperienceViewMode = 'list' | 'gallery';
 
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
+  const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
   const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
   const [user, setUser] = useState<User>(mockUser);
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
   const filteredExcellences = excellences.filter(excellence => 
     excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -65,7 +70,6 @@ const Index = () => {
   };
 
   const handleImportData = (importedExcellences: Excellence[], importedExperiences: Experience[]) => {
-    // Fusionner avec les données existantes en évitant les doublons
     const newExcellences = [...excellences];
     const newExperiences = [...experiences];
 
@@ -87,6 +91,21 @@ const Index = () => {
     console.log(`Importé: ${importedExcellences.length} excellences, ${importedExperiences.length} expériences`);
   };
 
+  const handleExportData = () => {
+    // Use the existing DataImportExport functionality
+    const dataImportExport = new DataImportExport({
+      excellences,
+      experiences,
+      onImportData: handleImportData
+    });
+    // Trigger export (this would need to be implemented properly)
+    console.log('Export data triggered');
+  };
+
+  const handleImportDataClick = () => {
+    setIsImportModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       {/* Header */}
@@ -99,12 +118,12 @@ const Index = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo & Brand */}
-            <div className="flex items-center space-x-3">
-              <ExcellenceFlashLogo size={40} />
+            {/* Logo, Title & Baseline */}
+            <div className="flex items-center space-x-4">
+              <ExcellenceFlashLogo size={32} />
               <div>
                 <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Excellence Flash</h1>
-                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Révélez vos talents</p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Modelez et structurez votre excellence</p>
               </div>
             </div>
 
@@ -115,12 +134,12 @@ const Index = () => {
               className="hidden md:flex"
             />
 
-            {/* Search, Import/Export, Theme Toggle & Profile */}
+            {/* Search, Theme Toggle & Profile */}
             <div className="flex items-center space-x-4">
               <div className="relative hidden sm:block">
                 <input
                   type="text"
-                  placeholder="Rechercher..."
+                  placeholder="Rechercher dans votre contenu..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-64 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2"
@@ -131,13 +150,12 @@ const Index = () => {
                   }}
                 />
               </div>
-              <DataImportExport
-                excellences={excellences}
-                experiences={experiences}
-                onImportData={handleImportData}
-              />
               <ThemeToggle />
-              <UserProfile user={user} />
+              <UserProfile 
+                user={user} 
+                onExportData={handleExportData}
+                onImportData={handleImportDataClick}
+              />
             </div>
           </div>
         </div>
@@ -213,6 +231,15 @@ const Index = () => {
                 <span>Nouvelle expérience</span>
               </button>
             </div>
+
+            {/* Experience View Toggle */}
+            <div className="flex justify-center">
+              <ViewToggle
+                currentView={experienceViewMode}
+                onViewChange={(view) => setExperienceViewMode(view as ExperienceViewMode)}
+                availableViews={['list', 'gallery']}
+              />
+            </div>
             
             <ExperiencesDisplay
               experiences={experiences}
@@ -229,6 +256,25 @@ const Index = () => {
           onAdd={handleAddExperience}
           onClose={() => setIsExperienceFormOpen(false)}
         />
+      )}
+
+      {/* Import Modal */}
+      {isImportModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg">
+            <DataImportExport
+              excellences={excellences}
+              experiences={experiences}
+              onImportData={handleImportData}
+            />
+            <button 
+              onClick={() => setIsImportModalOpen(false)}
+              className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

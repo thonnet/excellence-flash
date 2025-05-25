@@ -194,8 +194,9 @@
 .excellence-description-overlay {
   position: absolute;
   top: 100%;
-  left: 0;
-  right: 0;
+  left: 15%;
+  right: 15%;
+  width: 70%;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-medium);
   border-radius: 6px;
@@ -204,7 +205,7 @@
   color: var(--text-secondary);
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .excellence-actions-overlay {
@@ -234,29 +235,14 @@
   color: var(--text-primary);
 }
 
-/* Navigation avec orange pour actif */
-.nav-item {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 8px 16px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  cursor: pointer;
+/* Navigation avec filet orange pour actif */
+.active-nav-item {
+  background: rgba(255, 255, 255, 0.05) !important;
 }
 
-.nav-item:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-}
-
-.nav-item-active {
-  background: var(--accent-orange) !important;
-  color: white !important;
-}
-
-.nav-item-active:hover {
-  background: var(--active-orange-hover) !important;
+/* View Toggle avec filet orange pour actif */
+.active-view-toggle {
+  background: rgba(255, 255, 255, 0.05) !important;
 }
 
 /* Mobile Kanban optimizations */

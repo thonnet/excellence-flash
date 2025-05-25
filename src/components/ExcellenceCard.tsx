@@ -41,6 +41,16 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
 
           {excellence.description && (
             <div className="excellence-description-overlay">
+              {/* Triangle orange pointer */}
+              <div 
+                className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0"
+                style={{
+                  borderLeft: '6px solid transparent',
+                  borderRight: '6px solid transparent',
+                  borderBottom: '6px solid var(--accent-orange)',
+                  zIndex: 11
+                }}
+              />
               {excellence.description}
             </div>
           )}
