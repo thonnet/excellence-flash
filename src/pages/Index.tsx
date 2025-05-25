@@ -10,6 +10,8 @@ import { UserProfile } from '../components/UserProfile';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { ViewToggle } from '../components/ViewToggle';
 import { DataImportExport } from '../components/DataImportExport';
+import { ContextualHelp } from '../components/ContextualHelp';
+import { AlternatingBaseline } from '../components/AlternatingBaseline';
 import { Excellence, Experience, User } from '../types';
 import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
 import { Plus } from 'lucide-react';
@@ -92,19 +94,28 @@ const Index = () => {
   };
 
   const handleExportData = () => {
-    // Use the existing DataImportExport functionality
-    const dataImportExport = new DataImportExport({
-      excellences,
-      experiences,
-      onImportData: handleImportData
-    });
-    // Trigger export (this would need to be implemented properly)
     console.log('Export data triggered');
   };
 
   const handleImportDataClick = () => {
     setIsImportModalOpen(true);
   };
+
+  // Baselines for different pages
+  const excellencesBaselines = [
+    "Conscientisez vos capacités pour les mobiliser intentionnellement",
+    "Rassemblez vos forces distinctives en un lieu unique",
+    "Cartographiez votre signature distinctive",
+    "Transformez vos capacités implicites en atouts stratégiques"
+  ];
+
+  const experiencesBaselines = [
+    "Transformez vos expériences en carburant d'excellence",
+    "Conscientisez la valeur de ce que vous accomplissez naturellement",
+    "Connectez vos expériences aux excellences qu'elles révèlent",
+    "Donnez du sens et de la valeur à ce que vous vivez",
+    "Développez votre autorité intrinsèque par la présence à ce que vous faites"
+  ];
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
@@ -184,9 +195,14 @@ const Index = () => {
         {currentView === 'kanban' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Excellences</h2>
-                <p style={{ color: 'var(--text-muted)' }} className="mt-1">Organisez et développez vos compétences</p>
+              <div className="flex-1">
+                <div className="flex items-center space-x-4">
+                  <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Excellences</h2>
+                  <ContextualHelp pageType="excellences" />
+                </div>
+                <div className="mt-1 h-6">
+                  <AlternatingBaseline baselines={excellencesBaselines} />
+                </div>
               </div>
             </div>
             
@@ -218,9 +234,14 @@ const Index = () => {
         {currentView === 'experiences' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Expériences</h2>
-                <p style={{ color: 'var(--text-muted)' }} className="mt-1">Toutes vos expériences d'excellence</p>
+              <div className="flex-1">
+                <div className="flex items-center space-x-4">
+                  <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Expériences</h2>
+                  <ContextualHelp pageType="experiences" />
+                </div>
+                <div className="mt-1 h-6">
+                  <AlternatingBaseline baselines={experiencesBaselines} />
+                </div>
               </div>
               <button 
                 onClick={() => setIsExperienceFormOpen(true)}

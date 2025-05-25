@@ -5,6 +5,7 @@ import { EXCELLENCE_CATEGORIES } from '../types';
 import { ExcellenceCard } from './ExcellenceCard';
 import { AddExcellenceModal } from './AddExcellenceModal';
 import { ViewToggle } from './ViewToggle';
+import { ContextualHelp } from './ContextualHelp';
 import { Plus } from 'lucide-react';
 
 interface KanbanBoardProps {
@@ -63,20 +64,23 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   }}
                 >
                   <div className="flex items-center justify-between">
-                    <div 
-                      className="flex-1 cursor-help"
-                      title={category.description}
-                    >
-                      <h3 
-                        className="font-bold text-lg"
-                        style={{ color: 'var(--text-primary)' }}
+                    <div className="flex items-center space-x-2 flex-1">
+                      <div 
+                        className="flex-1 cursor-help"
+                        title={category.description}
                       >
-                        {category.title} ({categoryExcellences.length})
-                      </h3>
+                        <h3 
+                          className="font-bold text-lg"
+                          style={{ color: 'var(--text-primary)' }}
+                        >
+                          {category.title} ({categoryExcellences.length})
+                        </h3>
+                      </div>
+                      <ContextualHelp pageType={categoryKey as 'manifestee' | 'principe' | 'quete'} />
                     </div>
                     <button
                       onClick={() => handleAddClick(categoryKey as 'manifestee' | 'principe' | 'quete')}
-                      className="p-2 rounded-lg transition-colors"
+                      className="p-2 rounded-lg transition-colors ml-2"
                       style={{ 
                         color: 'var(--text-secondary)',
                         backgroundColor: 'transparent'
