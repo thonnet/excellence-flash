@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -165,16 +166,19 @@
 /* Classes spécifiques par catégorie - COULEURS EXACTES AVEC PRIORITÉ MAXIMALE */
 .category-icon--manifestee {
   color: var(--color-excellence-manifestee) !important;
+  fill: var(--color-excellence-manifestee) !important;
   filter: none !important;
 }
 
 .category-icon--principe {
   color: var(--color-principe-excellence) !important;
+  fill: var(--color-principe-excellence) !important;
   filter: none !important;
 }
 
 .category-icon--quete {
   color: var(--color-quete-excellence) !important;
+  fill: var(--color-quete-excellence) !important;
   filter: none !important;
 }
 
@@ -189,18 +193,21 @@
 .category-tag--manifestee .category-tag__icon,
 .category-icon.manifestee {
   color: var(--color-excellence-manifestee) !important;
+  fill: var(--color-excellence-manifestee) !important;
   filter: none !important;
 }
 
 .category-tag--principe .category-tag__icon,
 .category-icon.principe {
   color: var(--color-principe-excellence) !important;
+  fill: var(--color-principe-excellence) !important;
   filter: none !important;
 }
 
 .category-tag--quete .category-tag__icon,
 .category-icon.quete {
   color: var(--color-quete-excellence) !important;
+  fill: var(--color-quete-excellence) !important;
   filter: none !important;
 }
 
