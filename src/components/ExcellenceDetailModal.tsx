@@ -30,11 +30,11 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
     });
   };
 
-  // Fonction pour déterminer la classe CSS selon la catégorie
+  // Fonction corrigée pour déterminer la classe CSS selon la catégorie
   const getCategoryClass = (category: string) => {
-    if (category.includes('manifestee')) return 'category-icon--manifestee';
-    if (category.includes('principe')) return 'category-icon--principe';
-    if (category.includes('quete')) return 'category-icon--quete';
+    if (category === 'manifestee') return 'category-icon--manifestee';
+    if (category === 'principe') return 'category-icon--principe';
+    if (category === 'quete') return 'category-icon--quete';
     return '';
   };
 
