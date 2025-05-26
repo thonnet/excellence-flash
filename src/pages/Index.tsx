@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
-import { KanbanBoard } from '../components/KanbanBoard';
+import { KanbanView } from '../components/KanbanView';
+import { ListView } from '../components/ListView';
 import { Observatoire } from '../components/Observatoire';
 import { ExperiencesDisplay } from '../components/ExperiencesDisplay';
 import { ExperienceForm } from '../components/ExperienceForm';
@@ -100,14 +101,6 @@ const Index = () => {
     setIsImportModalOpen(true);
   };
 
-  // Baselines for different pages
-  const excellencesBaselines = [
-    "Conscientisez vos capacités pour les mobiliser intentionnellement",
-    "Rassemblez vos forces distinctives en un lieu unique",
-    "Cartographiez votre signature distinctive",
-    "Transformez vos capacités implicites en atouts stratégiques"
-  ];
-
   const experiencesBaselines = [
     "Transformez vos expériences en carburant d'excellence",
     "Conscientisez la valeur de ce que vous accomplissez naturellement",
@@ -192,48 +185,25 @@ const Index = () => {
         )}
 
         {currentView === 'kanban' && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <div className="flex items-center space-x-4">
-                  <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Excellences</h2>
-                  <ContextualHelp pageType="excellences" />
-                </div>
-                <div className="mt-1 h-6">
-                  <AlternatingBaseline baselines={excellencesBaselines} />
-                </div>
-              </div>
-            </div>
-            
-            <KanbanBoard
-              excellences={filteredExcellences}
-              experiences={experiences}
-              onAddExcellence={handleAddExcellence}
-              onUpdateExcellence={handleUpdateExcellence}
-              onDeleteExcellence={handleDeleteExcellence}
-              getExperienceCount={getExperienceCount}
-            />
-          </div>
+          <KanbanView
+            excellences={filteredExcellences}
+            experiences={experiences}
+            onAddExcellence={handleAddExcellence}
+            onUpdateExcellence={handleUpdateExcellence}
+            onDeleteExcellence={handleDeleteExcellence}
+            getExperienceCount={getExperienceCount}
+          />
         )}
 
         {currentView === 'list' && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Liste des Excellences</h2>
-                <p style={{ color: 'var(--text-muted)' }} className="mt-1">Vue détaillée de toutes vos excellences</p>
-              </div>
-            </div>
-            
-            <KanbanBoard
-              excellences={filteredExcellences}
-              experiences={experiences}
-              onAddExcellence={handleAddExcellence}
-              onUpdateExcellence={handleUpdateExcellence}
-              onDeleteExcellence={handleDeleteExcellence}
-              getExperienceCount={getExperienceCount}
-            />
-          </div>
+          <ListView
+            excellences={filteredExcellences}
+            experiences={experiences}
+            onAddExcellence={handleAddExcellence}
+            onUpdateExcellence={handleUpdateExcellence}
+            onDeleteExcellence={handleDeleteExcellence}
+            getExperienceCount={getExperienceCount}
+          />
         )}
 
         {currentView === 'experiences' && (
@@ -258,7 +228,6 @@ const Index = () => {
               </button>
             </div>
 
-            {/* Experience View Toggle */}
             <div className="flex justify-center">
               <ViewToggle
                 currentView={experienceViewMode}

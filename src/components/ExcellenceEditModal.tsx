@@ -100,12 +100,11 @@ export const ExcellenceEditModal: React.FC<ExcellenceEditModalProps> = ({
               type="text"
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
-              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               style={{
                 backgroundColor: 'var(--bg-tertiary)',
                 borderColor: 'var(--border-subtle)',
-                color: 'var(--text-primary)',
-                focusRingColor: 'var(--accent-orange)'
+                color: 'var(--text-primary)'
               }}
               placeholder="Donnez un nom à votre excellence..."
               required
@@ -120,7 +119,7 @@ export const ExcellenceEditModal: React.FC<ExcellenceEditModalProps> = ({
             <select
               value={formData.category}
               onChange={(e) => handleChange('category', e.target.value)}
-              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               style={{
                 backgroundColor: 'var(--bg-tertiary)',
                 borderColor: 'var(--border-subtle)',
@@ -144,7 +143,7 @@ export const ExcellenceEditModal: React.FC<ExcellenceEditModalProps> = ({
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
               rows={4}
-              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 resize-vertical"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 resize-vertical"
               style={{
                 backgroundColor: 'var(--bg-tertiary)',
                 borderColor: 'var(--border-subtle)',
