@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -34,9 +35,9 @@
     --gauge-blue-light: rgba(1, 149, 238, 0.2);
     
     /* === COULEURS PICTOGRAMMES CATÉGORIES === */
-    --excellence-manifestee: #8B9657;
-    --principe-excellence: #A7C7E7;
-    --quete-excellence: #FFB366;
+    --excellence-manifestee: #8B9657;  /* Vert olive */
+    --principe-excellence: #A7C7E7;    /* Bleu clair */
+    --quete-excellence: #FFB366;       /* Orange clair */
     
     /* === TRANSITIONS STANDARDISÉES === */
     --transition-fast: 200ms ease;
@@ -158,22 +159,22 @@
 /* Couleurs spécifiques par catégorie */
 .category-tag--manifestee .category-tag__icon,
 .category-icon.manifestee {
-  color: #8B9657;
+  color: var(--excellence-manifestee);
 }
 
 .category-tag--principe .category-tag__icon,
 .category-icon.principe {
-  color: #A7C7E7;
+  color: var(--principe-excellence);
 }
 
 .category-tag--quete .category-tag__icon,
 .category-icon.quete {
-  color: #FFB366;
+  color: var(--quete-excellence);
 }
 
-.category-manifestee { --category-color: #8B9657; }
-.category-principe { --category-color: #A7C7E7; }
-.category-quete { --category-color: #FFB366; }
+.category-manifestee { --category-color: var(--excellence-manifestee); }
+.category-principe { --category-color: var(--principe-excellence); }
+.category-quete { --category-color: var(--quete-excellence); }
 
 .category-icon {
   font-size: 0.9rem;
@@ -183,7 +184,7 @@
 /* === BOUTONS STANDARDISÉS === */
 .btn-discrete {
   background: var(--bg-hover);
-  border: 1px solid #ee5a01;
+  border: 1px solid var(--accent-orange);
   color: var(--text-primary);
   border-radius: 50%;
   cursor: pointer;
@@ -195,7 +196,7 @@
 
 .btn-discrete:hover {
   background: var(--bg-light);
-  border: 2px solid #ee5a01;
+  border: 2px solid var(--accent-orange);
 }
 
 .btn-discrete--small { width: 28px; height: 28px; font-size: 0.9rem; }
@@ -204,11 +205,11 @@
 
 /* === ÉTATS === */
 .state-active {
-  color: #ee5a01 !important;
+  color: var(--accent-orange) !important;
 }
 
 .state-focus:focus {
-  border-color: #ee5a01;
+  border-color: var(--accent-orange);
   outline: none;
 }
 
@@ -262,17 +263,17 @@
 /* Filets colorés selon catégorie */
 .excellence-description--manifestee,
 .excellence-description.category-manifestee {
-  border-left: 3px solid #8B9657;
+  border-left: 3px solid var(--excellence-manifestee);
 }
 
 .excellence-description--principe,
 .excellence-description.category-principe {
-  border-left: 3px solid #A7C7E7;
+  border-left: 3px solid var(--principe-excellence);
 }
 
 .excellence-description--quete,
 .excellence-description.category-quete {
-  border-left: 3px solid #FFB366;
+  border-left: 3px solid var(--quete-excellence);
 }
 
 .excellence-separator {
@@ -304,7 +305,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: #0195ee;
+  background: var(--gauge-blue);
 }
 
 .experiences-count {
