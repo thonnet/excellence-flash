@@ -28,14 +28,20 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({
   const viewIcons = {
     kanban: KanbanIcon,
     list: List,
-    gallery: () => (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
-        <rect x="1" y="1" width="6" height="6" rx="1" />
-        <rect x="11" y="1" width="6" height="6" rx="1" />
-        <rect x="1" y="11" width="6" height="6" rx="1" />
-        <rect x="11" y="11" width="6" height="6" rx="1" />
-      </svg>
-    )
+    gallery: KanbanIcon // Use Kanban icon for gallery mode on experiences page
+  };
+
+  const getViewTitle = (view: ViewMode) => {
+    switch (view) {
+      case 'kanban':
+        return 'Vue Kanban';
+      case 'list':
+        return 'Vue Liste';
+      case 'gallery':
+        return 'Vue par Catégories';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -50,7 +56,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({
             onClick={() => onViewChange(view)}
             className={`p-2 transition-colors relative ${isActive ? 'active-view-toggle' : ''}`}
             style={{ color: 'var(--text-secondary)' }}
-            title={view === 'kanban' ? 'Vue Kanban' : view === 'list' ? 'Vue Liste' : 'Vue Galerie'}
+            title={getViewTitle(view)}
           >
             <Icon size={18} />
             {isActive && (

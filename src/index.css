@@ -207,6 +207,134 @@
 .category-principe { --category-color: var(--color-principe-excellence); }
 .category-quete { --category-color: var(--color-quete-excellence); }
 
+/* ========================================
+   BARRE DE CONTRÔLES - NOUVEAU
+   ======================================== */
+
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 15px 20px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  gap: 20px;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+}
+
+.filter-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.category-filter {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-left: 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.category-filter:focus {
+  outline: none;
+  border-color: var(--accent-orange);
+}
+
+.sort-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sort-btn {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.sort-btn:hover {
+  border-color: var(--border-medium);
+  background: var(--bg-hover);
+}
+
+.sort-btn.active {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+  background: rgba(238, 90, 1, 0.1);
+}
+
+/* ========================================
+   VUE KANBAN EXPÉRIENCES - NOUVEAU
+   ======================================== */
+
+.experiences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.category-column {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid var(--border-subtle);
+  min-height: 400px;
+}
+
+.category-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.experiences-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.experiences-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.experiences-list::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 3px;
+}
+
+.experiences-list::-webkit-scrollbar-thumb {
+  background: #707070;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.experiences-list::-webkit-scrollbar-thumb:hover {
+  background: #ee5a01;
+}
+
 /* === BOUTONS STANDARDISÉS === */
 .btn-discrete {
   background: var(--bg-hover);
@@ -790,6 +918,33 @@
     width: 80%;
     max-width: none;
   }
+
+  /* Controls bar responsive */
+  .controls-bar {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .filter-section {
+    justify-content: center;
+  }
+  
+  .sort-section {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .sort-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  
+  .experiences-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Tablet */
@@ -804,6 +959,10 @@
 
   .search-field-container {
     width: 60%;
+  }
+  
+  .experiences-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }
 
