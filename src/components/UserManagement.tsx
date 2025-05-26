@@ -12,7 +12,17 @@ interface UserManagementProps {
 
 const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const { users, loading, isCreating, message, createUser } = useUserManagement();
+  const { 
+    users, 
+    loading, 
+    isCreating, 
+    message, 
+    createUser, 
+    editUser, 
+    deleteUser, 
+    fetchUsers, 
+    clearMessage 
+  } = useUserManagement();
 
   const handleCreateUser = async (userData: { email: string; fullName: string; role: string }) => {
     await createUser(userData);
@@ -50,17 +60,40 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
         </Button>
       </div>
 
+      {/* Message d'état */}
+      {message && (
+        <div className={`flex justify-between items-center p-4 rounded-md border ${
+          message.includes('succès') 
+            ? 'bg-green-50 border-green-200 text-green-800' 
+            : 'bg-red-50 border-red-200 text-red-800'
+        }`}>
+          <span>{message}</span>
+          <button 
+            onClick={clearMessage}
+            className="text-lg font-bold hover:opacity-70 ml-4"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Formulaire de création */}
       {showCreateForm && (
         <UserForm 
           onCreateUser={handleCreateUser}
           isCreating={isCreating}
-          message={message}
+          message=""
         />
       )}
 
       {/* Liste des utilisateurs */}
-      <UserList users={users} loading={loading} />
+      <UserList 
+        users={users} 
+        loading={loading} 
+        onEdit={editUser}
+        onDelete={deleteUser}
+        onRefresh={fetchUsers}
+      />
     </div>
   );
 };

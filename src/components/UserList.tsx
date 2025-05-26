@@ -16,9 +16,12 @@ interface UserProfile {
 interface UserListProps {
   users: UserProfile[];
   loading: boolean;
+  onEdit: (userId: string, updatedData: { fullName: string; role: string }) => Promise<void>;
+  onDelete: (userId: string, userEmail: string, userRole: string) => Promise<void>;
+  onRefresh: () => void;
 }
 
-const UserList: React.FC<UserListProps> = ({ users, loading }) => {
+const UserList: React.FC<UserListProps> = ({ users, loading, onEdit, onDelete, onRefresh }) => {
   if (loading) {
     return (
       <Card>
@@ -50,7 +53,16 @@ const UserList: React.FC<UserListProps> = ({ users, loading }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Liste des utilisateurs ({users.length})</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle>Liste des utilisateurs ({users.length})</CardTitle>
+          <button 
+            onClick={onRefresh}
+            className="px-3 py-2 text-sm border border-gray-300 bg-white rounded hover:border-orange-500 hover:text-orange-600 transition-colors flex items-center space-x-1"
+          >
+            <span>🔄</span>
+            <span>Actualiser</span>
+          </button>
+        </div>
       </CardHeader>
       <CardContent>
         <Table>
@@ -59,12 +71,17 @@ const UserList: React.FC<UserListProps> = ({ users, loading }) => {
               <TableHead>Utilisateur</TableHead>
               <TableHead>Rôle</TableHead>
               <TableHead>Statut</TableHead>
-              <TableHead>Créé le</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users.map((user) => (
-              <UserRow key={user.id} user={user} />
+              <UserRow 
+                key={user.id} 
+                user={user} 
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
             ))}
           </TableBody>
         </Table>

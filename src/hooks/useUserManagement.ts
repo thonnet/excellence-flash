@@ -101,6 +101,70 @@ export const useUserManagement = () => {
     }
   };
 
+  const editUser = async (userId: string, updatedData: { fullName: string; role: string }) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          full_name: updatedData.fullName,
+          role: updatedData.role
+        })
+        .eq('id', userId);
+
+      if (error) {
+        setMessage('Erreur lors de la modification: ' + error.message);
+        return;
+      }
+
+      setMessage('Utilisateur modifié avec succès!');
+      fetchUsers();
+      
+    } catch (error: any) {
+      setMessage('Erreur lors de la modification: ' + error.message);
+    }
+  };
+
+  const deleteUser = async (userId: string, userEmail: string, userRole: string) => {
+    // Vérifier si c'est le dernier admin
+    if (userRole === 'admin') {
+      const adminCount = users.filter(u => u.role === 'admin').length;
+      if (adminCount <= 1) {
+        setMessage('Impossible de supprimer le dernier administrateur!');
+        return;
+      }
+    }
+
+    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ${userEmail} ?`)) {
+      return;
+    }
+
+    try {
+      // Supprimer de la table profiles
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+
+      if (profileError) {
+        setMessage('Erreur lors de la suppression: ' + profileError.message);
+        return;
+      }
+
+      // Note: La suppression de l'auth user nécessite des privilèges admin spéciaux
+      // Pour l'instant, on supprime juste le profil
+      
+      setMessage('Utilisateur supprimé avec succès!');
+      fetchUsers();
+      
+    } catch (error: any) {
+      setMessage('Erreur lors de la suppression: ' + error.message);
+    }
+  };
+
+  const clearMessage = () => {
+    setMessage('');
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -111,6 +175,9 @@ export const useUserManagement = () => {
     isCreating,
     message,
     createUser,
-    fetchUsers
+    editUser,
+    deleteUser,
+    fetchUsers,
+    clearMessage
   };
 };
