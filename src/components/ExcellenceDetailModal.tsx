@@ -54,7 +54,7 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
           </div>
           
           <div className="excellence-category">
-            <div className="category-tag category-tag--{excellence.category}">
+            <div className={`category-tag category-tag--${excellence.category}`}>
               {getCategoryIcon()}
               <span className="category-tag__text">{category.title}</span>
             </div>
