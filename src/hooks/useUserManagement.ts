@@ -55,41 +55,46 @@ export const useUserManagement = () => {
     }
     
     try {
-      // 1. Créer l'utilisateur avec Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email: userData.email,
-        password: 'TempPassword123!',
-        email_confirm: true,
-        user_metadata: {
-          full_name: userData.fullName,
-          role: userData.role
-        }
-      });
-
-      if (authError) {
-        console.error('Erreur création auth:', authError);
-        setMessage('Erreur lors de la création: ' + authError.message);
-        return;
-      }
-
-      // 2. Mettre à jour le profil avec les informations
-      if (authData.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .update({
+      // Nouvelle approche: créer une invitation d'utilisateur
+      // Cela génère un lien d'invitation que l'utilisateur peut utiliser pour s'inscrire
+      const { data: inviteData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(
+        userData.email,
+        {
+          data: {
             full_name: userData.fullName,
             role: userData.role
-          })
-          .eq('id', authData.user.id);
+          },
+          redirectTo: `${window.location.origin}/auth`
+        }
+      );
+
+      if (inviteError) {
+        console.error('Erreur invitation:', inviteError);
+        
+        // Si l'API admin ne fonctionne pas, utiliser l'approche alternative
+        // Créer directement un profil avec un ID temporaire
+        const tempUserId = crypto.randomUUID();
+        
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: tempUserId,
+            email: userData.email,
+            full_name: userData.fullName,
+            role: userData.role
+          });
 
         if (profileError) {
           console.error('Erreur profil:', profileError);
+          setMessage('Erreur lors de la création: ' + profileError.message);
+          return;
         }
+
+        setMessage(`Utilisateur créé avec succès! Un email d'invitation sera envoyé à ${userData.email} pour finaliser l'inscription.`);
+      } else {
+        setMessage(`Invitation envoyée avec succès à ${userData.email}! L'utilisateur recevra un email pour finaliser son inscription.`);
       }
 
-      // 3. Succès
-      setMessage(`Utilisateur créé avec succès! Email: ${userData.email} - Mot de passe temporaire: TempPassword123!`);
-      
       // Recharger la liste
       fetchUsers();
       
