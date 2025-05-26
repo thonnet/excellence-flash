@@ -40,8 +40,17 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
     setSearchQuery('');
   };
 
+  // Fonction pour déterminer la classe CSS selon la catégorie
+  const getCategoryClass = (category: string) => {
+    if (category.includes('manifestee')) return 'category-icon--manifestee';
+    if (category.includes('principe')) return 'category-icon--principe';
+    if (category.includes('quete')) return 'category-icon--quete';
+    return '';
+  };
+
   const getCategoryIcon = (categoryKey: string) => {
-    return <span className={`category-icon ${categoryKey}`}>🏷️</span>;
+    const categoryClass = getCategoryClass(categoryKey);
+    return <span className={`category-icon ${categoryClass}`}>🏷️</span>;
   };
 
   const getSortArrows = (column: SortKey) => {

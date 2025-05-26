@@ -73,8 +73,17 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
     }
   };
 
+  // Fonction pour déterminer la classe CSS selon la catégorie
+  const getCategoryClass = (category: string) => {
+    if (category.includes('manifestee')) return 'category-icon--manifestee';
+    if (category.includes('principe')) return 'category-icon--principe';
+    if (category.includes('quete')) return 'category-icon--quete';
+    return '';
+  };
+
   const getCategoryIcon = () => {
-    return <span className={`category-icon ${excellence.category}`}>🏷️</span>;
+    const categoryClass = getCategoryClass(excellence.category);
+    return <span className={`category-icon ${categoryClass}`}>🏷️</span>;
   };
 
   return (

@@ -14,6 +14,11 @@
     --color-primary-blue: #0195ee;
     --color-neutral-gray: #707070;
 
+    /* === COULEURS CATÉGORIES D'EXCELLENCE === */
+    --color-excellence-manifestee: #8B9657;  /* Vert olive */
+    --color-principe-excellence: #A7C7E7;    /* Bleu clair */
+    --color-quete-excellence: #FFB366;       /* Orange clair */
+
     /* === INTERFACE SOBRE - NIVEAUX DE GRIS === */
     --bg-primary: #1a1a1a;      /* Background principal très sombre */
     --bg-secondary: #2a2a2a;    /* Cards et sections */
@@ -139,7 +144,7 @@
    COMPOSANTS RÉUTILISABLES
    ======================================== */
 
-/* === PICTOGRAMMES DE CATÉGORIES === */
+/* === PICTOGRAMMES DE CATÉGORIES - SYSTÈME CORRIGÉ === */
 .category-tag {
   display: inline-flex;
   align-items: center;
@@ -156,25 +161,38 @@
   color: var(--text-secondary);
 }
 
-/* Couleurs spécifiques par catégorie */
+/* Classes spécifiques par catégorie - COULEURS EXACTES */
+.category-icon--manifestee {
+  color: var(--color-excellence-manifestee) !important;
+}
+
+.category-icon--principe {
+  color: var(--color-principe-excellence) !important;
+}
+
+.category-icon--quete {
+  color: var(--color-quete-excellence) !important;
+}
+
+/* Compatibilité avec l'ancien système */
 .category-tag--manifestee .category-tag__icon,
 .category-icon.manifestee {
-  color: var(--excellence-manifestee);
+  color: var(--color-excellence-manifestee) !important;
 }
 
 .category-tag--principe .category-tag__icon,
 .category-icon.principe {
-  color: var(--principe-excellence);
+  color: var(--color-principe-excellence) !important;
 }
 
 .category-tag--quete .category-tag__icon,
 .category-icon.quete {
-  color: var(--quete-excellence);
+  color: var(--color-quete-excellence) !important;
 }
 
-.category-manifestee { --category-color: var(--excellence-manifestee); }
-.category-principe { --category-color: var(--principe-excellence); }
-.category-quete { --category-color: var(--quete-excellence); }
+.category-manifestee { --category-color: var(--color-excellence-manifestee); }
+.category-principe { --category-color: var(--color-principe-excellence); }
+.category-quete { --category-color: var(--color-quete-excellence); }
 
 .category-icon {
   font-size: 0.9rem;
@@ -263,17 +281,17 @@
 /* Filets colorés selon catégorie */
 .excellence-description--manifestee,
 .excellence-description.category-manifestee {
-  border-left: 3px solid var(--excellence-manifestee);
+  border-left: 3px solid var(--color-excellence-manifestee);
 }
 
 .excellence-description--principe,
 .excellence-description.category-principe {
-  border-left: 3px solid var(--principe-excellence);
+  border-left: 3px solid var(--color-principe-excellence);
 }
 
 .excellence-description--quete,
 .excellence-description.category-quete {
-  border-left: 3px solid var(--quete-excellence);
+  border-left: 3px solid var(--color-quete-excellence);
 }
 
 .excellence-separator {
