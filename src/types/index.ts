@@ -30,10 +30,10 @@ export interface Experience {
   excellence_id: string;
   title: string;
   description: string;
-  image_url?: string;           // NOUVEAU: URL de l'image uploadée
-  image_caption?: string;       // NOUVEAU: Légende optionnelle
+  image_url?: string;
+  image_caption?: string;
   date_experienced: string;
-  tags: string[];
+  tags: string[]; // Maintenu pour compatibilité mais non utilisé
   created_at: string;
   updated_at: string;
 }
@@ -42,22 +42,22 @@ export const EXCELLENCE_CATEGORIES = {
   manifestee: {
     title: "Excellence manifestée",
     description: "Compétences que vous pratiquez naturellement",
-    color: "#0195ee",
-    bgColor: "rgba(1, 149, 238, 0.1)",
-    borderColor: "rgba(1, 149, 238, 0.3)"
+    color: "#8B9657",
+    bgColor: "rgba(139, 150, 87, 0.1)",
+    borderColor: "rgba(139, 150, 87, 0.3)"
   },
   principe: {
     title: "Principe d'excellence", 
     description: "Règles et méthodes qui optimisent vos performances",
-    color: "#ee5a01",
-    bgColor: "rgba(238, 90, 1, 0.1)",
-    borderColor: "rgba(238, 90, 1, 0.3)"
+    color: "#A7C7E7",
+    bgColor: "rgba(167, 199, 231, 0.1)",
+    borderColor: "rgba(167, 199, 231, 0.3)"
   },
   quete: {
     title: "Quête d'excellence",
     description: "Excellences que vous souhaitez développer",
-    color: "#707070",
-    bgColor: "rgba(112, 112, 112, 0.1)",
-    borderColor: "rgba(112, 112, 112, 0.3)"
+    color: "#FFB366",
+    bgColor: "rgba(255, 179, 102, 0.1)",
+    borderColor: "rgba(255, 179, 102, 0.3)"
   }
 } as const;

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanView } from '../components/KanbanView';
@@ -239,27 +240,27 @@ const Index = () => {
                   <AlternatingBaseline baselines={experiencesBaselines} />
                 </div>
               </div>
-              <button 
-                onClick={() => setIsExperienceFormOpen(true)}
-                className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors"
-                style={{ backgroundColor: 'var(--accent-orange)' }}
-              >
-                <Plus size={16} />
-                <span>Nouvelle expérience</span>
-              </button>
-            </div>
-
-            <div className="flex justify-center">
-              <ViewToggle
-                currentView={experienceViewMode}
-                onViewChange={(view) => setExperienceViewMode(view as ExperienceViewMode)}
-                availableViews={['list', 'gallery']}
-              />
+              <div className="flex items-center space-x-4">
+                <ViewToggle
+                  currentView={experienceViewMode}
+                  onViewChange={(view) => setExperienceViewMode(view as ExperienceViewMode)}
+                  availableViews={['list', 'gallery']}
+                />
+                <button 
+                  onClick={() => setIsExperienceFormOpen(true)}
+                  className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors"
+                  style={{ backgroundColor: 'var(--accent-orange)' }}
+                >
+                  <Plus size={16} />
+                  <span>Nouvelle expérience</span>
+                </button>
+              </div>
             </div>
             
             <ExperiencesDisplay
               experiences={experiences}
               excellences={excellences}
+              viewMode={experienceViewMode}
             />
           </div>
         )}

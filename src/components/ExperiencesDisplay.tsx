@@ -1,65 +1,25 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Experience, Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Calendar, Tag, List, Image as ImageIcon } from 'lucide-react';
+import { Calendar, Tag } from 'lucide-react';
 
 interface ExperiencesDisplayProps {
   experiences: Experience[];
   excellences: Excellence[];
+  viewMode: 'list' | 'gallery';
 }
 
 export const ExperiencesDisplay: React.FC<ExperiencesDisplayProps> = ({
   experiences,
-  excellences
+  excellences,
+  viewMode
 }) => {
-  const [viewMode, setViewMode] = useState<'list' | 'gallery'>('list');
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-  };
-
-  const getExcellenceForExperience = (experienceId: string) => {
-    const experience = experiences.find(exp => exp.id === experienceId);
-    if (!experience) return null;
-    return excellences.find(exc => exc.id === experience.excellence_id);
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* View Toggle */}
-      <div className="flex items-center space-x-3">
-        <button
-          onClick={() => setViewMode('list')}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-            viewMode === 'list' ? 'nav-item-active' : 'nav-item'
-          }`}
-        >
-          <List size={16} />
-          <span>Liste</span>
-        </button>
-        <button
-          onClick={() => setViewMode('gallery')}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-            viewMode === 'gallery' ? 'nav-item-active' : 'nav-item'
-          }`}
-        >
-          <ImageIcon size={16} />
-          <span>Galerie</span>
-        </button>
-      </div>
-
-      {/* Display Mode */}
-      {viewMode === 'list' ? (
-        <ExperiencesList experiences={experiences} excellences={excellences} />
-      ) : (
-        <ExperiencesGallery experiences={experiences} excellences={excellences} />
-      )}
-    </div>
+  // Display Mode
+  return viewMode === 'list' ? (
+    <ExperiencesList experiences={experiences} excellences={excellences} />
+  ) : (
+    <ExperiencesGallery experiences={experiences} excellences={excellences} />
   );
 };
 
@@ -87,6 +47,22 @@ const ExperiencesList: React.FC<{ experiences: Experience[]; excellences: Excell
       month: 'long',
       year: 'numeric'
     });
+  };
+
+  const getCategoryIcon = (category: string) => {
+    const iconColor = category === 'manifestee' ? '#8B9657' : 
+                      category === 'principe' ? '#A7C7E7' : 
+                      category === 'quete' ? '#FFB366' : '#999999';
+    
+    return (
+      <Tag 
+        size={16}
+        style={{ 
+          color: iconColor,
+          marginRight: '8px'
+        }}
+      />
+    );
   };
 
   if (sortedDates.length === 0) {
@@ -143,14 +119,14 @@ const ExperiencesList: React.FC<{ experiences: Experience[]; excellences: Excell
                       </h4>
                       {excellence && (
                         <div className="flex items-center space-x-2">
-                          <div 
-                            className="px-2 py-1 rounded text-xs font-medium"
-                            style={{
-                              backgroundColor: category?.bgColor,
-                              color: category?.color
-                            }}
-                          >
-                            {excellence.name}
+                          <div className="flex items-center">
+                            {getCategoryIcon(excellence.category)}
+                            <span 
+                              className="text-xs font-medium"
+                              style={{ color: 'var(--text-secondary)' }}
+                            >
+                              {excellence.name}
+                            </span>
                           </div>
                         </div>
                       )}
@@ -175,26 +151,6 @@ const ExperiencesList: React.FC<{ experiences: Experience[]; excellences: Excell
                       {experience.image_caption}
                     </p>
                   )}
-
-                  {experience.tags.length > 0 && (
-                    <div className="flex items-center space-x-2">
-                      <Tag size={14} style={{ color: 'var(--text-muted)' }} />
-                      <div className="flex flex-wrap gap-1">
-                        {experience.tags.map(tag => (
-                          <span 
-                            key={tag}
-                            className="px-2 py-1 text-xs rounded"
-                            style={{ 
-                              backgroundColor: 'var(--bg-hover)',
-                              color: 'var(--text-muted)'
-                            }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               );
             })}
@@ -209,6 +165,22 @@ const ExperiencesGallery: React.FC<{ experiences: Experience[]; excellences: Exc
   experiences,
   excellences
 }) => {
+  const getCategoryIcon = (category: string) => {
+    const iconColor = category === 'manifestee' ? '#8B9657' : 
+                      category === 'principe' ? '#A7C7E7' : 
+                      category === 'quete' ? '#FFB366' : '#999999';
+    
+    return (
+      <Tag 
+        size={14}
+        style={{ 
+          color: iconColor,
+          marginRight: '6px'
+        }}
+      />
+    );
+  };
+
   return (
     <div className="experiences-gallery">
       {experiences.map(experience => {
@@ -224,7 +196,10 @@ const ExperiencesGallery: React.FC<{ experiences: Experience[]; excellences: Exc
             <div className="gallery-overlay">
               <h4 className="font-medium mb-1">{experience.title}</h4>
               {excellence && (
-                <p className="text-sm opacity-90 mb-2">{excellence.name}</p>
+                <div className="flex items-center mb-2">
+                  {getCategoryIcon(excellence.category)}
+                  <p className="text-sm opacity-90">{excellence.name}</p>
+                </div>
               )}
               <p className="text-sm opacity-75">
                 {experience.description?.substring(0, 100)}
@@ -238,7 +213,7 @@ const ExperiencesGallery: React.FC<{ experiences: Experience[]; excellences: Exc
       {experiences.length === 0 && (
         <div className="col-span-full text-center py-12">
           <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-            <ImageIcon style={{ color: 'var(--text-muted)' }} size={24} />
+            <Calendar style={{ color: 'var(--text-muted)' }} size={24} />
           </div>
           <h3 className="text-lg font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
             Aucune expérience

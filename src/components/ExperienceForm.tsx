@@ -18,7 +18,6 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
   const [description, setDescription] = useState('');
   const [excellenceId, setExcellenceId] = useState('');
   const [dateExperienced, setDateExperienced] = useState(new Date().toISOString().split('T')[0]);
-  const [tags, setTags] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageCaption, setImageCaption] = useState('');
@@ -57,7 +56,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
       image_url: imageUrl,
       image_caption: imageCaption.trim() || undefined,
       date_experienced: dateExperienced,
-      tags: tags.split(',').map(tag => tag.trim()).filter(Boolean)
+      tags: [] // Système de tags supprimé
     };
 
     onAdd(newExperience);
@@ -213,25 +212,6 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
               type="date"
               value={dateExperienced}
               onChange={(e) => setDateExperienced(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
-              style={{
-                backgroundColor: 'var(--bg-tertiary)',
-                borderColor: 'var(--border-subtle)',
-                color: 'var(--text-primary)'
-              }}
-            />
-          </div>
-
-          {/* Tags */}
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
-              Tags (séparés par des virgules)
-            </label>
-            <input
-              type="text"
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              placeholder="ex: leadership, communication, créativité"
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
               style={{
                 backgroundColor: 'var(--bg-tertiary)',
