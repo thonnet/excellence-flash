@@ -23,7 +23,15 @@ export const useAuth = () => {
         return;
       }
 
-      setUserProfile(data);
+      // Ensure role is properly typed
+      const typedProfile: UserDisplay = {
+        id: data.id,
+        email: data.email,
+        full_name: data.full_name,
+        role: data.role === 'admin' ? 'admin' : 'user'
+      };
+
+      setUserProfile(typedProfile);
     } catch (error) {
       console.error('Erreur:', error);
     }
