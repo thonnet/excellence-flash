@@ -11,6 +11,9 @@ export const mockUser: User = {
   plan_type: 'pro',
   theme_preference: 'dark',
   ai_insights_enabled: true,
+  role: 'admin',
+  permissions: { admin: true },
+  last_sign_in_at: '2024-01-15T09:30:00Z',
   created_at: '2024-01-15T10:00:00Z',
   updated_at: '2024-01-15T10:00:00Z'
 };
