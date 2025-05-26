@@ -1,22 +1,8 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from '../integrations/supabase/client';
 import { useToast } from './use-toast';
-
-interface UserProfile {
-  id: string;
-  email: string;
-  full_name: string;
-  role: string;
-  created_at: string;
-  last_sign_in_at?: string;
-}
-
-interface NewUser {
-  email: string;
-  fullName: string;
-  role: string;
-}
+import { userService } from '../services/userService';
+import type { UserProfile, NewUser } from '../types/userManagement';
 
 export const useUserManagement = () => {
   const [users, setUsers] = useState<UserProfile[]>([]);
@@ -28,10 +14,7 @@ export const useUserManagement = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const { data, error } = await userService.fetchUsers();
       
       if (error) {
         console.error('Erreur lors du chargement des utilisateurs:', error);
@@ -54,32 +37,15 @@ export const useUserManagement = () => {
     setIsCreating(true);
     setMessage('');
     
-    // Validation basique
-    if (!userData.email || !userData.fullName) {
-      setMessage('Tous les champs sont obligatoires');
-      setIsCreating(false);
-      return;
-    }
-    
     try {
-      // Insérer directement dans la table profiles avec un UUID généré
-      const tempUserId = crypto.randomUUID();
-      
-      const { error: directInsertError } = await supabase
-        .from('profiles')
-        .insert({
-          id: tempUserId,
-          email: userData.email,
-          full_name: userData.fullName,
-          role: userData.role
-        });
+      const { error } = await userService.createUser(userData);
 
-      if (directInsertError) {
-        console.error('Erreur insertion directe:', directInsertError);
-        setMessage('Erreur lors de la création: ' + directInsertError.message);
+      if (error) {
+        console.error('Erreur insertion directe:', error);
+        setMessage('Erreur lors de la création: ' + error.message);
         toast({
           title: "Erreur de création",
-          description: directInsertError.message,
+          description: error.message,
           variant: "destructive",
         });
         return;
@@ -109,13 +75,7 @@ export const useUserManagement = () => {
 
   const editUser = async (userId: string, updatedData: { fullName: string; role: string }) => {
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          full_name: updatedData.fullName,
-          role: updatedData.role
-        })
-        .eq('id', userId);
+      const { error } = await userService.updateUser(userId, updatedData);
 
       if (error) {
         setMessage('Erreur lors de la modification: ' + error.message);
@@ -136,12 +96,9 @@ export const useUserManagement = () => {
 
   const deleteUser = async (userId: string, userEmail: string, userRole: string) => {
     // Vérifier si c'est le dernier admin
-    if (userRole === 'admin') {
-      const adminCount = users.filter(u => u.role === 'admin').length;
-      if (adminCount <= 1) {
-        setMessage('Impossible de supprimer le dernier administrateur!');
-        return;
-      }
+    if (userService.isLastAdmin(users, userRole)) {
+      setMessage('Impossible de supprimer le dernier administrateur!');
+      return;
     }
 
     if (!window.confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ${userEmail} ?`)) {
@@ -149,14 +106,10 @@ export const useUserManagement = () => {
     }
 
     try {
-      // Supprimer de la table profiles
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .delete()
-        .eq('id', userId);
+      const { error } = await userService.deleteUser(userId);
 
-      if (profileError) {
-        setMessage('Erreur lors de la suppression: ' + profileError.message);
+      if (error) {
+        setMessage('Erreur lors de la suppression: ' + error.message);
         return;
       }
 

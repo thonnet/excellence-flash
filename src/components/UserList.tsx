@@ -1,17 +1,8 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from './ui/table';
 import UserRow from './UserRow';
-
-interface UserProfile {
-  id: string;
-  email: string;
-  full_name: string;
-  role: string;
-  created_at: string;
-  last_sign_in_at?: string;
-}
+import type { UserProfile } from '../types/userManagement';
 
 interface UserListProps {
   users: UserProfile[];
