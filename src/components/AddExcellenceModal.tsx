@@ -50,15 +50,34 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#2a2a3e] rounded-xl max-w-md w-full border border-white/10">
+      <div 
+        className="rounded-xl max-w-md w-full border"
+        style={{ 
+          backgroundColor: 'var(--bg-secondary)',
+          borderColor: 'var(--border-subtle)'
+        }}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
-          <h3 className="text-lg font-semibold text-white">
+        <div 
+          className="flex items-center justify-between p-6 border-b"
+          style={{ borderColor: 'var(--border-subtle)' }}
+        >
+          <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
             Nouvelle Excellence
           </h3>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-white/10 transition-colors text-gray-400 hover:text-white"
+            className="p-2 rounded-lg transition-colors"
+            style={{ 
+              color: 'var(--text-secondary)',
+              backgroundColor: 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }}
           >
             <X size={20} />
           </button>
@@ -68,7 +87,7 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
               Nom de l'excellence *
             </label>
             <input
@@ -76,7 +95,12 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Ex: Communication empathique, Leadership collaboratif..."
-              className="w-full px-3 py-2 bg-[#1a1a2e] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0195ee]/50"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              style={{
+                backgroundColor: 'var(--bg-tertiary)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-primary)'
+              }}
               required
               autoFocus
             />
@@ -84,7 +108,7 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
               Catégorie
             </label>
             <div className="space-y-2">
@@ -97,13 +121,14 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
                     checked={category === key}
                     onChange={(e) => setCategory(e.target.value as 'manifestee' | 'principe' | 'quete')}
                     className="mt-1"
-                    style={{ accentColor: cat.color }}
+                    style={{ accentColor: '#ee5a01' }}
                   />
                   <div>
-                    <div className="text-sm font-medium" style={{ color: cat.color }}>
-                      {cat.title}
+                    <div className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                      <span className="category-icon" style={{ color: cat.color }}>🏷️</span>
+                      <span className="ml-2">{cat.title}</span>
                     </div>
-                    <div className="text-xs text-gray-400">
+                    <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
                       {cat.description}
                     </div>
                   </div>
@@ -114,7 +139,7 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
               Description (optionnelle)
             </label>
             <textarea
@@ -122,7 +147,12 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Décrivez cette excellence, comment vous la manifestez..."
               rows={3}
-              className="w-full px-3 py-2 bg-[#1a1a2e] border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0195ee]/50 resize-none"
+              className="w-full px-3 py-2 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+              style={{
+                backgroundColor: 'var(--bg-tertiary)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-primary)'
+              }}
             />
           </div>
 
@@ -131,14 +161,32 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+              className="px-4 py-2 transition-colors"
+              style={{ color: 'var(--text-secondary)' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--text-primary)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--text-secondary)';
+              }}
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={!name.trim()}
-              className="px-4 py-2 bg-[#0195ee] text-white rounded-lg hover:bg-[#0175bb] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ backgroundColor: '#ee5a01' }}
+              onMouseEnter={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.backgroundColor = '#d14d01';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!e.currentTarget.disabled) {
+                  e.currentTarget.style.backgroundColor = '#ee5a01';
+                }
+              }}
             >
               Créer l'excellence
             </button>
