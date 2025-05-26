@@ -10,9 +10,6 @@ export interface User {
   plan_type: 'free' | 'pro' | 'premium';
   theme_preference: 'dark' | 'light';
   ai_insights_enabled: boolean;
-  role: 'user' | 'admin';
-  permissions: Record<string, any>;
-  last_sign_in_at?: string;
   created_at: string;
   updated_at: string;
 }

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanView } from '../components/KanbanView';
 import { ListView } from '../components/ListView';
@@ -20,11 +21,6 @@ type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
 
 const Index = () => {
-  console.log('Index component rendering');
-  console.log('Mock user:', mockUser);
-  console.log('Mock excellences:', mockExcellences);
-  console.log('Mock experiences:', mockExperiences);
-
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
   const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
   const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
@@ -34,10 +30,6 @@ const Index = () => {
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-
-  useEffect(() => {
-    console.log('User state updated:', user);
-  }, [user]);
 
   const filteredExcellences = excellences.filter(excellence => 
     excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -120,13 +112,13 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       {/* Header */}
       <header 
         className="border-b sticky top-0 z-50"
         style={{ 
-          backgroundColor: 'var(--color-bg-secondary)',
-          borderColor: 'var(--color-border-subtle)'
+          backgroundColor: 'var(--bg-secondary)',
+          borderColor: 'var(--border-subtle)'
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -135,8 +127,8 @@ const Index = () => {
             <div className="flex items-center space-x-4">
               <ExcellenceFlashLogo size={32} />
               <div>
-                <h1 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>Excellence Flash</h1>
-                <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Modelez et structurez votre excellence</p>
+                <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Excellence Flash</h1>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Modelez et structurez votre excellence</p>
               </div>
             </div>
 
@@ -156,18 +148,18 @@ const Index = () => {
                       isSearchFocused ? 'w-64' : 'w-10'
                     } h-10 border rounded-lg focus:outline-none`}
                     style={{
-                      backgroundColor: 'var(--color-bg-tertiary)',
-                      borderColor: searchQuery ? 'var(--color-primary-orange)' : 'var(--color-border-subtle)',
-                      color: 'var(--color-text-primary)'
+                      backgroundColor: 'var(--bg-tertiary)',
+                      borderColor: searchQuery ? 'var(--accent-orange)' : 'var(--border-subtle)',
+                      color: 'var(--text-primary)'
                     }}
                     onClick={() => setIsSearchFocused(true)}
                     title={!isSearchFocused ? "Rechercher" : undefined}
                   >
                     {!isSearchFocused ? (
-                      <Search size={20} style={{ color: 'var(--color-text-secondary)' }} />
+                      <Search size={20} style={{ color: 'var(--text-secondary)' }} />
                     ) : (
                       <>
-                        <Search size={16} className="absolute left-3" style={{ color: 'var(--color-text-secondary)' }} />
+                        <Search size={16} className="absolute left-3" style={{ color: 'var(--text-secondary)' }} />
                         <input
                           type="text"
                           placeholder="Rechercher..."
@@ -175,7 +167,7 @@ const Index = () => {
                           onChange={(e) => setSearchQuery(e.target.value)}
                           onBlur={() => !searchQuery && setIsSearchFocused(false)}
                           className="w-full pl-10 pr-4 py-2 bg-transparent focus:outline-none"
-                          style={{ color: 'var(--color-text-primary)' }}
+                          style={{ color: 'var(--text-primary)' }}
                           autoFocus
                         />
                       </>
@@ -194,7 +186,7 @@ const Index = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden border-t" style={{ borderColor: 'var(--color-border-subtle)', backgroundColor: 'var(--color-bg-secondary)' }}>
+        <div className="md:hidden border-t" style={{ borderColor: 'var(--border-subtle)', backgroundColor: 'var(--bg-secondary)' }}>
           <Navigation 
             currentView={currentView} 
             onViewChange={setCurrentView}
@@ -241,7 +233,7 @@ const Index = () => {
             <div className="page-header">
               <div className="title-section">
                 <div className="flex items-center space-x-4">
-                  <h2 className="text-3xl font-bold" style={{ color: 'var(--color-text-primary)' }}>Vos Expériences</h2>
+                  <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Expériences</h2>
                   <ContextualHelp pageType="experiences" />
                 </div>
                 <div className="mt-1 h-6">
@@ -257,7 +249,7 @@ const Index = () => {
                 <button 
                   onClick={() => setIsExperienceFormOpen(true)}
                   className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors ml-4"
-                  style={{ backgroundColor: 'var(--color-primary-orange)' }}
+                  style={{ backgroundColor: 'var(--accent-orange)' }}
                 >
                   <Plus size={16} />
                   <span>Nouvelle expérience</span>
@@ -286,7 +278,7 @@ const Index = () => {
       {/* Import Modal */}
       {isImportModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg" style={{ backgroundColor: 'var(--color-bg-primary)' }}>
+          <div className="bg-white p-6 rounded-lg">
             <DataImportExport
               excellences={excellences}
               experiences={experiences}
