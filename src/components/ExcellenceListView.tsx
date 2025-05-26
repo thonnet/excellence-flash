@@ -1,7 +1,8 @@
+
 import React, { useState, useMemo } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Eye, Edit2, X, Search } from 'lucide-react';
+import { Eye, Edit2, X, Search, Tag } from 'lucide-react';
 
 interface ExcellenceListViewProps {
   excellences: Excellence[];
@@ -48,18 +49,18 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
   };
 
   const getCategoryIcon = (categoryKey: string) => {
-    const categoryClass = getCategoryClass(categoryKey);
+    const iconColor = categoryKey === 'manifestee' ? '#8B9657' : 
+                      categoryKey === 'principe' ? '#A7C7E7' : 
+                      categoryKey === 'quete' ? '#FFB366' : '#999999';
+    
     return (
-      <span 
-        className={`category-icon ${categoryClass}`}
+      <Tag 
+        size={16}
         style={{ 
-          color: categoryKey === 'manifestee' ? '#8B9657' : 
-                 categoryKey === 'principe' ? '#A7C7E7' : 
-                 categoryKey === 'quete' ? '#FFB366' : 'inherit'
+          color: iconColor,
+          marginRight: '8px'
         }}
-      >
-        🏷️
-      </span>
+      />
     );
   };
 

@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Eye, Edit2, X } from 'lucide-react';
+import { Eye, Edit2, X, Tag } from 'lucide-react';
 
 interface ExcellenceCardProps {
   excellence: Excellence;
@@ -82,18 +82,18 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
   };
 
   const getCategoryIcon = () => {
-    const categoryClass = getCategoryClass(excellence.category);
+    const iconColor = excellence.category === 'manifestee' ? '#8B9657' : 
+                      excellence.category === 'principe' ? '#A7C7E7' : 
+                      excellence.category === 'quete' ? '#FFB366' : '#999999';
+    
     return (
-      <span 
-        className={`category-icon ${categoryClass}`}
+      <Tag 
+        size={16}
         style={{ 
-          color: excellence.category === 'manifestee' ? '#8B9657' : 
-                 excellence.category === 'principe' ? '#A7C7E7' : 
-                 excellence.category === 'quete' ? '#FFB366' : 'inherit'
+          color: iconColor,
+          marginRight: '8px'
         }}
-      >
-        🏷️
-      </span>
+      />
     );
   };
 

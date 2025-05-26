@@ -2,7 +2,7 @@
 import React from 'react';
 import { Excellence, Experience } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { X, Calendar } from 'lucide-react';
+import { X, Calendar, Tag } from 'lucide-react';
 
 interface ExcellenceDetailModalProps {
   excellence: Excellence;
@@ -39,18 +39,19 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
   };
 
   const getCategoryIcon = () => {
-    const categoryClass = getCategoryClass(excellence.category);
+    const iconColor = excellence.category === 'manifestee' ? '#8B9657' : 
+                      excellence.category === 'principe' ? '#A7C7E7' : 
+                      excellence.category === 'quete' ? '#FFB366' : '#999999';
+    
     return (
-      <span 
-        className={`category-tag__icon category-icon ${categoryClass}`}
+      <Tag 
+        size={18}
+        className="category-tag__icon"
         style={{ 
-          color: excellence.category === 'manifestee' ? '#8B9657' : 
-                 excellence.category === 'principe' ? '#A7C7E7' : 
-                 excellence.category === 'quete' ? '#FFB366' : 'inherit'
+          color: iconColor,
+          marginRight: '8px'
         }}
-      >
-        🏷️
-      </span>
+      />
     );
   };
 
