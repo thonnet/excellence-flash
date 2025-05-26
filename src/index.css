@@ -229,6 +229,73 @@
 .btn-discrete--medium { width: 32px; height: 32px; font-size: 1rem; }
 .btn-discrete--large { width: 56px; height: 56px; font-size: 1.5rem; }
 
+/* BOUTON CRÉATION EXCELLENCE */
+.btn-create-excellence {
+  background: #4a4a4a;
+  border: 1px solid #ee5a01;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.btn-create-excellence:hover {
+  background: #555555;
+  border: 2px solid #ee5a01;
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .btn-create-excellence {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile/Tablet */
+@media (max-width: 1023px) {
+  .btn-create-excellence {
+    width: 56px;
+    height: 56px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-size: 1.5rem;
+  }
+}
+
+/* BOUTONS INFORMATION */
+.info-button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #707070;
+  background: transparent;
+  color: #707070;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.75rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.info-button:hover {
+  border-color: #ee5a01;
+  color: #ee5a01;
+  background: rgba(238, 90, 1, 0.1);
+}
+
 /* === ÉTATS === */
 .state-active {
   color: var(--accent-orange) !important;
@@ -512,7 +579,7 @@
    INTERFACE UTILISATEUR
    ======================================== */
 
-/* Help Icons */
+/* Help Icons - DEPRECATED - Use .info-button instead */
 .help-icon {
   width: 20px;
   height: 20px;

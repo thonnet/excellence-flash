@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Info } from 'lucide-react';
 
 interface ContextualHelpProps {
   pageType: 'excellences' | 'experiences' | 'manifestee' | 'principe' | 'quete';
@@ -27,10 +26,10 @@ export const ContextualHelp: React.FC<ContextualHelpProps> = ({
   return (
     <button
       onClick={handleHelpClick}
-      className={`help-icon ${className}`}
+      className={`info-button ${className}`}
       title="Obtenir de l'aide sur cette section"
     >
-      <Info size={20} />
+      i
     </button>
   );
 };
