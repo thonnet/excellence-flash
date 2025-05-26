@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Eye, BarChart3, List, Star, Zap } from 'lucide-react';
+import { Eye, Star, Zap } from 'lucide-react';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 
@@ -19,12 +19,6 @@ export const Navigation: React.FC<NavigationProps> = ({
 }) => {
   const navItems = [
     {
-      id: 'observatoire' as ViewType,
-      label: 'Observatoire',
-      icon: Eye,
-      description: 'Vue d\'ensemble'
-    },
-    {
       id: 'kanban' as ViewType,
       label: 'Excellences',
       icon: Star,
@@ -35,6 +29,12 @@ export const Navigation: React.FC<NavigationProps> = ({
       label: 'Expériences',
       icon: Zap,
       description: 'Toutes les expériences'
+    },
+    {
+      id: 'observatoire' as ViewType,
+      label: 'Observatoire',
+      icon: Eye,
+      description: 'Vue d\'ensemble'
     }
   ];
 

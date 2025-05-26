@@ -12,11 +12,16 @@ export const ExcellenceFlashLogo: React.FC<ExcellenceFlashLogoProps> = ({
 }) => {
   return (
     <img 
-      src="https://www.entrepreneur-multipotentiel.com/wp-content/uploads/2025/05/Source-Logo-anime-442x420-carre-seul.gif" 
+      src="https://imgur.com/ExzBObo.gif" 
       alt="Excellence Flash"
       width={size}
       height={size}
       className={`logo-excellence-flash ${className}`}
+      onError={(e) => {
+        // Fallback to text if image fails to load
+        e.currentTarget.style.display = 'none';
+        e.currentTarget.parentElement!.innerHTML = '<span style="font-weight: bold; color: var(--accent-orange);">EF</span>';
+      }}
     />
   );
 };

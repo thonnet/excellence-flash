@@ -14,7 +14,7 @@ import { ContextualHelp } from '../components/ContextualHelp';
 import { AlternatingBaseline } from '../components/AlternatingBaseline';
 import { Excellence, Experience, User } from '../types';
 import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
-import { Plus } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
@@ -28,6 +28,7 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const filteredExcellences = excellences.filter(excellence => 
     excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -137,21 +138,41 @@ const Index = () => {
               className="hidden md:flex"
             />
 
-            {/* Search, Theme Toggle & Profile */}
+            {/* Simplified Search, Theme Toggle & Profile */}
             <div className="flex items-center space-x-4">
               <div className="relative hidden sm:block">
-                <input
-                  type="text"
-                  placeholder="Rechercher dans votre contenu..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-64 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2"
-                  style={{
-                    backgroundColor: 'var(--bg-tertiary)',
-                    borderColor: 'var(--border-subtle)',
-                    color: 'var(--text-primary)'
-                  }}
-                />
+                <div className="relative">
+                  <button
+                    className={`flex items-center justify-center transition-all duration-200 ${
+                      isSearchFocused ? 'w-64' : 'w-10'
+                    } h-10 border rounded-lg focus:outline-none`}
+                    style={{
+                      backgroundColor: 'var(--bg-tertiary)',
+                      borderColor: searchQuery ? 'var(--accent-orange)' : 'var(--border-subtle)',
+                      color: 'var(--text-primary)'
+                    }}
+                    onClick={() => setIsSearchFocused(true)}
+                    title={!isSearchFocused ? "Rechercher" : undefined}
+                  >
+                    {!isSearchFocused ? (
+                      <Search size={20} style={{ color: 'var(--text-secondary)' }} />
+                    ) : (
+                      <>
+                        <Search size={16} className="absolute left-3" style={{ color: 'var(--text-secondary)' }} />
+                        <input
+                          type="text"
+                          placeholder="Rechercher..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onBlur={() => !searchQuery && setIsSearchFocused(false)}
+                          className="w-full pl-10 pr-4 py-2 bg-transparent focus:outline-none"
+                          style={{ color: 'var(--text-primary)' }}
+                          autoFocus
+                        />
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
               <ThemeToggle />
               <UserProfile 

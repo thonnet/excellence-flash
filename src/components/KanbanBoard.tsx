@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
@@ -10,6 +9,7 @@ import { ExcellenceListView } from './ExcellenceListView';
 import { ExcellenceDetailModal } from './ExcellenceDetailModal';
 import { ExcellenceEditModal } from './ExcellenceEditModal';
 import { Plus } from 'lucide-react';
+import { useIsMobile } from '../hooks/use-mobile';
 
 interface KanbanBoardProps {
   excellences: Excellence[];
@@ -34,6 +34,12 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const [selectedExcellence, setSelectedExcellence] = useState<Excellence | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [draggedExcellence, setDraggedExcellence] = useState<Excellence | null>(null);
+  const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
+  const [showContextMenu, setShowContextMenu] = useState<{excellence: Excellence, x: number, y: number} | null>(null);
+  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
+  
+  const isMobile = useIsMobile();
 
   const getExcellencesByCategory = (category: 'manifestee' | 'principe' | 'quete') => {
     return excellences.filter(excellence => excellence.category === category);
@@ -54,6 +60,72 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
     setIsEditModalOpen(true);
   };
 
+  // Drag & Drop handlers for desktop
+  const handleDragStart = (e: React.DragEvent, excellence: Excellence) => {
+    if (isMobile) return;
+    setDraggedExcellence(excellence);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, category: string) => {
+    if (isMobile) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverColumn(category);
+  };
+
+  const handleDragLeave = () => {
+    if (isMobile) return;
+    setDragOverColumn(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, targetCategory: 'manifestee' | 'principe' | 'quete') => {
+    if (isMobile) return;
+    e.preventDefault();
+    setDragOverColumn(null);
+    
+    if (draggedExcellence && draggedExcellence.category !== targetCategory) {
+      onUpdateExcellence(draggedExcellence.id, { category: targetCategory });
+    }
+    setDraggedExcellence(null);
+  };
+
+  const handleDragEnd = () => {
+    if (isMobile) return;
+    setDraggedExcellence(null);
+    setDragOverColumn(null);
+  };
+
+  // Long press handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent, excellence: Excellence) => {
+    if (!isMobile) return;
+    const timer = setTimeout(() => {
+      const touch = e.touches[0];
+      setShowContextMenu({
+        excellence,
+        x: touch.clientX,
+        y: touch.clientY
+      });
+    }, 500);
+    setLongPressTimer(timer);
+  };
+
+  const handleTouchEnd = () => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
+  };
+
+  const handleCategoryChange = (excellence: Excellence, newCategory: 'manifestee' | 'principe' | 'quete') => {
+    onUpdateExcellence(excellence.id, { category: newCategory });
+    setShowContextMenu(null);
+  };
+
+  const closeContextMenu = () => {
+    setShowContextMenu(null);
+  };
+
   return (
     <div className="space-y-6">
       {/* View Toggle Controls */}
@@ -67,13 +139,20 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
       {/* Kanban Columns */}
       {viewMode === 'kanban' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 kanban-mobile-optimized">
           {Object.entries(EXCELLENCE_CATEGORIES).map(([categoryKey, category]) => {
             const categoryExcellences = getExcellencesByCategory(categoryKey as 'manifestee' | 'principe' | 'quete');
+            const isDragOver = dragOverColumn === categoryKey;
             
             return (
-              <div key={categoryKey} className="kanban-column">
-                {/* Column Header - Style barre de menu */}
+              <div 
+                key={categoryKey} 
+                className={`kanban-column ${isDragOver ? 'drag-over' : ''}`}
+                onDragOver={(e) => handleDragOver(e, categoryKey)}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, categoryKey as 'manifestee' | 'principe' | 'quete')}
+              >
+                {/* Column Header */}
                 <div 
                   className="kanban-header"
                   style={{
@@ -125,15 +204,24 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   }}
                 >
                   {categoryExcellences.map(excellence => (
-                    <ExcellenceCard
+                    <div
                       key={excellence.id}
-                      excellence={excellence}
-                      experienceCount={getExperienceCount(excellence.id)}
-                      onUpdate={onUpdateExcellence}
-                      onDelete={onDeleteExcellence}
-                      onView={handleViewExcellence}
-                      onEdit={handleEditExcellence}
-                    />
+                      draggable={!isMobile}
+                      onDragStart={(e) => handleDragStart(e, excellence)}
+                      onDragEnd={handleDragEnd}
+                      onTouchStart={(e) => handleTouchStart(e, excellence)}
+                      onTouchEnd={handleTouchEnd}
+                      className={`${draggedExcellence?.id === excellence.id ? 'dragging' : ''}`}
+                    >
+                      <ExcellenceCard
+                        excellence={excellence}
+                        experienceCount={getExperienceCount(excellence.id)}
+                        onUpdate={onUpdateExcellence}
+                        onDelete={onDeleteExcellence}
+                        onView={handleViewExcellence}
+                        onEdit={handleEditExcellence}
+                      />
+                    </div>
                   ))}
                   
                   {categoryExcellences.length === 0 && (
@@ -163,6 +251,59 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           onEdit={handleEditExcellence}
           onDelete={onDeleteExcellence}
           getExperienceCount={getExperienceCount}
+        />
+      )}
+
+      {/* Mobile Context Menu */}
+      {showContextMenu && (
+        <div 
+          className="fixed bg-white border border-gray-300 rounded-lg shadow-lg z-50 py-2"
+          style={{
+            left: showContextMenu.x - 100,
+            top: showContextMenu.y - 50,
+            backgroundColor: 'var(--bg-tertiary)',
+            borderColor: 'var(--border-medium)'
+          }}
+        >
+          {Object.entries(EXCELLENCE_CATEGORIES).map(([categoryKey, category]) => (
+            <button
+              key={categoryKey}
+              onClick={() => handleCategoryChange(showContextMenu.excellence, categoryKey as 'manifestee' | 'principe' | 'quete')}
+              disabled={showContextMenu.excellence.category === categoryKey}
+              className={`w-full text-left px-4 py-2 hover:bg-gray-100 ${
+                showContextMenu.excellence.category === categoryKey ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              style={{ 
+                color: 'var(--text-primary)',
+                backgroundColor: 'transparent'
+              }}
+              onMouseEnter={(e) => {
+                if (showContextMenu.excellence.category !== categoryKey) {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+            >
+              {category.title}
+            </button>
+          ))}
+          <button
+            onClick={closeContextMenu}
+            className="w-full text-left px-4 py-2 text-sm"
+            style={{ color: 'var(--text-secondary)' }}
+          >
+            Annuler
+          </button>
+        </div>
+      )}
+
+      {/* Overlay to close context menu */}
+      {showContextMenu && (
+        <div 
+          className="fixed inset-0 z-40"
+          onClick={closeContextMenu}
         />
       )}
 
