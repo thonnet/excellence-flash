@@ -2,15 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Eye, Edit2, X, ChevronUp, ChevronDown } from 'lucide-react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Eye, Edit2, X, ChevronUp, ChevronDown, Search } from 'lucide-react';
 
 interface ExcellenceListViewProps {
   excellences: Excellence[];
@@ -20,7 +12,7 @@ interface ExcellenceListViewProps {
   getExperienceCount: (excellenceId: string) => number;
 }
 
-type SortField = 'name' | 'category' | 'experienceCount' | 'created_at';
+type SortKey = 'name' | 'category' | 'description' | 'experiences' | 'created_at';
 type SortDirection = 'asc' | 'desc';
 
 export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
@@ -30,48 +22,45 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
   onDelete,
   getExperienceCount
 }) => {
-  const [sortField, setSortField] = useState<SortField>('name');
+  const [sortKey, setSortKey] = useState<SortKey>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
-  const handleSort = (field: SortField) => {
-    if (sortField === field) {
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
-      setSortField(field);
+      setSortKey(key);
       setSortDirection('asc');
     }
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette excellence ?')) {
-      onDelete(id);
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+  const clearSearch = () => {
+    setSearchQuery('');
   };
 
   const filteredAndSortedExcellences = useMemo(() => {
-    let filtered = excellences.filter(excellence => {
-      const matchesCategory = categoryFilter === 'all' || excellence.category === categoryFilter;
-      const matchesSearch = searchQuery === '' || 
-        excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        excellence.description.toLowerCase().includes(searchQuery.toLowerCase());
-      
-      return matchesCategory && matchesSearch;
-    });
+    let filtered = excellences;
 
-    filtered.sort((a, b) => {
-      let aValue, bValue;
-      
-      switch (sortField) {
+    // Filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter(excellence =>
+        excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        excellence.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Filter by category
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(excellence => excellence.category === categoryFilter);
+    }
+
+    // Sort
+    return filtered.sort((a, b) => {
+      let aValue: any, bValue: any;
+
+      switch (sortKey) {
         case 'name':
           aValue = a.name.toLowerCase();
           bValue = b.name.toLowerCase();
@@ -80,266 +69,252 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
           aValue = EXCELLENCE_CATEGORIES[a.category].title;
           bValue = EXCELLENCE_CATEGORIES[b.category].title;
           break;
-        case 'experienceCount':
+        case 'description':
+          aValue = a.description.toLowerCase();
+          bValue = b.description.toLowerCase();
+          break;
+        case 'experiences':
           aValue = getExperienceCount(a.id);
           bValue = getExperienceCount(b.id);
           break;
         case 'created_at':
-          aValue = new Date(a.created_at).getTime();
-          bValue = new Date(b.created_at).getTime();
+          aValue = new Date(a.created_at);
+          bValue = new Date(b.created_at);
           break;
         default:
-          return 0;
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
       }
 
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return sortDirection === 'asc' 
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      } else {
-        return sortDirection === 'asc' 
-          ? (aValue as number) - (bValue as number)
-          : (bValue as number) - (aValue as number);
-      }
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
     });
+  }, [excellences, searchQuery, categoryFilter, sortKey, sortDirection, getExperienceCount]);
 
-    return filtered;
-  }, [excellences, sortField, sortDirection, categoryFilter, searchQuery, getExperienceCount]);
-
-  const SortIcon = ({ field }: { field: SortField }) => {
-    if (sortField !== field) return null;
+  const SortIcon = ({ column }: { column: SortKey }) => {
+    if (sortKey !== column) return null;
     return sortDirection === 'asc' ? <ChevronUp size={16} /> : <ChevronDown size={16} />;
   };
 
-  if (excellences.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-          <span className="text-2xl">📋</span>
-        </div>
-        <h3 className="text-lg font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
-          Aucune excellence
-        </h3>
-        <p style={{ color: 'var(--text-muted)' }} className="mb-4">
-          Créez votre première excellence pour commencer votre cartographie !
-        </p>
-      </div>
-    );
-  }
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
 
   return (
     <div className="space-y-4">
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <input
-            type="text"
-            placeholder="Rechercher dans les excellences..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2"
-            style={{
-              backgroundColor: 'var(--bg-tertiary)',
-              borderColor: 'var(--border-subtle)',
-              color: 'var(--text-primary)'
-            }}
-          />
+      {/* Search and Filters */}
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <div className="search-field-container">
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2" style={{ color: 'var(--text-muted)' }} />
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-10 py-2 rounded-lg border transition-colors"
+              style={{
+                backgroundColor: 'var(--bg-tertiary)',
+                borderColor: searchQuery ? 'var(--accent-orange)' : 'var(--border-subtle)',
+                color: 'var(--text-primary)'
+              }}
+            />
+            {searchQuery && (
+              <button
+                onClick={clearSearch}
+                className={`search-clear-button visible`}
+                title="Effacer la recherche"
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
         </div>
-        <div>
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2"
-            style={{
-              backgroundColor: 'var(--bg-tertiary)',
-              borderColor: 'var(--border-subtle)',
-              color: 'var(--text-primary)'
-            }}
-          >
-            <option value="all">Toutes les catégories</option>
-            {Object.entries(EXCELLENCE_CATEGORIES).map(([key, category]) => (
-              <option key={key} value={key}>
-                {category.title}
-              </option>
-            ))}
-          </select>
-        </div>
+
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="px-3 py-2 rounded-lg border"
+          style={{
+            backgroundColor: 'var(--bg-tertiary)',
+            borderColor: 'var(--border-subtle)',
+            color: 'var(--text-primary)'
+          }}
+        >
+          <option value="all">Toutes les catégories</option>
+          {Object.entries(EXCELLENCE_CATEGORIES).map(([key, category]) => (
+            <option key={key} value={key}>
+              {category.title}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Table */}
-      <div 
-        className="rounded-lg border overflow-hidden"
-        style={{ 
-          backgroundColor: 'var(--bg-secondary)',
-          borderColor: 'var(--border-subtle)'
-        }}
-      >
-        <Table>
-          <TableHeader>
-            <TableRow style={{ borderColor: 'var(--border-subtle)' }}>
-              <TableHead 
-                className="cursor-pointer select-none"
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+              <th 
+                className="text-left p-4 cursor-pointer border-b"
+                style={{ borderColor: 'var(--border-medium)' }}
                 onClick={() => handleSort('name')}
-                style={{ color: 'var(--text-primary)' }}
               >
                 <div className="flex items-center space-x-2">
-                  <span>Nom</span>
-                  <SortIcon field="name" />
+                  <span style={{ color: 'var(--text-primary)' }}>Nom</span>
+                  <SortIcon column="name" />
                 </div>
-              </TableHead>
-              <TableHead 
-                className="cursor-pointer select-none"
+              </th>
+              <th 
+                className="text-left p-4 cursor-pointer border-b"
+                style={{ borderColor: 'var(--border-medium)' }}
                 onClick={() => handleSort('category')}
-                style={{ color: 'var(--text-primary)' }}
               >
                 <div className="flex items-center space-x-2">
-                  <span>Catégorie</span>
-                  <SortIcon field="category" />
+                  <span style={{ color: 'var(--text-primary)' }}>Catégorie</span>
+                  <SortIcon column="category" />
                 </div>
-              </TableHead>
-              <TableHead style={{ color: 'var(--text-primary)' }}>
-                Description
-              </TableHead>
-              <TableHead 
-                className="cursor-pointer select-none"
-                onClick={() => handleSort('experienceCount')}
-                style={{ color: 'var(--text-primary)' }}
+              </th>
+              <th 
+                className="text-left p-4 cursor-pointer border-b"
+                style={{ borderColor: 'var(--border-medium)' }}
+                onClick={() => handleSort('description')}
               >
                 <div className="flex items-center space-x-2">
-                  <span>Expériences</span>
-                  <SortIcon field="experienceCount" />
+                  <span style={{ color: 'var(--text-primary)' }}>Description</span>
+                  <SortIcon column="description" />
                 </div>
-              </TableHead>
-              <TableHead 
-                className="cursor-pointer select-none"
+              </th>
+              <th 
+                className="text-left p-4 cursor-pointer border-b"
+                style={{ borderColor: 'var(--border-medium)' }}
+                onClick={() => handleSort('experiences')}
+              >
+                <div className="flex items-center space-x-2">
+                  <span style={{ color: 'var(--text-primary)' }}>Nb Expériences</span>
+                  <SortIcon column="experiences" />
+                </div>
+              </th>
+              <th 
+                className="text-left p-4 cursor-pointer border-b"
+                style={{ borderColor: 'var(--border-medium)' }}
                 onClick={() => handleSort('created_at')}
-                style={{ color: 'var(--text-primary)' }}
               >
                 <div className="flex items-center space-x-2">
-                  <span>Créée le</span>
-                  <SortIcon field="created_at" />
+                  <span style={{ color: 'var(--text-primary)' }}>Date création</span>
+                  <SortIcon column="created_at" />
                 </div>
-              </TableHead>
-              <TableHead style={{ color: 'var(--text-primary)' }}>
-                Actions
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredAndSortedExcellences.map((excellence, index) => {
-              const category = EXCELLENCE_CATEGORIES[excellence.category];
-              const experienceCount = getExperienceCount(excellence.id);
-              
-              return (
-                <TableRow 
+              </th>
+              <th 
+                className="text-left p-4 border-b"
+                style={{ borderColor: 'var(--border-medium)' }}
+              >
+                <span style={{ color: 'var(--text-primary)' }}>Actions</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredAndSortedExcellences.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
+                  {searchQuery || categoryFilter !== 'all' 
+                    ? 'Aucune excellence trouvée pour ces critères'
+                    : 'Aucune excellence pour le moment'
+                  }
+                </td>
+              </tr>
+            ) : (
+              filteredAndSortedExcellences.map((excellence, index) => (
+                <tr 
                   key={excellence.id}
+                  className="border-b hover:bg-opacity-50"
                   style={{ 
-                    borderColor: 'var(--border-subtle)',
-                    backgroundColor: index % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-tertiary)'
+                    backgroundColor: index % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-primary)',
+                    borderColor: 'var(--border-subtle)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = index % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-primary)';
                   }}
                 >
-                  <TableCell>
-                    <div className="font-medium" style={{ color: 'var(--text-primary)' }}>
+                  <td className="p-4">
+                    <span className="font-medium" style={{ color: 'var(--text-primary)' }}>
                       {excellence.name}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div 
-                      className="inline-block px-2 py-1 rounded text-xs font-medium"
-                      style={{
-                        backgroundColor: category.bgColor,
-                        color: category.color
-                      }}
-                    >
-                      {category.title}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div 
-                      className="max-w-xs truncate text-sm"
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <span style={{ color: 'var(--text-secondary)' }}>
+                      {EXCELLENCE_CATEGORIES[excellence.category].title}
+                    </span>
+                  </td>
+                  <td className="p-4 max-w-xs">
+                    <span 
+                      className="truncate block"
                       style={{ color: 'var(--text-secondary)' }}
                       title={excellence.description}
                     >
-                      {excellence.description || '—'}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <span style={{ color: 'var(--text-secondary)' }}>
-                      {experienceCount}
+                      {excellence.description}
                     </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  </td>
+                  <td className="p-4">
+                    <span style={{ color: 'var(--text-secondary)' }}>
+                      {getExperienceCount(excellence.id)}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <span style={{ color: 'var(--text-secondary)' }}>
                       {formatDate(excellence.created_at)}
                     </span>
-                  </TableCell>
-                  <TableCell>
+                  </td>
+                  <td className="p-4">
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => onView(excellence)}
-                        className="p-2 rounded transition-colors"
-                        style={{ 
-                          color: 'var(--text-secondary)',
-                          backgroundColor: 'transparent'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }}
+                        className="action-btn"
                         title="Voir"
                       >
-                        <Eye size={16} />
+                        <Eye size={14} />
                       </button>
                       <button
                         onClick={() => onEdit(excellence)}
-                        className="p-2 rounded transition-colors"
-                        style={{ 
-                          color: 'var(--text-secondary)',
-                          backgroundColor: 'transparent'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }}
+                        className="action-btn"
                         title="Modifier"
                       >
-                        <Edit2 size={16} />
+                        <Edit2 size={14} />
                       </button>
                       <button
-                        onClick={() => handleDelete(excellence.id)}
-                        className="p-2 rounded transition-colors"
-                        style={{ 
-                          color: 'var(--text-secondary)',
-                          backgroundColor: 'transparent'
+                        onClick={() => {
+                          if (confirm('Êtes-vous sûr de vouloir supprimer cette excellence ?')) {
+                            onDelete(excellence.id);
+                          }
                         }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }}
+                        className="action-btn"
                         title="Supprimer"
                       >
-                        <X size={16} />
+                        <X size={14} />
                       </button>
                     </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
 
-      {filteredAndSortedExcellences.length === 0 && (excellences.length > 0) && (
-        <div className="text-center py-8">
-          <p style={{ color: 'var(--text-muted)' }}>
-            Aucune excellence ne correspond à vos critères de recherche.
-          </p>
+      {/* Results summary */}
+      {(searchQuery || categoryFilter !== 'all') && (
+        <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          {filteredAndSortedExcellences.length} excellence{filteredAndSortedExcellences.length !== 1 ? 's' : ''} trouvée{filteredAndSortedExcellences.length !== 1 ? 's' : ''}
+          {searchQuery && ` pour "${searchQuery}"`}
+          {categoryFilter !== 'all' && ` dans la catégorie "${EXCELLENCE_CATEGORIES[categoryFilter as keyof typeof EXCELLENCE_CATEGORIES].title}"`}
         </div>
       )}
     </div>

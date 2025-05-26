@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -241,18 +242,6 @@
   cursor: grabbing;
 }
 
-.experience-counter-overlay {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-medium);
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 0.75rem;
-  z-index: 15;
-}
-
 .excellence-description-overlay {
   position: absolute;
   left: 15%;
@@ -308,25 +297,39 @@
   right: 4px;
   display: flex;
   gap: 4px;
-  background: rgba(0,0,0,0.8);
   border-radius: 4px;
   padding: 4px;
   z-index: 20;
 }
 
 .action-btn {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
   cursor: pointer;
-  padding: 4px;
-  border-radius: 2px;
+  padding: 6px;
+  border-radius: 4px;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .action-btn:hover {
   background: var(--bg-hover);
-  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+/* Light mode adaptations for action buttons */
+.light .action-btn {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  color: #333333;
+}
+
+.light .action-btn:hover {
+  background: #e9ecef;
+  border-color: #cccccc;
 }
 
 /* Navigation avec filet orange pour actif */
@@ -414,9 +417,54 @@
   transform: translateY(0);
 }
 
+/* Search field styling */
+.search-field-container {
+  position: relative;
+  max-width: 500px;
+  width: 50%;
+}
+
+.search-clear-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.search-clear-button.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.search-clear-button:hover {
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
 @media (max-width: 768px) {
   .experiences-gallery {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 12px;
+  }
+  
+  .search-field-container {
+    width: 80%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .search-field-container {
+    width: 60%;
   }
 }

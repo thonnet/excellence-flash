@@ -87,13 +87,6 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
       {/* DÉTAILS au survol UNIQUEMENT */}
       {isHovered && (
         <>
-          {/* Compteur d'expériences au survol */}
-          <div className="experience-counter-overlay">
-            <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-              {experienceCount} expérience{experienceCount !== 1 ? 's' : ''}
-            </span>
-          </div>
-
           {excellence.description && showDescription && (
             <div 
               className={`excellence-description-overlay ${descriptionPosition === 'above' ? 'above' : 'below'}`}
