@@ -1,7 +1,14 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import UserManagement from './UserManagement';
 
 const AdminDashboard = () => {
+  const [currentView, setCurrentView] = useState<'dashboard' | 'users'>('dashboard');
+
+  if (currentView === 'users') {
+    return <UserManagement onBack={() => setCurrentView('dashboard')} />;
+  }
+
   return (
     <div className="admin-dashboard">
       <div className="admin-header-section">
@@ -13,7 +20,12 @@ const AdminDashboard = () => {
         <div className="stat-card">
           <h3>👥 Utilisateurs</h3>
           <p>Gérer les comptes et permissions</p>
-          <button className="admin-btn">Accéder</button>
+          <button 
+            className="admin-btn"
+            onClick={() => setCurrentView('users')}
+          >
+            Accéder
+          </button>
         </div>
         
         <div className="stat-card">
