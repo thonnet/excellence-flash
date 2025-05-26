@@ -2,7 +2,7 @@
 import React from 'react';
 import { Excellence, Experience } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { X, Calendar, Tag } from 'lucide-react';
+import { X, Calendar, Star } from 'lucide-react';
 
 interface ExcellenceDetailModalProps {
   excellence: Excellence;
@@ -44,7 +44,7 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
                       excellence.category === 'quete' ? '#FFB366' : '#999999';
     
     return (
-      <Tag 
+      <Star 
         size={18}
         className="category-tag__icon"
         style={{ 

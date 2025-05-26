@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { X, Tag } from 'lucide-react';
+import { X, Star } from 'lucide-react';
 
 interface AddExcellenceModalProps {
   isOpen: boolean;
@@ -52,7 +52,7 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
                       categoryKey === 'quete' ? '#FFB366' : '#999999';
     
     return (
-      <Tag 
+      <Star 
         size={16}
         style={{ 
           color: iconColor,

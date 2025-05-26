@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Experience, Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Calendar, Tag } from 'lucide-react';
+import { Calendar, Star } from 'lucide-react';
 import { isToday, isThisWeek, isThisMonth, isThisYear } from 'date-fns';
 
 interface ExperiencesDisplayProps {
@@ -198,7 +198,7 @@ const ExperiencesKanban: React.FC<{ experiences: Experience[]; excellences: Exce
             <div className="category-header" style={{ marginBottom: '16px' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Tag className={`category-icon ${getCategoryIconClass(category)} mr-2`} size={16} />
+                  <Star className={`category-icon ${getCategoryIconClass(category)} mr-2`} size={16} />
                   <h3 className="font-medium" style={{ color: 'var(--text-primary)' }}>
                     {categoryData.title}
                   </h3>
@@ -348,7 +348,7 @@ const ExperiencesList: React.FC<{ experiences: Experience[]; excellences: Excell
                       {excellence && (
                         <div className="flex items-center space-x-2">
                           <div className="flex items-center">
-                            <Tag className={`category-icon ${getCategoryIconClass(excellence.category)} mr-2`} size={16} />
+                            <Star className={`category-icon ${getCategoryIconClass(excellence.category)} mr-2`} size={16} />
                             <span 
                               className="text-xs font-medium"
                               style={{ color: 'var(--text-secondary)' }}
