@@ -25,6 +25,8 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
+  const [message, setMessage] = useState('');
   const [newUser, setNewUser] = useState({
     email: '',
     fullName: '',
@@ -57,15 +59,65 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsCreating(true);
+    setMessage('');
     
-    // Pour l'instant, juste simuler la création
-    console.log('Création utilisateur:', newUser);
+    // Validation basique
+    if (!newUser.email || !newUser.fullName) {
+      setMessage('Tous les champs sont obligatoires');
+      setIsCreating(false);
+      return;
+    }
     
-    // Reset du formulaire
-    setNewUser({ email: '', fullName: '', role: 'user' });
-    setShowCreateForm(false);
-    
-    // Note: Pour l'étape 5, nous implémenterons la vraie création avec Supabase Auth
+    try {
+      // 1. Créer l'utilisateur avec Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email: newUser.email,
+        password: 'TempPassword123!',
+        email_confirm: true,
+        user_metadata: {
+          full_name: newUser.fullName,
+          role: newUser.role
+        }
+      });
+
+      if (authError) {
+        console.error('Erreur création auth:', authError);
+        setMessage('Erreur lors de la création: ' + authError.message);
+        return;
+      }
+
+      // 2. Mettre à jour le profil avec les informations
+      if (authData.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({
+            full_name: newUser.fullName,
+            role: newUser.role
+          })
+          .eq('id', authData.user.id);
+
+        if (profileError) {
+          console.error('Erreur profil:', profileError);
+        }
+      }
+
+      // 3. Succès
+      setMessage(`Utilisateur créé avec succès! Email: ${newUser.email} - Mot de passe temporaire: TempPassword123!`);
+      
+      // Reset du formulaire
+      setNewUser({ email: '', fullName: '', role: 'user' });
+      setShowCreateForm(false);
+      
+      // Recharger la liste
+      fetchUsers();
+      
+    } catch (error: any) {
+      console.error('Erreur:', error);
+      setMessage('Erreur lors de la création de l\'utilisateur: ' + (error.message || 'Erreur inconnue'));
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   const getRoleBadgeVariant = (role: string) => {
@@ -111,6 +163,17 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
         </Button>
       </div>
 
+      {/* Messages de feedback */}
+      {message && (
+        <div className={`p-4 rounded-md border ${
+          message.includes('succès') 
+            ? 'bg-green-50 border-green-200 text-green-800' 
+            : 'bg-red-50 border-red-200 text-red-800'
+        }`}>
+          {message}
+        </div>
+      )}
+
       {/* Formulaire de création */}
       {showCreateForm && (
         <Card>
@@ -134,6 +197,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
                     value={newUser.fullName}
                     onChange={(e) => setNewUser({...newUser, fullName: e.target.value})}
                     required
+                    className="border-l-4 border-l-orange-500"
                   />
                 </div>
                 <div>
@@ -147,6 +211,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
                     value={newUser.email}
                     onChange={(e) => setNewUser({...newUser, email: e.target.value})}
                     required
+                    className="border-l-4 border-l-orange-500"
                   />
                 </div>
                 <div>
@@ -157,7 +222,7 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
                     id="role"
                     value={newUser.role}
                     onChange={(e) => setNewUser({...newUser, role: e.target.value})}
-                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border-l-4 border-l-orange-500"
                   >
                     <option value="user">Utilisateur</option>
                     <option value="admin">Administrateur</option>
@@ -167,9 +232,10 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
               <Button 
                 type="submit" 
                 className="w-full"
+                disabled={isCreating}
                 style={{ backgroundColor: 'var(--accent-orange)' }}
               >
-                Créer l'utilisateur
+                {isCreating ? 'Création en cours...' : 'Créer l\'utilisateur'}
               </Button>
             </form>
           </CardContent>
@@ -213,10 +279,17 @@ const UserManagement: React.FC<UserManagementProps> = ({ onBack }) => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <span className="flex items-center space-x-1">
-                        <span>{getStatusIcon(user.last_sign_in_at)}</span>
-                        <span className="text-sm">{getStatusText(user.last_sign_in_at)}</span>
-                      </span>
+                      <div>
+                        <span className="flex items-center space-x-1">
+                          <span>{getStatusIcon(user.last_sign_in_at)}</span>
+                          <span className="text-sm">{getStatusText(user.last_sign_in_at)}</span>
+                        </span>
+                        {user.last_sign_in_at && (
+                          <div className="text-xs text-muted-foreground mt-1">
+                            Dernière connexion: {new Date(user.last_sign_in_at).toLocaleDateString('fr-FR')}
+                          </div>
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {new Date(user.created_at).toLocaleDateString('fr-FR')}
