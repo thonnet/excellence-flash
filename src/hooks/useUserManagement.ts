@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '../integrations/supabase/client';
 
@@ -55,45 +54,26 @@ export const useUserManagement = () => {
     }
     
     try {
-      // Nouvelle approche: créer une invitation d'utilisateur
-      // Cela génère un lien d'invitation que l'utilisateur peut utiliser pour s'inscrire
-      const { data: inviteData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(
-        userData.email,
-        {
-          data: {
-            full_name: userData.fullName,
-            role: userData.role
-          },
-          redirectTo: `${window.location.origin}/auth`
-        }
-      );
+      // Créer directement un profil utilisateur
+      // Les nouvelles politiques RLS permettent aux admins de créer des profils
+      const tempUserId = crypto.randomUUID();
+      
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          id: tempUserId,
+          email: userData.email,
+          full_name: userData.fullName,
+          role: userData.role
+        });
 
-      if (inviteError) {
-        console.error('Erreur invitation:', inviteError);
-        
-        // Si l'API admin ne fonctionne pas, utiliser l'approche alternative
-        // Créer directement un profil avec un ID temporaire
-        const tempUserId = crypto.randomUUID();
-        
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: tempUserId,
-            email: userData.email,
-            full_name: userData.fullName,
-            role: userData.role
-          });
-
-        if (profileError) {
-          console.error('Erreur profil:', profileError);
-          setMessage('Erreur lors de la création: ' + profileError.message);
-          return;
-        }
-
-        setMessage(`Utilisateur créé avec succès! Un email d'invitation sera envoyé à ${userData.email} pour finaliser l'inscription.`);
-      } else {
-        setMessage(`Invitation envoyée avec succès à ${userData.email}! L'utilisateur recevra un email pour finaliser son inscription.`);
+      if (profileError) {
+        console.error('Erreur profil:', profileError);
+        setMessage('Erreur lors de la création: ' + profileError.message);
+        return;
       }
+
+      setMessage(`Utilisateur créé avec succès! Un profil a été créé pour ${userData.email}.`);
 
       // Recharger la liste
       fetchUsers();
@@ -155,9 +135,6 @@ export const useUserManagement = () => {
         return;
       }
 
-      // Note: La suppression de l'auth user nécessite des privilèges admin spéciaux
-      // Pour l'instant, on supprime juste le profil
-      
       setMessage('Utilisateur supprimé avec succès!');
       fetchUsers();
       
