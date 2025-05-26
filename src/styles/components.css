@@ -1,47 +1,77 @@
 
-/* Couleurs pour les catégories d'excellences - Styles spécifiques pour les colonnes Kanban */
-.kanban-column-manifestee {
-  background: linear-gradient(135deg, var(--color-excellence-manifestee), rgba(139, 150, 87, 0.1)) !important;
-  border: 2px solid var(--color-excellence-manifestee) !important;
+/* STYLES KANBAN - Colonnes avec couleurs spécifiques */
+.kanban-column {
+  min-height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.kanban-column-principe {
-  background: linear-gradient(135deg, var(--color-principe-excellence), rgba(167, 199, 231, 0.1)) !important;
-  border: 2px solid var(--color-principe-excellence) !important;
+.kanban-header {
+  padding: 16px;
+  font-weight: 600;
+  border-bottom: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.kanban-column-quete {
-  background: linear-gradient(135deg, var(--color-quete-excellence), rgba(255, 179, 102, 0.1)) !important;
-  border: 2px solid var(--color-quete-excellence) !important;
+.kanban-content {
+  padding: 16px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* Headers des colonnes Kanban */
-.kanban-header-manifestee {
-  background-color: var(--color-excellence-manifestee) !important;
-  color: white !important;
+/* Couleurs spécifiques pour chaque catégorie d'excellence */
+.kanban-column:nth-child(1) {
+  background: linear-gradient(135deg, var(--color-excellence-manifestee), rgba(139, 150, 87, 0.1));
+  border: 2px solid var(--color-excellence-manifestee);
 }
 
-.kanban-header-principe {
-  background-color: var(--color-principe-excellence) !important;
-  color: white !important;
+.kanban-column:nth-child(1) .kanban-header {
+  background-color: var(--color-excellence-manifestee);
+  color: white;
+  border-color: var(--color-excellence-manifestee);
 }
 
-.kanban-header-quete {
-  background-color: var(--color-quete-excellence) !important;
-  color: white !important;
+.kanban-column:nth-child(2) {
+  background: linear-gradient(135deg, var(--color-principe-excellence), rgba(167, 199, 231, 0.1));
+  border: 2px solid var(--color-principe-excellence);
 }
 
-/* Couleurs pour les catégories d'excellences - Anciens styles conservés */
-.excellence-manifestee { 
-  background: linear-gradient(135deg, var(--color-excellence-manifestee), rgba(139, 150, 87, 0.8));
+.kanban-column:nth-child(2) .kanban-header {
+  background-color: var(--color-principe-excellence);
+  color: white;
+  border-color: var(--color-principe-excellence);
 }
 
-.excellence-principe { 
-  background: linear-gradient(135deg, var(--color-principe-excellence), rgba(167, 199, 231, 0.8));
+.kanban-column:nth-child(3) {
+  background: linear-gradient(135deg, var(--color-quete-excellence), rgba(255, 179, 102, 0.1));
+  border: 2px solid var(--color-quete-excellence);
 }
 
-.excellence-quete { 
-  background: linear-gradient(135deg, var(--color-quete-excellence), rgba(255, 179, 102, 0.8));
+.kanban-column:nth-child(3) .kanban-header {
+  background-color: var(--color-quete-excellence);
+  color: white;
+  border-color: var(--color-quete-excellence);
+}
+
+/* Styles pour les cartes d'excellence */
+.excellence-card {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.excellence-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-orange);
 }
 
 /* Icônes de catégories */
@@ -51,54 +81,45 @@
   transition: all 0.2s ease;
 }
 
-/* Classes spécifiques par catégorie - COULEURS EXACTES AVEC PRIORITÉ MAXIMALE */
 .category-icon--manifestee {
   color: var(--color-excellence-manifestee) !important;
   fill: var(--color-excellence-manifestee) !important;
-  filter: none !important;
 }
 
 .category-icon--principe {
   color: var(--color-principe-excellence) !important;
   fill: var(--color-principe-excellence) !important;
-  filter: none !important;
 }
 
 .category-icon--quete {
   color: var(--color-quete-excellence) !important;
   fill: var(--color-quete-excellence) !important;
-  filter: none !important;
 }
 
-/* Tags de catégories - Styles additionnels pour assurer la consistance */
-.category-tag {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+/* Drag & Drop states */
+.kanban-column.drag-over {
+  background: rgba(238, 90, 1, 0.1);
+  border-color: var(--color-primary-orange);
 }
 
-.category-tag--manifestee .category-tag__icon,
-.category-icon.manifestee {
-  color: var(--color-excellence-manifestee) !important;
-  fill: var(--color-excellence-manifestee) !important;
-  filter: none !important;
+.excellence-card.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
 }
 
-.category-tag--principe .category-tag__icon,
-.category-icon.principe {
-  color: var(--color-principe-excellence) !important;
-  fill: var(--color-principe-excellence) !important;
-  filter: none !important;
+/* Responsive Kanban */
+.kanban-mobile-optimized {
+  display: grid;
+  gap: 1.5rem;
 }
 
-.category-tag--quete .category-tag__icon,
-.category-icon.quete {
-  color: var(--color-quete-excellence) !important;
-  fill: var(--color-quete-excellence) !important;
-  filter: none !important;
+@media (min-width: 1024px) {
+  .kanban-mobile-optimized {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-/* Styles pour les boutons de création d'excellence */
+/* Bouton de création d'excellence */
 .btn-create-excellence {
   position: fixed;
   bottom: 2rem;
@@ -123,10 +144,6 @@
   transform: scale(1.05);
 }
 
-.btn-create-excellence.hidden {
-  display: none;
-}
-
 /* Version desktop du bouton */
 @media (min-width: 1024px) {
   .btn-create-excellence {
@@ -141,4 +158,42 @@
   .btn-create-excellence:hover {
     transform: none;
   }
+}
+
+/* Page headers */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+/* View toggle styles */
+.active-view-toggle {
+  position: relative;
+}
+
+.active-view-toggle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-primary-orange);
 }

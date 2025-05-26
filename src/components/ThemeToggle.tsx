@@ -4,7 +4,7 @@ import { Moon, Sun } from 'lucide-react';
 
 export const ThemeToggle: React.FC = () => {
   const [isDark, setIsDark] = useState(() => {
-    // Initialiser à partir du localStorage ou par défaut sombre
+    // Vérifier d'abord le localStorage, sinon utiliser le thème sombre par défaut
     const saved = localStorage.getItem('theme');
     return saved ? saved === 'dark' : true;
   });
@@ -12,19 +12,26 @@ export const ThemeToggle: React.FC = () => {
   useEffect(() => {
     console.log('ThemeToggle: Applying theme', isDark ? 'dark' : 'light');
     
-    // Appliquer le thème
+    // Appliquer le thème via l'attribut data-theme
+    const root = document.documentElement;
+    
     if (isDark) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.documentElement.classList.remove('light');
+      root.setAttribute('data-theme', 'dark');
+      root.classList.remove('light');
       localStorage.setItem('theme', 'dark');
     } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      document.documentElement.classList.add('light');
+      root.setAttribute('data-theme', 'light');
+      root.classList.add('light');
       localStorage.setItem('theme', 'light');
     }
     
-    // Forcer un rafraîchissement des styles
-    document.documentElement.style.setProperty('--force-refresh', Math.random().toString());
+    // Forcer un recalcul des styles CSS
+    root.style.setProperty('--theme-applied', Math.random().toString());
+    
+    // Déclencher un événement de redimensionnement pour forcer le re-render
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 10);
   }, [isDark]);
 
   const toggleTheme = () => {
@@ -35,17 +42,19 @@ export const ThemeToggle: React.FC = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg transition-colors"
+      className="p-2 rounded-lg transition-all duration-200 border"
       style={{ 
         backgroundColor: 'var(--color-bg-tertiary)',
         color: 'var(--color-text-secondary)',
-        border: '1px solid var(--color-border-subtle)'
+        borderColor: 'var(--color-border-subtle)'
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = 'var(--color-bg-hover)';
+        e.currentTarget.style.borderColor = 'var(--color-primary-orange)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = 'var(--color-bg-tertiary)';
+        e.currentTarget.style.borderColor = 'var(--color-border-subtle)';
       }}
       title={isDark ? 'Passer au mode clair' : 'Passer au mode sombre'}
     >
