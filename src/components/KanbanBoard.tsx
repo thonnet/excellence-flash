@@ -8,7 +8,7 @@ import { ContextualHelp } from './ContextualHelp';
 import { ExcellenceListView } from './ExcellenceListView';
 import { ExcellenceDetailModal } from './ExcellenceDetailModal';
 import { ExcellenceEditModal } from './ExcellenceEditModal';
-import { Plus, Tag } from 'lucide-react';
+import { Plus, Star } from 'lucide-react';
 import { useIsMobile } from '../hooks/use-mobile';
 
 interface KanbanBoardProps {
@@ -180,7 +180,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                         title={category.description}
                       >
                         <h3 className="font-bold text-lg flex items-center" style={{ color: 'var(--text-primary)' }}>
-                          <Tag className={`category-icon ${getCategoryIconClass(categoryKey)} mr-2`} size={16} />
+                          <Star className={`category-icon ${getCategoryIconClass(categoryKey)} mr-2`} size={16} />
                           <span className="font-bold">{category.title}</span>
                           <span className="font-normal ml-2" style={{ color: 'var(--text-secondary)' }}>
                             {categoryExcellences.length}

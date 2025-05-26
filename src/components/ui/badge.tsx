@@ -1,5 +1,7 @@
+
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import { Star } from 'lucide-react'
 
 import { cn } from "@/lib/utils"
 
@@ -15,6 +17,9 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
+        manifestee: "border-transparent bg-green-100 text-green-800",
+        principe: "border-transparent bg-blue-100 text-blue-800", 
+        quete: "border-transparent bg-orange-100 text-orange-800",
       },
     },
     defaultVariants: {
@@ -25,11 +30,26 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  showIcon?: boolean;
+  category?: 'manifestee' | 'principe' | 'quete';
+}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
+function Badge({ className, variant, showIcon = false, category, ...props }: BadgeProps) {
+  const getCategoryIconClass = (cat?: string) => {
+    if (cat === 'manifestee') return 'category-icon--manifestee';
+    if (cat === 'principe') return 'category-icon--principe';
+    if (cat === 'quete') return 'category-icon--quete';
+    return 'category-icon--manifestee';
+  };
+
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div className={cn(badgeVariants({ variant }), className)} {...props}>
+      {showIcon && category && (
+        <Star className={`category-icon ${getCategoryIconClass(category)} mr-1`} size={12} />
+      )}
+      {props.children}
+    </div>
   )
 }
 

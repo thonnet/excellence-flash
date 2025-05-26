@@ -1,8 +1,7 @@
-
 import React, { useState, useMemo } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Eye, Edit2, X, Search, Tag } from 'lucide-react';
+import { Eye, Edit2, X, Search, Star } from 'lucide-react';
 
 interface ExcellenceListViewProps {
   excellences: Excellence[];
@@ -254,7 +253,7 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
                   </td>
                   <td className="p-4">
                     <div className="flex items-center">
-                      <Tag className={`category-icon ${getCategoryIconClass(excellence.category)} mr-2`} size={16} />
+                      <Star className={`category-icon ${getCategoryIconClass(excellence.category)} mr-2`} size={16} />
                       <span style={{ color: 'var(--text-secondary)' }}>
                         {EXCELLENCE_CATEGORIES[excellence.category].title}
                       </span>

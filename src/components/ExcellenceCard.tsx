@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Eye, Edit2, X, Tag } from 'lucide-react';
+import { Eye, Edit2, X, Star } from 'lucide-react';
 
 interface ExcellenceCardProps {
   excellence: Excellence;
@@ -89,7 +89,7 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
     >
       {/* AFFICHAGE MINIMAL - Nom avec pictogramme de catégorie */}
       <div className="flex items-start">
-        <Tag className={`category-icon ${getCategoryIconClass()} mr-2 mt-0.5`} size={16} />
+        <Star className={`category-icon ${getCategoryIconClass()} mr-2 mt-0.5`} size={16} />
         <h4 className="font-medium text-sm line-clamp-2 flex-1" style={{ color: 'var(--text-primary)' }}>
           {excellence.name}
         </h4>
