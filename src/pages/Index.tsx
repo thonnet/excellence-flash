@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanView } from '../components/KanbanView';
@@ -13,9 +12,11 @@ import { ViewToggle } from '../components/ViewToggle';
 import { DataImportExport } from '../components/DataImportExport';
 import { ContextualHelp } from '../components/ContextualHelp';
 import { AlternatingBaseline } from '../components/AlternatingBaseline';
+import { AdminSwitch } from '../components/AdminSwitch';
 import { Excellence, Experience, User } from '../types';
 import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
 import { Plus, Search } from 'lucide-react';
+import '../components/AdminSwitch.css';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
@@ -25,11 +26,14 @@ const Index = () => {
   const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
   const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
-  const [user, setUser] = useState<User>(mockUser);
+  const [user, setUser] = useState<User>({...mockUser, role: 'admin'}); // Temporairement admin pour tester
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  
+  // Nouvel état pour le mode admin
+  const [isAdminMode, setIsAdminMode] = useState(false);
 
   const filteredExcellences = excellences.filter(excellence => 
     excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -139,7 +143,7 @@ const Index = () => {
               className="hidden md:flex"
             />
 
-            {/* Simplified Search, Theme Toggle & Profile */}
+            {/* Simplified Search, Admin Switch, Theme Toggle & Profile */}
             <div className="flex items-center space-x-4">
               <div className="relative hidden sm:block">
                 <div className="relative">
@@ -175,6 +179,15 @@ const Index = () => {
                   </button>
                 </div>
               </div>
+              
+              {/* Admin Switch - visible seulement pour les admins */}
+              {user?.role === 'admin' && (
+                <AdminSwitch 
+                  isAdminMode={isAdminMode}
+                  onModeChange={setIsAdminMode}
+                />
+              )}
+              
               <ThemeToggle />
               <UserProfile 
                 user={user} 

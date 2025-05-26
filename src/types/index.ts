@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   email: string;
@@ -10,6 +9,7 @@ export interface User {
   plan_type: 'free' | 'pro' | 'premium';
   theme_preference: 'dark' | 'light';
   ai_insights_enabled: boolean;
+  role: 'user' | 'admin'; // Ajout du rôle
   created_at: string;
   updated_at: string;
 }
