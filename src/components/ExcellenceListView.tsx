@@ -49,7 +49,18 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
 
   const getCategoryIcon = (categoryKey: string) => {
     const categoryClass = getCategoryClass(categoryKey);
-    return <span className={`category-icon ${categoryClass}`}>🏷️</span>;
+    return (
+      <span 
+        className={`category-icon ${categoryClass}`}
+        style={{ 
+          color: categoryKey === 'manifestee' ? '#8B9657' : 
+                 categoryKey === 'principe' ? '#A7C7E7' : 
+                 categoryKey === 'quete' ? '#FFB366' : 'inherit'
+        }}
+      >
+        🏷️
+      </span>
+    );
   };
 
   const getSortArrows = (column: SortKey) => {

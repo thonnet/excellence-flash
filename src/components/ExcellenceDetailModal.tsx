@@ -40,7 +40,18 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
 
   const getCategoryIcon = () => {
     const categoryClass = getCategoryClass(excellence.category);
-    return <span className={`category-tag__icon category-icon ${categoryClass}`}>🏷️</span>;
+    return (
+      <span 
+        className={`category-tag__icon category-icon ${categoryClass}`}
+        style={{ 
+          color: excellence.category === 'manifestee' ? '#8B9657' : 
+                 excellence.category === 'principe' ? '#A7C7E7' : 
+                 excellence.category === 'quete' ? '#FFB366' : 'inherit'
+        }}
+      >
+        🏷️
+      </span>
+    );
   };
 
   return (
