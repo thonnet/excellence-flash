@@ -1,17 +1,12 @@
 
 import React from 'react';
-import { KanbanView } from './KanbanView';
+import { KanbanBoard } from './KanbanBoard';
 import { ListView } from './ListView';
 import { Observatoire } from './Observatoire';
 import { ExperiencesDisplay } from './ExperiencesDisplay';
-import { ViewToggle } from './ViewToggle';
-import { ContextualHelp } from './ContextualHelp';
-import { AlternatingBaseline } from './AlternatingBaseline';
-import AdminDashboard from './AdminDashboard';
+import { AdminDashboard } from './AdminDashboard';
 import { Excellence, Experience } from '../types';
 import { UserDisplay } from '../types/user';
-import { Plus } from 'lucide-react';
-import '../components/AdminDashboard.css';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
@@ -47,92 +42,71 @@ export const MainContent: React.FC<MainContentProps> = ({
   setIsExperienceFormOpen,
   isAdminMode,
 }) => {
-  const experiencesBaselines = [
-    "Transformez vos expériences en carburant d'excellence",
-    "Conscientisez la valeur de ce que vous accomplissez naturellement",
-    "Connectez vos expériences aux excellences qu'elles révèlent",
-    "Donnez du sens et de la valeur à ce que vous vivez",
-    "Développez votre autorité intrinsèque par la présence à ce que vous faites"
-  ];
-
-  // Si mode admin, afficher le dashboard admin
-  if (isAdminMode) {
+  // Si l'utilisateur est admin et en mode admin, afficher le dashboard admin
+  if (isAdminMode && user?.role === 'admin') {
     return (
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <AdminDashboard />
+      <main className="flex-1 overflow-hidden">
+        <div className="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <AdminDashboard />
+        </div>
       </main>
     );
   }
 
-  // Sinon, afficher l'interface utilisateur normale
-  return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {currentView === 'observatoire' && user && (
-        <Observatoire 
-          excellences={excellences}
-          experiences={experiences}
-          user={user}
-        />
-      )}
-
-      {currentView === 'kanban' && (
-        <KanbanView
-          excellences={filteredExcellences}
-          experiences={experiences}
-          onAddExcellence={onAddExcellence}
-          onUpdateExcellence={onUpdateExcellence}
-          onDeleteExcellence={onDeleteExcellence}
-          getExperienceCount={getExperienceCount}
-        />
-      )}
-
-      {currentView === 'list' && (
-        <ListView
-          excellences={filteredExcellences}
-          experiences={experiences}
-          onAddExcellence={onAddExcellence}
-          onUpdateExcellence={onUpdateExcellence}
-          onDeleteExcellence={onDeleteExcellence}
-          getExperienceCount={getExperienceCount}
-        />
-      )}
-
-      {currentView === 'experiences' && (
-        <div className="space-y-6">
-          <div className="page-header">
-            <div className="title-section">
-              <div className="flex items-center space-x-4">
-                <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Expériences</h2>
-                <ContextualHelp pageType="experiences" />
-              </div>
-              <div className="mt-1 h-6">
-                <AlternatingBaseline baselines={experiencesBaselines} />
-              </div>
-            </div>
-            <div className="view-controls">
-              <ViewToggle
-                currentView={experienceViewMode}
-                onViewChange={(view) => setExperienceViewMode(view as ExperienceViewMode)}
-                availableViews={['list', 'gallery']}
-              />
-              <button 
-                onClick={() => setIsExperienceFormOpen(true)}
-                className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors ml-4"
-                style={{ backgroundColor: 'var(--accent-orange)' }}
-              >
-                <Plus size={16} />
-                <span>Nouvelle expérience</span>
-              </button>
-            </div>
-          </div>
-          
+  // Affichage normal selon la vue sélectionnée
+  const renderContent = () => {
+    switch (currentView) {
+      case 'kanban':
+        return (
+          <KanbanBoard
+            excellences={filteredExcellences}
+            onAddExcellence={onAddExcellence}
+            onUpdateExcellence={onUpdateExcellence}
+            onDeleteExcellence={onDeleteExcellence}
+            getExperienceCount={getExperienceCount}
+            user={user}
+          />
+        );
+      case 'list':
+        return (
+          <ListView
+            excellences={filteredExcellences}
+            onAddExcellence={onAddExcellence}
+            onUpdateExcellence={onUpdateExcellence}
+            onDeleteExcellence={onDeleteExcellence}
+            getExperienceCount={getExperienceCount}
+            user={user}
+          />
+        );
+      case 'observatoire':
+        return (
+          <Observatoire
+            excellences={excellences}
+            experiences={experiences}
+            user={user}
+          />
+        );
+      case 'experiences':
+        return (
           <ExperiencesDisplay
             experiences={experiences}
             excellences={excellences}
             viewMode={experienceViewMode}
+            onViewModeChange={setExperienceViewMode}
+            onAddExperience={() => setIsExperienceFormOpen(true)}
+            user={user}
           />
-        </div>
-      )}
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <main className="flex-1 overflow-hidden">
+      <div className="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {renderContent()}
+      </div>
     </main>
   );
 };
