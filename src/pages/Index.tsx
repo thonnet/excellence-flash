@@ -73,6 +73,7 @@ const Index = () => {
         onDeleteExcellence={handleDeleteExcellence}
         getExperienceCount={getExperienceCount}
         setIsExperienceFormOpen={setIsExperienceFormOpen}
+        isAdminMode={isAdminMode}
       />
 
       <AppModals

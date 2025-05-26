@@ -7,8 +7,10 @@ import { ExperiencesDisplay } from './ExperiencesDisplay';
 import { ViewToggle } from './ViewToggle';
 import { ContextualHelp } from './ContextualHelp';
 import { AlternatingBaseline } from './AlternatingBaseline';
+import AdminDashboard from './AdminDashboard';
 import { Excellence, Experience, User } from '../types';
 import { Plus } from 'lucide-react';
+import '../components/AdminDashboard.css';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
@@ -26,6 +28,7 @@ interface MainContentProps {
   onDeleteExcellence: (id: string) => void;
   getExperienceCount: (excellenceId: string) => number;
   setIsExperienceFormOpen: (open: boolean) => void;
+  isAdminMode: boolean;
 }
 
 export const MainContent: React.FC<MainContentProps> = ({
@@ -41,6 +44,7 @@ export const MainContent: React.FC<MainContentProps> = ({
   onDeleteExcellence,
   getExperienceCount,
   setIsExperienceFormOpen,
+  isAdminMode,
 }) => {
   const experiencesBaselines = [
     "Transformez vos expériences en carburant d'excellence",
@@ -50,6 +54,16 @@ export const MainContent: React.FC<MainContentProps> = ({
     "Développez votre autorité intrinsèque par la présence à ce que vous faites"
   ];
 
+  // Si mode admin, afficher le dashboard admin
+  if (isAdminMode) {
+    return (
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <AdminDashboard />
+      </main>
+    );
+  }
+
+  // Sinon, afficher l'interface utilisateur normale
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {currentView === 'observatoire' && (
