@@ -11,7 +11,6 @@ export const mockUser: User = {
   plan_type: 'pro',
   theme_preference: 'dark',
   ai_insights_enabled: true,
-  role: 'admin', // Ajout de la propriété manquante
   created_at: '2024-01-15T10:00:00Z',
   updated_at: '2024-01-15T10:00:00Z'
 };
