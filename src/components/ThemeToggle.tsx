@@ -6,10 +6,12 @@ export const ThemeToggle: React.FC = () => {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    // Appliquer le thème au document
+    // Appliquer le thème au document avec l'attribut data-theme
     if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
       document.documentElement.classList.remove('light');
     } else {
+      document.documentElement.setAttribute('data-theme', 'light');
       document.documentElement.classList.add('light');
     }
   }, [isDark]);
@@ -23,15 +25,15 @@ export const ThemeToggle: React.FC = () => {
       onClick={toggleTheme}
       className="p-2 rounded-lg transition-colors"
       style={{ 
-        backgroundColor: 'var(--bg-tertiary)',
-        color: 'var(--text-secondary)',
-        border: '1px solid var(--border-subtle)'
+        backgroundColor: 'var(--color-bg-tertiary)',
+        color: 'var(--color-text-secondary)',
+        border: '1px solid var(--color-border-subtle)'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+        e.currentTarget.style.backgroundColor = 'var(--color-bg-hover)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = 'var(--bg-tertiary)';
+        e.currentTarget.style.backgroundColor = 'var(--color-bg-tertiary)';
       }}
       title={isDark ? 'Passer au mode clair' : 'Passer au mode sombre'}
     >
