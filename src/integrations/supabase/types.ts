@@ -24,12 +24,69 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          ai_insights_enabled: boolean | null
+          billing_type: string | null
+          company_name: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          last_sign_in_at: string | null
+          permissions: Json | null
+          plan_type: string | null
+          role: string | null
+          subscription_status: string | null
+          theme_preference: string | null
+          updated_at: string | null
+          vat_number: string | null
+        }
+        Insert: {
+          ai_insights_enabled?: boolean | null
+          billing_type?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          last_sign_in_at?: string | null
+          permissions?: Json | null
+          plan_type?: string | null
+          role?: string | null
+          subscription_status?: string | null
+          theme_preference?: string | null
+          updated_at?: string | null
+          vat_number?: string | null
+        }
+        Update: {
+          ai_insights_enabled?: boolean | null
+          billing_type?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          last_sign_in_at?: string | null
+          permissions?: Json | null
+          plan_type?: string | null
+          role?: string | null
+          subscription_status?: string | null
+          theme_preference?: string | null
+          updated_at?: string | null
+          vat_number?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
