@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../integrations/supabase/client';
+import { useToast } from './use-toast';
 
 interface UserProfile {
   id: string;
@@ -21,6 +22,7 @@ export const useUserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [message, setMessage] = useState('');
+  const { toast } = useToast();
 
   const fetchUsers = async () => {
     try {
@@ -32,6 +34,11 @@ export const useUserManagement = () => {
       
       if (error) {
         console.error('Erreur lors du chargement des utilisateurs:', error);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger les utilisateurs",
+          variant: "destructive",
+        });
       } else {
         setUsers(data || []);
       }
@@ -54,26 +61,84 @@ export const useUserManagement = () => {
     }
     
     try {
-      // Créer directement un profil utilisateur
-      // Les nouvelles politiques RLS permettent aux admins de créer des profils
-      const tempUserId = crypto.randomUUID();
-      
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: tempUserId,
-          email: userData.email,
-          full_name: userData.fullName,
-          role: userData.role
-        });
-
-      if (profileError) {
-        console.error('Erreur profil:', profileError);
-        setMessage('Erreur lors de la création: ' + profileError.message);
+      // Vérifier d'abord si l'utilisateur actuel est admin
+      const { data: currentUser } = await supabase.auth.getUser();
+      if (!currentUser.user) {
+        setMessage('Vous devez être connecté pour créer un utilisateur');
+        setIsCreating(false);
         return;
       }
 
-      setMessage(`Utilisateur créé avec succès! Un profil a été créé pour ${userData.email}.`);
+      // Vérifier le rôle de l'utilisateur actuel
+      const { data: currentProfile, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', currentUser.user.id)
+        .single();
+
+      if (profileError || !currentProfile) {
+        console.error('Erreur profile:', profileError);
+        setMessage('Impossible de vérifier vos permissions');
+        setIsCreating(false);
+        return;
+      }
+
+      if (currentProfile.role !== 'admin') {
+        setMessage('Seuls les administrateurs peuvent créer des utilisateurs');
+        setIsCreating(false);
+        return;
+      }
+
+      // Maintenant essayer de créer l'utilisateur via l'API d'authentification
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+        email: userData.email,
+        password: 'TempPassword123!', // Mot de passe temporaire
+        options: {
+          data: {
+            full_name: userData.fullName,
+            role: userData.role
+          }
+        }
+      });
+
+      if (signUpError) {
+        console.error('Erreur signUp:', signUpError);
+        
+        // Si l'API signUp ne fonctionne pas, essayons l'approche directe
+        const tempUserId = crypto.randomUUID();
+        
+        const { error: directInsertError } = await supabase
+          .from('profiles')
+          .insert({
+            id: tempUserId,
+            email: userData.email,
+            full_name: userData.fullName,
+            role: userData.role
+          });
+
+        if (directInsertError) {
+          console.error('Erreur insertion directe:', directInsertError);
+          setMessage('Erreur lors de la création: ' + directInsertError.message);
+          toast({
+            title: "Erreur de création",
+            description: directInsertError.message,
+            variant: "destructive",
+          });
+          return;
+        }
+
+        setMessage(`Profil créé avec succès pour ${userData.email}. L'utilisateur devra s'inscrire via l'interface normale.`);
+        toast({
+          title: "Profil créé",
+          description: `Profil créé pour ${userData.email}`,
+        });
+      } else {
+        setMessage(`Utilisateur créé avec succès! ${userData.email} peut maintenant se connecter.`);
+        toast({
+          title: "Utilisateur créé",
+          description: `${userData.email} peut maintenant se connecter`,
+        });
+      }
 
       // Recharger la liste
       fetchUsers();
@@ -81,6 +146,11 @@ export const useUserManagement = () => {
     } catch (error: any) {
       console.error('Erreur:', error);
       setMessage('Erreur lors de la création de l\'utilisateur: ' + (error.message || 'Erreur inconnue'));
+      toast({
+        title: "Erreur",
+        description: error.message || 'Erreur inconnue',
+        variant: "destructive",
+      });
     } finally {
       setIsCreating(false);
     }
@@ -102,6 +172,10 @@ export const useUserManagement = () => {
       }
 
       setMessage('Utilisateur modifié avec succès!');
+      toast({
+        title: "Modification réussie",
+        description: "L'utilisateur a été modifié avec succès",
+      });
       fetchUsers();
       
     } catch (error: any) {
@@ -136,6 +210,10 @@ export const useUserManagement = () => {
       }
 
       setMessage('Utilisateur supprimé avec succès!');
+      toast({
+        title: "Suppression réussie",
+        description: "L'utilisateur a été supprimé avec succès",
+      });
       fetchUsers();
       
     } catch (error: any) {
