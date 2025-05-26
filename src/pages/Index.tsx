@@ -1,5 +1,9 @@
 
 import React, { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useExcellences } from '@/hooks/useExcellences';
+import { useExperiences } from '@/hooks/useExperiences';
+import { AuthPage } from '@/components/auth/AuthPage';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanView } from '../components/KanbanView';
 import { ListView } from '../components/ListView';
@@ -10,97 +14,63 @@ import { Navigation } from '../components/Navigation';
 import { UserProfile } from '../components/UserProfile';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { ViewToggle } from '../components/ViewToggle';
-import { DataImportExport } from '../components/DataImportExport';
 import { ContextualHelp } from '../components/ContextualHelp';
 import { AlternatingBaseline } from '../components/AlternatingBaseline';
-import { Excellence, Experience, User } from '../types';
-import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
+import { Excellence, Experience } from '../types';
 import { Plus, Search } from 'lucide-react';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
 
 const Index = () => {
+  const { user, profile, loading: authLoading } = useAuth();
+  const { excellences, loading: excellencesLoading, addExcellence, updateExcellence, deleteExcellence } = useExcellences();
+  const { experiences, loading: experiencesLoading, addExperience } = useExperiences();
+
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
   const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
-  const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
-  const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
-  const [user, setUser] = useState<User>(mockUser);
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // Show loading spinner while auth is loading
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <ExcellenceFlashLogo size={64} />
+          <p className="mt-4 text-lg">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show auth page if user is not logged in
+  if (!user || !profile) {
+    return <AuthPage />;
+  }
 
   const filteredExcellences = excellences.filter(excellence => 
     excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    excellence.description.toLowerCase().includes(searchQuery.toLowerCase())
+    (excellence.description && excellence.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const handleAddExcellence = (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => {
-    const newExcellence: Excellence = {
+  const handleAddExcellence = async (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => {
+    await addExcellence({
       ...excellence,
-      id: crypto.randomUUID(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    setExcellences(prev => [...prev, newExcellence]);
+      user_id: user.id
+    });
   };
 
-  const handleUpdateExcellence = (id: string, updates: Partial<Excellence>) => {
-    setExcellences(prev => prev.map(excellence => 
-      excellence.id === id 
-        ? { ...excellence, ...updates, updated_at: new Date().toISOString() }
-        : excellence
-    ));
-  };
-
-  const handleDeleteExcellence = (id: string) => {
-    setExcellences(prev => prev.filter(excellence => excellence.id !== id));
-    setExperiences(prev => prev.filter(experience => experience.excellence_id !== id));
-  };
-
-  const handleAddExperience = (experience: Omit<Experience, 'id' | 'created_at' | 'updated_at'>) => {
-    const newExperience: Experience = {
+  const handleAddExperience = async (experience: Omit<Experience, 'id' | 'created_at' | 'updated_at'>) => {
+    await addExperience({
       ...experience,
-      id: crypto.randomUUID(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    setExperiences(prev => [...prev, newExperience]);
+      user_id: user.id
+    });
   };
 
   const getExperienceCount = (excellenceId: string) => {
     return experiences.filter(exp => exp.excellence_id === excellenceId).length;
-  };
-
-  const handleImportData = (importedExcellences: Excellence[], importedExperiences: Experience[]) => {
-    const newExcellences = [...excellences];
-    const newExperiences = [...experiences];
-
-    importedExcellences.forEach(importedExc => {
-      if (!newExcellences.find(exc => exc.id === importedExc.id)) {
-        newExcellences.push(importedExc);
-      }
-    });
-
-    importedExperiences.forEach(importedExp => {
-      if (!newExperiences.find(exp => exp.id === importedExp.id)) {
-        newExperiences.push(importedExp);
-      }
-    });
-
-    setExcellences(newExcellences);
-    setExperiences(newExperiences);
-    
-    console.log(`Importé: ${importedExcellences.length} excellences, ${importedExperiences.length} expériences`);
-  };
-
-  const handleExportData = () => {
-    console.log('Export data triggered');
-  };
-
-  const handleImportDataClick = () => {
-    setIsImportModalOpen(true);
   };
 
   const experiencesBaselines = [
@@ -177,9 +147,9 @@ const Index = () => {
               </div>
               <ThemeToggle />
               <UserProfile 
-                user={user} 
-                onExportData={handleExportData}
-                onImportData={handleImportDataClick}
+                user={profile} 
+                onExportData={() => {}}
+                onImportData={() => {}}
               />
             </div>
           </div>
@@ -202,7 +172,7 @@ const Index = () => {
           <Observatoire 
             excellences={excellences}
             experiences={experiences}
-            user={user}
+            user={profile}
           />
         )}
 
@@ -211,8 +181,8 @@ const Index = () => {
             excellences={filteredExcellences}
             experiences={experiences}
             onAddExcellence={handleAddExcellence}
-            onUpdateExcellence={handleUpdateExcellence}
-            onDeleteExcellence={handleDeleteExcellence}
+            onUpdateExcellence={updateExcellence}
+            onDeleteExcellence={deleteExcellence}
             getExperienceCount={getExperienceCount}
           />
         )}
@@ -222,8 +192,8 @@ const Index = () => {
             excellences={filteredExcellences}
             experiences={experiences}
             onAddExcellence={handleAddExcellence}
-            onUpdateExcellence={handleUpdateExcellence}
-            onDeleteExcellence={handleDeleteExcellence}
+            onUpdateExcellence={updateExcellence}
+            onDeleteExcellence={deleteExcellence}
             getExperienceCount={getExperienceCount}
           />
         )}
@@ -273,25 +243,6 @@ const Index = () => {
           onAdd={handleAddExperience}
           onClose={() => setIsExperienceFormOpen(false)}
         />
-      )}
-
-      {/* Import Modal */}
-      {isImportModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg">
-            <DataImportExport
-              excellences={excellences}
-              experiences={experiences}
-              onImportData={handleImportData}
-            />
-            <button 
-              onClick={() => setIsImportModalOpen(false)}
-              className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
       )}
     </div>
   );
