@@ -4,19 +4,16 @@ import { AppHeader } from '../components/AppHeader';
 import { MainContent } from '../components/MainContent';
 import { AppModals } from '../components/AppModals';
 import { useAppState } from '../hooks/useAppState';
-import { useUserProfile } from '../hooks/useUserProfile';
-import type { UserDisplay } from '../types/userDisplay';
 import '../components/AdminSwitch.css';
 
 const Index = () => {
-  const { profile, loading: profileLoading } = useUserProfile();
-  
   const {
     // States
     currentView,
     experienceViewMode,
     excellences,
     experiences,
+    user,
     searchQuery,
     isExperienceFormOpen,
     isImportModalOpen,
@@ -46,25 +43,6 @@ const Index = () => {
   const handleImportDataClick = () => {
     setIsImportModalOpen(true);
   };
-
-  // Créer un objet user compatible avec l'interface UserDisplay
-  const user: UserDisplay | null = profile ? {
-    id: profile.id,
-    name: profile.full_name || profile.email,
-    email: profile.email,
-    role: profile.role as 'user' | 'admin'
-  } : null;
-
-  if (profileLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p>Chargement de votre profil...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>

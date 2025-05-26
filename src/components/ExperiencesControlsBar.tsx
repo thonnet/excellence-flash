@@ -1,67 +1,86 @@
 
 import React from 'react';
-
-type SortType = 'today' | 'week' | 'month' | 'year' | 'category' | 'title';
-type CategoryFilter = 'all' | 'manifestee' | 'principe' | 'quete';
+import { EXCELLENCE_CATEGORIES } from '../types';
+import { Star } from 'lucide-react';
 
 interface ExperiencesControlsBarProps {
-  categoryFilter: CategoryFilter;
-  sortType: SortType;
-  onCategoryChange: (category: CategoryFilter) => void;
-  onSortChange: (sort: SortType) => void;
+  selectedCategory: string;
+  selectedSort: string;
+  onCategoryChange: (category: string) => void;
+  onSortChange: (sort: string) => void;
 }
 
 export const ExperiencesControlsBar: React.FC<ExperiencesControlsBarProps> = ({
-  categoryFilter,
-  sortType,
+  selectedCategory,
+  selectedSort,
   onCategoryChange,
   onSortChange
 }) => {
-  const sortButtons = [
-    { id: 'today' as SortType, label: '📅 Aujourd\'hui' },
-    { id: 'week' as SortType, label: '📅 Cette semaine' },
-    { id: 'month' as SortType, label: '📅 Ce mois' },
-    { id: 'year' as SortType, label: '📅 Cette année' },
-    { id: 'category' as SortType, label: '🏷️ Catégorie' },
-    { id: 'title' as SortType, label: '🔤 Titre A-Z' }
-  ];
+  const getCategoryIconClass = (category: string) => {
+    if (category === 'manifestee') return 'category-icon--manifestee';
+    if (category === 'principe') return 'category-icon--principe';
+    if (category === 'quete') return 'category-icon--quete';
+    return 'category-icon--manifestee';
+  };
 
   return (
     <div className="controls-bar">
       <div className="filter-section">
         <span className="filter-label">Filtrer par catégorie :</span>
-        <select 
+        <select
           className="category-filter"
-          value={categoryFilter}
-          onChange={(e) => onCategoryChange(e.target.value as CategoryFilter)}
-          style={{
-            backgroundColor: 'var(--bg-tertiary)',
-            color: 'var(--text-primary)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '6px',
-            padding: '8px 12px',
-            marginLeft: '12px'
-          }}
+          value={selectedCategory}
+          onChange={(e) => onCategoryChange(e.target.value)}
         >
           <option value="all">Toutes les catégories</option>
-          <option value="manifestee">Excellence manifestée</option>
-          <option value="principe">Principe d'excellence</option>
-          <option value="quete">Quête d'excellence</option>
+          {Object.entries(EXCELLENCE_CATEGORIES).map(([key, category]) => (
+            <option key={key} value={key}>
+              {category.title}
+            </option>
+          ))}
         </select>
       </div>
-      
+
       <div className="sort-section">
         <span className="filter-label">Trier par :</span>
         <div className="sort-buttons">
-          {sortButtons.map((button) => (
-            <button
-              key={button.id}
-              className={`sort-btn ${sortType === button.id ? 'active' : ''}`}
-              onClick={() => onSortChange(button.id)}
-            >
-              {button.label}
-            </button>
-          ))}
+          <button
+            className={`sort-btn ${selectedSort === 'today' ? 'active' : ''}`}
+            onClick={() => onSortChange('today')}
+          >
+            📅 Aujourd'hui
+          </button>
+          <button
+            className={`sort-btn ${selectedSort === 'week' ? 'active' : ''}`}
+            onClick={() => onSortChange('week')}
+          >
+            📅 Cette semaine
+          </button>
+          <button
+            className={`sort-btn ${selectedSort === 'month' ? 'active' : ''}`}
+            onClick={() => onSortChange('month')}
+          >
+            📅 Ce mois
+          </button>
+          <button
+            className={`sort-btn ${selectedSort === 'year' ? 'active' : ''}`}
+            onClick={() => onSortChange('year')}
+          >
+            📅 Cette année
+          </button>
+          <button
+            className={`sort-btn ${selectedSort === 'category' ? 'active' : ''}`}
+            onClick={() => onSortChange('category')}
+          >
+            <Star className="category-icon" size={14} style={{ marginRight: '4px' }} />
+            Catégorie
+          </button>
+          <button
+            className={`sort-btn ${selectedSort === 'title' ? 'active' : ''}`}
+            onClick={() => onSortChange('title')}
+          >
+            🔤 Titre A-Z
+          </button>
         </div>
       </div>
     </div>

@@ -6,14 +6,14 @@ import { UserProfile } from './UserProfile';
 import { ThemeToggle } from './ThemeToggle';
 import { AdminSwitch } from './AdminSwitch';
 import { Search } from 'lucide-react';
-import type { UserDisplay } from '../types/userDisplay';
+import { User } from '../types';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 
 interface AppHeaderProps {
   currentView: ViewType;
   onViewChange: (view: ViewType) => void;
-  user: UserDisplay;
+  user: User;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   isSearchFocused: boolean;

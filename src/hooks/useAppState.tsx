@@ -4,11 +4,11 @@ import { Excellence, Experience, User } from '../types';
 import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
-type ExperienceViewMode = 'grid' | 'kanban';
+type ExperienceViewMode = 'list' | 'gallery';
 
 export const useAppState = () => {
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
-  const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('grid');
+  const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
   const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
   const [user, setUser] = useState<User>({...mockUser, role: 'admin'});

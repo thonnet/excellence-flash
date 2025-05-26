@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Excellence, Experience, EXCELLENCE_CATEGORIES } from '../types';
-import { Star, Calendar } from 'lucide-react';
+import { Excellence, Experience } from '../types';
+import { EXCELLENCE_CATEGORIES } from '../types';
+import { Star } from 'lucide-react';
 
 interface ExperiencesKanbanViewProps {
   experiences: Experience[];
@@ -12,26 +13,17 @@ export const ExperiencesKanbanView: React.FC<ExperiencesKanbanViewProps> = ({
   experiences,
   excellences
 }) => {
-  const categories = ['manifestee', 'principe', 'quete'] as const;
-
-  const groupExperiencesByCategory = () => {
-    const groups = {
-      manifestee: [] as Experience[],
-      principe: [] as Experience[],
-      quete: [] as Experience[]
-    };
-
-    experiences.forEach(experience => {
-      const excellence = excellences.find(exc => exc.id === experience.excellence_id);
-      if (excellence && excellence.category in groups) {
-        groups[excellence.category as keyof typeof groups].push(experience);
-      }
-    });
-
-    return groups;
+  const getExcellenceCategory = (excellenceId: string) => {
+    const excellence = excellences.find(exc => exc.id === excellenceId);
+    return excellence?.category || 'manifestee';
   };
 
-  const groupedExperiences = groupExperiencesByCategory();
+  const getExperiencesByCategory = (category: string) => {
+    return experiences.filter(exp => {
+      const excellence = excellences.find(exc => exc.id === exp.excellence_id);
+      return excellence?.category === category;
+    });
+  };
 
   const getCategoryIconClass = (category: string) => {
     if (category === 'manifestee') return 'category-icon--manifestee';
@@ -40,86 +32,73 @@ export const ExperiencesKanbanView: React.FC<ExperiencesKanbanViewProps> = ({
     return 'category-icon--manifestee';
   };
 
-  if (experiences.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'var(--bg-secondary)' }}>
-          <Calendar style={{ color: 'var(--text-muted)' }} size={24} />
-        </div>
-        <h3 className="text-lg font-medium mb-2" style={{ color: 'var(--text-primary)' }}>
-          Aucune expérience
-        </h3>
-        <p style={{ color: 'var(--text-muted)' }}>
-          Aucune expérience ne correspond aux critères sélectionnés
-        </p>
-      </div>
-    );
-  }
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  };
 
   return (
     <div className="experiences-grid">
-      {categories.map(category => {
-        const categoryData = EXCELLENCE_CATEGORIES[category];
-        const categoryExperiences = groupedExperiences[category];
-
+      {Object.entries(EXCELLENCE_CATEGORIES).map(([categoryKey, category]) => {
+        const categoryExperiences = getExperiencesByCategory(categoryKey);
+        
         return (
-          <div key={category} className="category-column">
-            <div className="category-header" style={{ marginBottom: '16px' }}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Star className={`category-icon ${getCategoryIconClass(category)} mr-2`} size={16} />
-                  <h3 className="font-medium" style={{ color: 'var(--text-primary)' }}>
-                    {categoryData.title}
-                  </h3>
-                </div>
-                <span className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                  {categoryExperiences.length} expérience{categoryExperiences.length !== 1 ? 's' : ''}
+          <div key={categoryKey} className="category-column">
+            <div className="category-header">
+              <h3 className="font-bold text-lg flex items-center" style={{ color: 'var(--text-primary)' }}>
+                <Star className={`category-icon ${getCategoryIconClass(categoryKey)} mr-2`} size={16} />
+                <span className="font-bold">{category.title}</span>
+                <span className="font-normal ml-2" style={{ color: 'var(--text-secondary)' }}>
+                  {categoryExperiences.length}
                 </span>
-              </div>
+              </h3>
             </div>
-            
+
             <div className="experiences-list">
-              {categoryExperiences.map(experience => (
-                <div 
-                  key={experience.id} 
-                  className="rounded-lg p-3 mb-3 border"
-                  style={{ 
-                    backgroundColor: 'var(--bg-primary)',
-                    borderColor: 'var(--border-subtle)'
-                  }}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
-                      {experience.title}
-                    </h4>
-                    {experience.image_url && (
-                      <img
-                        src={experience.image_url}
-                        alt={experience.image_caption || experience.title}
-                        className="w-12 h-12 object-cover rounded ml-3"
-                      />
-                    )}
-                  </div>
-                  
-                  <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
-                    {new Date(experience.date_experienced).toLocaleDateString('fr-FR')}
-                  </p>
-                  
-                  {experience.description && (
-                    <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                      {experience.description.substring(0, 100)}
-                      {experience.description.length > 100 ? '...' : ''}
-                    </p>
-                  )}
+              {categoryExperiences.length === 0 ? (
+                <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
+                  <p className="text-sm">Aucune expérience pour cette catégorie</p>
                 </div>
-              ))}
-              
-              {categoryExperiences.length === 0 && (
-                <div className="text-center py-8">
-                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                    Aucune expérience dans cette catégorie
-                  </p>
-                </div>
+              ) : (
+                categoryExperiences.map(experience => {
+                  const excellence = excellences.find(exc => exc.id === experience.excellence_id);
+                  
+                  return (
+                    <div 
+                      key={experience.id}
+                      className="p-4 border rounded-lg mb-3"
+                      style={{
+                        backgroundColor: 'var(--bg-primary)',
+                        borderColor: 'var(--border-subtle)'
+                      }}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="font-medium text-sm" style={{ color: 'var(--text-primary)' }}>
+                          {experience.title}
+                        </h4>
+                        <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                          {formatDate(experience.date_experienced)}
+                        </span>
+                      </div>
+                      
+                      {excellence && (
+                        <div className="flex items-center mb-2">
+                          <Star className={`category-icon ${getCategoryIconClass(excellence.category)} mr-1`} size={12} />
+                          <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                            {excellence.name}
+                          </span>
+                        </div>
+                      )}
+                      
+                      <p className="text-xs line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
+                        {experience.description}
+                      </p>
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>

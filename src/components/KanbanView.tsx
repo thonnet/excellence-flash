@@ -1,34 +1,27 @@
 
 import React from 'react';
-import { Excellence, Experience } from '../types';
+import { Excellence } from '../types';
 import { KanbanBoard } from './KanbanBoard';
 import { ContextualHelp } from './ContextualHelp';
 import { AlternatingBaseline } from './AlternatingBaseline';
 import { ViewToggle } from './ViewToggle';
-import type { UserDisplay } from '../types/userDisplay';
 
 interface KanbanViewProps {
   excellences: Excellence[];
-  experiences: Experience[];
-  user: UserDisplay;
+  experiences: any[];
   onAddExcellence: (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => void;
   onUpdateExcellence: (id: string, updates: Partial<Excellence>) => void;
   onDeleteExcellence: (id: string) => void;
   getExperienceCount: (excellenceId: string) => number;
-  setIsExperienceFormOpen: (open: boolean) => void;
-  isAdminMode: boolean;
 }
 
 export const KanbanView: React.FC<KanbanViewProps> = ({
   excellences,
   experiences,
-  user,
   onAddExcellence,
   onUpdateExcellence,
   onDeleteExcellence,
-  getExperienceCount,
-  setIsExperienceFormOpen,
-  isAdminMode
+  getExperienceCount
 }) => {
   const excellencesBaselines = [
     "Conscientisez vos capacités pour les mobiliser intentionnellement",
