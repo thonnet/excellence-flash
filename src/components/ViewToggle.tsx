@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BarChart3, List } from 'lucide-react';
+import { List } from 'lucide-react';
 
 type ViewMode = 'kanban' | 'list' | 'gallery';
 
@@ -11,6 +11,14 @@ interface ViewToggleProps {
   className?: string;
 }
 
+const KanbanIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+    <rect x="1" y="2" width="4" height="12" rx="1" />
+    <rect x="7" y="2" width="4" height="8" rx="1" />
+    <rect x="13" y="2" width="4" height="10" rx="1" />
+  </svg>
+);
+
 export const ViewToggle: React.FC<ViewToggleProps> = ({
   currentView,
   onViewChange,
@@ -18,7 +26,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({
   className = ""
 }) => {
   const viewIcons = {
-    kanban: BarChart3,
+    kanban: KanbanIcon,
     list: List,
     gallery: () => (
       <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">

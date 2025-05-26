@@ -6,10 +6,14 @@ import { ExcellenceCard } from './ExcellenceCard';
 import { AddExcellenceModal } from './AddExcellenceModal';
 import { ViewToggle } from './ViewToggle';
 import { ContextualHelp } from './ContextualHelp';
+import { ExcellenceListView } from './ExcellenceListView';
+import { ExcellenceDetailModal } from './ExcellenceDetailModal';
+import { ExcellenceEditModal } from './ExcellenceEditModal';
 import { Plus } from 'lucide-react';
 
 interface KanbanBoardProps {
   excellences: Excellence[];
+  experiences: any[];
   onAddExcellence: (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => void;
   onUpdateExcellence: (id: string, updates: Partial<Excellence>) => void;
   onDeleteExcellence: (id: string) => void;
@@ -18,6 +22,7 @@ interface KanbanBoardProps {
 
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   excellences,
+  experiences,
   onAddExcellence,
   onUpdateExcellence,
   onDeleteExcellence,
@@ -26,6 +31,9 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'manifestee' | 'principe' | 'quete' | null>(null);
   const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
+  const [selectedExcellence, setSelectedExcellence] = useState<Excellence | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const getExcellencesByCategory = (category: 'manifestee' | 'principe' | 'quete') => {
     return excellences.filter(excellence => excellence.category === category);
@@ -34,6 +42,16 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const handleAddClick = (category: 'manifestee' | 'principe' | 'quete') => {
     setSelectedCategory(category);
     setIsAddModalOpen(true);
+  };
+
+  const handleViewExcellence = (excellence: Excellence) => {
+    setSelectedExcellence(excellence);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleEditExcellence = (excellence: Excellence) => {
+    setSelectedExcellence(excellence);
+    setIsEditModalOpen(true);
   };
 
   return (
@@ -69,11 +87,11 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                         className="flex-1 cursor-help"
                         title={category.description}
                       >
-                        <h3 
-                          className="font-bold text-lg"
-                          style={{ color: 'var(--text-primary)' }}
-                        >
-                          {category.title} ({categoryExcellences.length})
+                        <h3 className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>
+                          <span className="font-bold">{category.title}</span>
+                          <span className="font-normal ml-2" style={{ color: 'var(--text-secondary)' }}>
+                            {categoryExcellences.length}
+                          </span>
                         </h3>
                       </div>
                       <ContextualHelp pageType={categoryKey as 'manifestee' | 'principe' | 'quete'} />
@@ -113,6 +131,8 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       experienceCount={getExperienceCount(excellence.id)}
                       onUpdate={onUpdateExcellence}
                       onDelete={onDeleteExcellence}
+                      onView={handleViewExcellence}
+                      onEdit={handleEditExcellence}
                     />
                   ))}
                   
@@ -137,9 +157,13 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
       {/* List View */}
       {viewMode === 'list' && (
-        <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
-          <p style={{ color: 'var(--text-muted)' }}>Vue liste à implémenter dans la prochaine itération</p>
-        </div>
+        <ExcellenceListView
+          excellences={excellences}
+          onView={handleViewExcellence}
+          onEdit={handleEditExcellence}
+          onDelete={onDeleteExcellence}
+          getExperienceCount={getExperienceCount}
+        />
       )}
 
       {/* Add Excellence Modal */}
@@ -149,6 +173,32 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         onAdd={onAddExcellence}
         preselectedCategory={selectedCategory}
       />
+
+      {/* Excellence Detail Modal */}
+      {selectedExcellence && (
+        <ExcellenceDetailModal
+          excellence={selectedExcellence}
+          experiences={experiences}
+          isOpen={isDetailModalOpen}
+          onClose={() => {
+            setIsDetailModalOpen(false);
+            setSelectedExcellence(null);
+          }}
+        />
+      )}
+
+      {/* Excellence Edit Modal */}
+      {selectedExcellence && (
+        <ExcellenceEditModal
+          excellence={selectedExcellence}
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setSelectedExcellence(null);
+          }}
+          onSave={onUpdateExcellence}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Excellence } from '../types';
 import { Eye, Edit2, X } from 'lucide-react';
 
@@ -8,18 +8,73 @@ interface ExcellenceCardProps {
   experienceCount: number;
   onUpdate: (id: string, updates: Partial<Excellence>) => void;
   onDelete: (id: string) => void;
+  onView: (excellence: Excellence) => void;
+  onEdit: (excellence: Excellence) => void;
 }
 
 export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
   excellence,
   experienceCount,
   onUpdate,
-  onDelete
+  onDelete,
+  onView,
+  onEdit
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
+  const [descriptionPosition, setDescriptionPosition] = useState<'above' | 'below'>('below');
+  const cardRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    if (isHovered && excellence.description) {
+      timeoutRef.current = setTimeout(() => {
+        // Check position in viewport to decide if description goes above or below
+        if (cardRef.current) {
+          const rect = cardRef.current.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          const spaceBelow = viewportHeight - rect.bottom;
+          const spaceAbove = rect.top;
+          
+          // If less than 150px below, show above
+          setDescriptionPosition(spaceBelow < 150 && spaceAbove > 150 ? 'above' : 'below');
+        }
+        setShowDescription(true);
+      }, 300);
+    } else {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      setShowDescription(false);
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [isHovered, excellence.description]);
+
+  const handleView = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onView(excellence);
+  };
+
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onEdit(excellence);
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette excellence ?')) {
+      onDelete(excellence.id);
+    }
+  };
 
   return (
     <div 
+      ref={cardRef}
       className="excellence-card-minimal"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -39,17 +94,13 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
             </span>
           </div>
 
-          {excellence.description && (
-            <div className="excellence-description-overlay">
+          {excellence.description && showDescription && (
+            <div 
+              className={`excellence-description-overlay ${descriptionPosition === 'above' ? 'above' : 'below'}`}
+            >
               {/* Triangle orange pointer */}
               <div 
-                className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0"
-                style={{
-                  borderLeft: '6px solid transparent',
-                  borderRight: '6px solid transparent',
-                  borderBottom: '6px solid var(--accent-orange)',
-                  zIndex: 11
-                }}
+                className={`description-triangle ${descriptionPosition === 'above' ? 'triangle-below' : 'triangle-above'}`}
               />
               {excellence.description}
             </div>
@@ -57,10 +108,7 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
           
           <div className="excellence-actions-overlay">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log('View excellence:', excellence.id);
-              }}
+              onClick={handleView}
               className="action-btn"
               title="Voir"
             >
@@ -68,10 +116,7 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
             </button>
             
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log('Edit excellence:', excellence.id);
-              }}
+              onClick={handleEdit}
               className="action-btn"
               title="Modifier"
             >
@@ -79,12 +124,7 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
             </button>
             
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (confirm('Êtes-vous sûr de vouloir supprimer cette excellence ?')) {
-                  onDelete(excellence.id);
-                }
-              }}
+              onClick={handleDelete}
               className="action-btn"
               title="Supprimer"
             >

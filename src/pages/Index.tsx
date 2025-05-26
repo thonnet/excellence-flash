@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanBoard } from '../components/KanbanBoard';
@@ -208,6 +207,7 @@ const Index = () => {
             
             <KanbanBoard
               excellences={filteredExcellences}
+              experiences={experiences}
               onAddExcellence={handleAddExcellence}
               onUpdateExcellence={handleUpdateExcellence}
               onDeleteExcellence={handleDeleteExcellence}
@@ -225,9 +225,14 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="rounded-xl p-6 border" style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border-subtle)' }}>
-              <p style={{ color: 'var(--text-muted)' }}>Vue liste à implémenter dans la prochaine itération</p>
-            </div>
+            <KanbanBoard
+              excellences={filteredExcellences}
+              experiences={experiences}
+              onAddExcellence={handleAddExcellence}
+              onUpdateExcellence={handleUpdateExcellence}
+              onDeleteExcellence={handleDeleteExcellence}
+              getExperienceCount={getExperienceCount}
+            />
           </div>
         )}
 
