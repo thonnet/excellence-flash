@@ -13,11 +13,9 @@ import { ViewToggle } from '../components/ViewToggle';
 import { DataImportExport } from '../components/DataImportExport';
 import { ContextualHelp } from '../components/ContextualHelp';
 import { AlternatingBaseline } from '../components/AlternatingBaseline';
-import { AdminToggle } from '../components/auth/AdminToggle';
-import { useAuth } from '../contexts/AuthContext';
-import { useExcellences } from '../hooks/useExcellences';
-import { useExperiences } from '../hooks/useExperiences';
-import { Plus, Search, LogOut } from 'lucide-react';
+import { Excellence, Experience, User } from '../types';
+import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
+import { Plus, Search } from 'lucide-react';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
@@ -25,66 +23,76 @@ type ExperienceViewMode = 'list' | 'gallery';
 const Index = () => {
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
   const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
+  const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
+  const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
+  const [user, setUser] = useState<User>(mockUser);
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [isAdminMode, setIsAdminMode] = useState(false);
-
-  const { userProfile, signOut } = useAuth();
-  const { 
-    excellences, 
-    loading: excellencesLoading, 
-    addExcellence, 
-    updateExcellence, 
-    deleteExcellence 
-  } = useExcellences();
-  const { 
-    experiences, 
-    loading: experiencesLoading, 
-    addExperience, 
-    getExperienceCount 
-  } = useExperiences();
 
   const filteredExcellences = excellences.filter(excellence => 
     excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     excellence.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleAddExcellence = async (excellence: Omit<any, 'id' | 'created_at' | 'updated_at'>) => {
-    try {
-      await addExcellence(excellence);
-    } catch (error) {
-      console.error('Error adding excellence:', error);
-    }
+  const handleAddExcellence = (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => {
+    const newExcellence: Excellence = {
+      ...excellence,
+      id: crypto.randomUUID(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    setExcellences(prev => [...prev, newExcellence]);
   };
 
-  const handleUpdateExcellence = async (id: string, updates: Partial<any>) => {
-    try {
-      await updateExcellence(id, updates);
-    } catch (error) {
-      console.error('Error updating excellence:', error);
-    }
+  const handleUpdateExcellence = (id: string, updates: Partial<Excellence>) => {
+    setExcellences(prev => prev.map(excellence => 
+      excellence.id === id 
+        ? { ...excellence, ...updates, updated_at: new Date().toISOString() }
+        : excellence
+    ));
   };
 
-  const handleDeleteExcellence = async (id: string) => {
-    try {
-      await deleteExcellence(id);
-    } catch (error) {
-      console.error('Error deleting excellence:', error);
-    }
+  const handleDeleteExcellence = (id: string) => {
+    setExcellences(prev => prev.filter(excellence => excellence.id !== id));
+    setExperiences(prev => prev.filter(experience => experience.excellence_id !== id));
   };
 
-  const handleAddExperience = async (experience: Omit<any, 'id' | 'created_at' | 'updated_at'>) => {
-    try {
-      await addExperience(experience);
-    } catch (error) {
-      console.error('Error adding experience:', error);
-    }
+  const handleAddExperience = (experience: Omit<Experience, 'id' | 'created_at' | 'updated_at'>) => {
+    const newExperience: Experience = {
+      ...experience,
+      id: crypto.randomUUID(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    setExperiences(prev => [...prev, newExperience]);
   };
 
-  const handleImportData = (importedExcellences: any[], importedExperiences: any[]) => {
-    console.log(`Import functionality needs to be implemented for: ${importedExcellences.length} excellences, ${importedExperiences.length} experiences`);
+  const getExperienceCount = (excellenceId: string) => {
+    return experiences.filter(exp => exp.excellence_id === excellenceId).length;
+  };
+
+  const handleImportData = (importedExcellences: Excellence[], importedExperiences: Experience[]) => {
+    const newExcellences = [...excellences];
+    const newExperiences = [...experiences];
+
+    importedExcellences.forEach(importedExc => {
+      if (!newExcellences.find(exc => exc.id === importedExc.id)) {
+        newExcellences.push(importedExc);
+      }
+    });
+
+    importedExperiences.forEach(importedExp => {
+      if (!newExperiences.find(exp => exp.id === importedExp.id)) {
+        newExperiences.push(importedExp);
+      }
+    });
+
+    setExcellences(newExcellences);
+    setExperiences(newExperiences);
+    
+    console.log(`Importé: ${importedExcellences.length} excellences, ${importedExperiences.length} expériences`);
   };
 
   const handleExportData = () => {
@@ -102,17 +110,6 @@ const Index = () => {
     "Donnez du sens et de la valeur à ce que vous vivez",
     "Développez votre autorité intrinsèque par la présence à ce que vous faites"
   ];
-
-  if (excellencesLoading || experiencesLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 mx-auto mb-4" style={{ borderColor: 'var(--accent-orange)' }}></div>
-          <p style={{ color: 'var(--text-muted)' }}>Chargement de vos données...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
@@ -142,7 +139,7 @@ const Index = () => {
               className="hidden md:flex"
             />
 
-            {/* Controls */}
+            {/* Simplified Search, Theme Toggle & Profile */}
             <div className="flex items-center space-x-4">
               <div className="relative hidden sm:block">
                 <div className="relative">
@@ -178,30 +175,12 @@ const Index = () => {
                   </button>
                 </div>
               </div>
-              
-              <AdminToggle isAdminMode={isAdminMode} onToggle={setIsAdminMode} />
               <ThemeToggle />
-              
-              {/* User Info & Logout */}
-              <div className="flex items-center space-x-2">
-                <span className="text-sm hidden sm:block" style={{ color: 'var(--text-secondary)' }}>
-                  {userProfile?.full_name || 'Utilisateur'}
-                </span>
-                <button
-                  onClick={signOut}
-                  className="p-2 rounded-lg transition-colors"
-                  style={{ color: 'var(--text-secondary)' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
-                  title="Se déconnecter"
-                >
-                  <LogOut size={18} />
-                </button>
-              </div>
+              <UserProfile 
+                user={user} 
+                onExportData={handleExportData}
+                onImportData={handleImportDataClick}
+              />
             </div>
           </div>
         </div>
@@ -223,7 +202,7 @@ const Index = () => {
           <Observatoire 
             excellences={excellences}
             experiences={experiences}
-            user={userProfile!}
+            user={user}
           />
         )}
 
