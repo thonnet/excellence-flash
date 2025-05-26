@@ -5,6 +5,7 @@ import { MainContent } from '../components/MainContent';
 import { AppModals } from '../components/AppModals';
 import { useAppState } from '../hooks/useAppState';
 import { useUserProfile } from '../hooks/useUserProfile';
+import type { UserDisplay } from '../types/userDisplay';
 import '../components/AdminSwitch.css';
 
 const Index = () => {
@@ -46,8 +47,8 @@ const Index = () => {
     setIsImportModalOpen(true);
   };
 
-  // Créer un objet user compatible avec l'interface existante
-  const user = profile ? {
+  // Créer un objet user compatible avec l'interface UserDisplay
+  const user: UserDisplay | null = profile ? {
     id: profile.id,
     name: profile.full_name || profile.email,
     email: profile.email,

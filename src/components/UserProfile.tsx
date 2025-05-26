@@ -12,10 +12,10 @@ import { Button } from './ui/button';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { User, Download, Upload, LogOut } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import type { User as UserType } from '../types';
+import type { UserDisplay } from '../types/userDisplay';
 
 interface UserProfileProps {
-  user: UserType;
+  user: UserDisplay;
   onExportData: () => void;
   onImportData: () => void;
 }
