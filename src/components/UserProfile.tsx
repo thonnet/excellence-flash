@@ -1,20 +1,18 @@
 
 import React, { useState } from 'react';
-import { UserDisplay } from '../types/auth';
+import { User } from '../types';
 import { Settings, LogOut, User as UserIcon, Download, Upload, Camera, Key } from 'lucide-react';
 
 interface UserProfileProps {
-  user: UserDisplay;
+  user: User;
   onExportData?: () => void;
   onImportData?: () => void;
-  onLogout?: () => void;
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ 
   user, 
   onExportData,
-  onImportData,
-  onLogout
+  onImportData 
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -27,17 +25,19 @@ export const UserProfile: React.FC<UserProfileProps> = ({
       .slice(0, 2);
   };
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'admin': return '#dc2626';
-      default: return '#0195ee';
+  const getPlanColor = (plan: string) => {
+    switch (plan) {
+      case 'pro': return '#0195ee';
+      case 'premium': return '#ee5a01';
+      default: return '#707070';
     }
   };
 
-  const getRoleLabel = (role: string) => {
-    switch (role) {
-      case 'admin': return 'Administrateur';
-      default: return 'Utilisateur';
+  const getPlanLabel = (plan: string) => {
+    switch (plan) {
+      case 'pro': return 'Pro';
+      case 'premium': return 'Premium';
+      default: return 'Gratuit';
     }
   };
 
@@ -57,14 +57,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         }}
       >
         {/* Avatar */}
-        <div 
-          className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-medium"
-          style={{ 
-            backgroundColor: user.role === 'admin' 
-              ? 'linear-gradient(45deg, #dc2626, #ea580c)' 
-              : 'linear-gradient(45deg, #0195ee, #ee5a01)'
-          }}
-        >
+        <div className="w-8 h-8 bg-gradient-to-br from-[#0195ee] to-[#ee5a01] rounded-full flex items-center justify-center text-white text-sm font-medium">
           {getInitials(user.full_name || 'UU')}
         </div>
 
@@ -74,7 +67,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
             {user.full_name || 'Utilisateur'}
           </p>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-            {getRoleLabel(user.role)}
+            Plan {getPlanLabel(user.plan_type)}
           </p>
         </div>
       </button>
@@ -102,12 +95,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               style={{ borderColor: 'var(--border-subtle)' }}
             >
               <div className="flex items-center space-x-3">
-                <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-medium"
-                  style={{ 
-                    backgroundColor: user.role === 'admin' ? '#dc2626' : '#0195ee'
-                  }}
-                >
+                <div className="w-10 h-10 bg-gradient-to-br from-[#0195ee] to-[#ee5a01] rounded-full flex items-center justify-center text-white font-medium">
                   {getInitials(user.full_name || 'UU')}
                 </div>
                 <div className="flex-1">
@@ -121,11 +109,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                     <div 
                       className="px-2 py-1 rounded text-xs font-medium"
                       style={{
-                        backgroundColor: `${getRoleColor(user.role)}20`,
-                        color: getRoleColor(user.role)
+                        backgroundColor: `${getPlanColor(user.plan_type)}20`,
+                        color: getPlanColor(user.plan_type)
                       }}
                     >
-                      {getRoleLabel(user.role)}
+                      {getPlanLabel(user.plan_type)}
                     </div>
                   </div>
                 </div>
@@ -227,7 +215,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               style={{ borderColor: 'var(--border-subtle)' }}
             >
               <button 
-                onClick={onLogout}
                 className="w-full flex items-center space-x-3 px-4 py-3 text-left transition-colors group"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';

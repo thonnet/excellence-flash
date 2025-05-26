@@ -1,53 +1,35 @@
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AppHeader } from '../components/AppHeader';
-import { MainContent } from '../components/MainContent';
+import React, { useState } from 'react';
+import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
+import { KanbanView } from '../components/KanbanView';
+import { ListView } from '../components/ListView';
+import { Observatoire } from '../components/Observatoire';
+import { ExperiencesDisplay } from '../components/ExperiencesDisplay';
 import { ExperienceForm } from '../components/ExperienceForm';
+import { Navigation } from '../components/Navigation';
+import { UserProfile } from '../components/UserProfile';
+import { ThemeToggle } from '../components/ThemeToggle';
+import { ViewToggle } from '../components/ViewToggle';
 import { DataImportExport } from '../components/DataImportExport';
-import { Excellence, Experience } from '../types';
-import { UserDisplay } from '../types/auth';
-import { useAuth } from '../hooks/useAuth';
-import { mockExcellences, mockExperiences } from '../data/mockData';
+import { ContextualHelp } from '../components/ContextualHelp';
+import { AlternatingBaseline } from '../components/AlternatingBaseline';
+import { Excellence, Experience, User } from '../types';
+import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
+import { Plus, Search } from 'lucide-react';
 
-type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences' | 'admin';
+type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
 
 const Index = () => {
-  const navigate = useNavigate();
-  const { user, loading } = useAuth();
-  
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
   const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
   const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
+  const [user, setUser] = useState<User>(mockUser);
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-
-  // Redirection si non connecté
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate('/auth');
-    }
-  }, [user, loading, navigate]);
-
-  // Affichage du loading
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p>Chargement...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Si pas d'utilisateur, ne rien afficher (redirection en cours)
-  if (!user) {
-    return null;
-  }
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const filteredExcellences = excellences.filter(excellence => 
     excellence.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -121,32 +103,167 @@ const Index = () => {
     setIsImportModalOpen(true);
   };
 
+  const experiencesBaselines = [
+    "Transformez vos expériences en carburant d'excellence",
+    "Conscientisez la valeur de ce que vous accomplissez naturellement",
+    "Connectez vos expériences aux excellences qu'elles révèlent",
+    "Donnez du sens et de la valeur à ce que vous vivez",
+    "Développez votre autorité intrinsèque par la présence à ce que vous faites"
+  ];
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
-      <AppHeader
-        user={user}
-        currentView={currentView}
-        onViewChange={setCurrentView}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        onExportData={handleExportData}
-        onImportData={handleImportDataClick}
-      />
+      {/* Header */}
+      <header 
+        className="border-b sticky top-0 z-50"
+        style={{ 
+          backgroundColor: 'var(--bg-secondary)',
+          borderColor: 'var(--border-subtle)'
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo, Title & Baseline */}
+            <div className="flex items-center space-x-4">
+              <ExcellenceFlashLogo size={32} />
+              <div>
+                <h1 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Excellence Flash</h1>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Modelez et structurez votre excellence</p>
+              </div>
+            </div>
 
+            {/* Navigation */}
+            <Navigation 
+              currentView={currentView} 
+              onViewChange={setCurrentView}
+              className="hidden md:flex"
+            />
+
+            {/* Simplified Search, Theme Toggle & Profile */}
+            <div className="flex items-center space-x-4">
+              <div className="relative hidden sm:block">
+                <div className="relative">
+                  <button
+                    className={`flex items-center justify-center transition-all duration-200 ${
+                      isSearchFocused ? 'w-64' : 'w-10'
+                    } h-10 border rounded-lg focus:outline-none`}
+                    style={{
+                      backgroundColor: 'var(--bg-tertiary)',
+                      borderColor: searchQuery ? 'var(--accent-orange)' : 'var(--border-subtle)',
+                      color: 'var(--text-primary)'
+                    }}
+                    onClick={() => setIsSearchFocused(true)}
+                    title={!isSearchFocused ? "Rechercher" : undefined}
+                  >
+                    {!isSearchFocused ? (
+                      <Search size={20} style={{ color: 'var(--text-secondary)' }} />
+                    ) : (
+                      <>
+                        <Search size={16} className="absolute left-3" style={{ color: 'var(--text-secondary)' }} />
+                        <input
+                          type="text"
+                          placeholder="Rechercher..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          onBlur={() => !searchQuery && setIsSearchFocused(false)}
+                          className="w-full pl-10 pr-4 py-2 bg-transparent focus:outline-none"
+                          style={{ color: 'var(--text-primary)' }}
+                          autoFocus
+                        />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+              <ThemeToggle />
+              <UserProfile 
+                user={user} 
+                onExportData={handleExportData}
+                onImportData={handleImportDataClick}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden border-t" style={{ borderColor: 'var(--border-subtle)', backgroundColor: 'var(--bg-secondary)' }}>
+          <Navigation 
+            currentView={currentView} 
+            onViewChange={setCurrentView}
+            className="flex justify-around py-2"
+            isMobile={true}
+          />
+        </div>
+      </header>
+
+      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <MainContent
-          currentView={currentView}
-          experienceViewMode={experienceViewMode}
-          filteredExcellences={filteredExcellences}
-          experiences={experiences}
-          user={user}
-          onAddExcellence={handleAddExcellence}
-          onUpdateExcellence={handleUpdateExcellence}
-          onDeleteExcellence={handleDeleteExcellence}
-          getExperienceCount={getExperienceCount}
-          onAddExperience={() => setIsExperienceFormOpen(true)}
-          onViewModeChange={setExperienceViewMode}
-        />
+        {currentView === 'observatoire' && (
+          <Observatoire 
+            excellences={excellences}
+            experiences={experiences}
+            user={user}
+          />
+        )}
+
+        {currentView === 'kanban' && (
+          <KanbanView
+            excellences={filteredExcellences}
+            experiences={experiences}
+            onAddExcellence={handleAddExcellence}
+            onUpdateExcellence={handleUpdateExcellence}
+            onDeleteExcellence={handleDeleteExcellence}
+            getExperienceCount={getExperienceCount}
+          />
+        )}
+
+        {currentView === 'list' && (
+          <ListView
+            excellences={filteredExcellences}
+            experiences={experiences}
+            onAddExcellence={handleAddExcellence}
+            onUpdateExcellence={handleUpdateExcellence}
+            onDeleteExcellence={handleDeleteExcellence}
+            getExperienceCount={getExperienceCount}
+          />
+        )}
+
+        {currentView === 'experiences' && (
+          <div className="space-y-6">
+            <div className="page-header">
+              <div className="title-section">
+                <div className="flex items-center space-x-4">
+                  <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Expériences</h2>
+                  <ContextualHelp pageType="experiences" />
+                </div>
+                <div className="mt-1 h-6">
+                  <AlternatingBaseline baselines={experiencesBaselines} />
+                </div>
+              </div>
+              <div className="view-controls">
+                <ViewToggle
+                  currentView={experienceViewMode}
+                  onViewChange={(view) => setExperienceViewMode(view as ExperienceViewMode)}
+                  availableViews={['list', 'gallery']}
+                />
+                <button 
+                  onClick={() => setIsExperienceFormOpen(true)}
+                  className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors ml-4"
+                  style={{ backgroundColor: 'var(--accent-orange)' }}
+                >
+                  <Plus size={16} />
+                  <span>Nouvelle expérience</span>
+                </button>
+              </div>
+            </div>
+            
+            <ExperiencesDisplay
+              experiences={experiences}
+              excellences={excellences}
+              viewMode={experienceViewMode}
+            />
+          </div>
+        )}
       </main>
 
       {/* Experience Form Modal */}
