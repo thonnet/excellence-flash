@@ -1,23 +1,40 @@
-
 import React, { useState, useMemo } from 'react';
 import { Experience, Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
 import { Calendar, Star } from 'lucide-react';
 import { isToday, isThisWeek, isThisMonth, isThisYear } from 'date-fns';
+import type { UserDisplay } from '../types/userDisplay';
 
-interface ExperiencesDisplayProps {
-  experiences: Experience[];
-  excellences: Excellence[];
-  viewMode: 'list' | 'gallery';
-}
-
+type ExperienceViewMode = 'grid' | 'kanban';
 type SortType = 'today' | 'week' | 'month' | 'year' | 'category' | 'title';
 type CategoryFilter = 'all' | 'manifestee' | 'principe' | 'quete';
 
+interface ExperiencesDisplayProps {
+  experienceViewMode: ExperienceViewMode;
+  setExperienceViewMode: (mode: ExperienceViewMode) => void;
+  excellences: Excellence[];
+  experiences: Experience[];
+  user: UserDisplay;
+  onAddExcellence: (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => void;
+  onUpdateExcellence: (id: string, updates: Partial<Excellence>) => void;
+  onDeleteExcellence: (id: string) => void;
+  getExperienceCount: (excellenceId: string) => number;
+  setIsExperienceFormOpen: (open: boolean) => void;
+  isAdminMode: boolean;
+}
+
 export const ExperiencesDisplay: React.FC<ExperiencesDisplayProps> = ({
+  experienceViewMode,
+  setExperienceViewMode,
   experiences,
   excellences,
-  viewMode
+  user,
+  onAddExcellence,
+  onUpdateExcellence,
+  onDeleteExcellence,
+  getExperienceCount,
+  setIsExperienceFormOpen,
+  isAdminMode
 }) => {
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
   const [sortType, setSortType] = useState<SortType>('today');
@@ -130,7 +147,7 @@ export const ExperiencesDisplay: React.FC<ExperiencesDisplayProps> = ({
       </div>
 
       {/* Display Mode */}
-      {viewMode === 'list' ? (
+      {experienceViewMode === 'grid' ? (
         <ExperiencesList experiences={filteredAndSortedExperiences} excellences={excellences} />
       ) : (
         <ExperiencesKanban experiences={filteredAndSortedExperiences} excellences={excellences} />

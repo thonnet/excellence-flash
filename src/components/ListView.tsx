@@ -1,28 +1,35 @@
 
 import React from 'react';
-import { Excellence } from '../types';
+import { Excellence, Experience } from '../types';
 import { KanbanBoard } from './KanbanBoard';
 import { ContextualHelp } from './ContextualHelp';
 import { AlternatingBaseline } from './AlternatingBaseline';
 import { AddExcellenceModal } from './AddExcellenceModal';
 import { Plus } from 'lucide-react';
+import type { UserDisplay } from '../types/userDisplay';
 
 interface ListViewProps {
   excellences: Excellence[];
-  experiences: any[];
+  experiences: Experience[];
+  user: UserDisplay;
   onAddExcellence: (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => void;
   onUpdateExcellence: (id: string, updates: Partial<Excellence>) => void;
   onDeleteExcellence: (id: string) => void;
   getExperienceCount: (excellenceId: string) => number;
+  setIsExperienceFormOpen: (open: boolean) => void;
+  isAdminMode: boolean;
 }
 
 export const ListView: React.FC<ListViewProps> = ({
   excellences,
   experiences,
+  user,
   onAddExcellence,
   onUpdateExcellence,
   onDeleteExcellence,
-  getExperienceCount
+  getExperienceCount,
+  setIsExperienceFormOpen,
+  isAdminMode
 }) => {
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
 
