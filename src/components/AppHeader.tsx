@@ -6,14 +6,14 @@ import { UserProfile } from './UserProfile';
 import { ThemeToggle } from './ThemeToggle';
 import { AdminSwitch } from './AdminSwitch';
 import { Search } from 'lucide-react';
-import { User } from '../types';
+import { UserDisplay } from '../types/user';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 
 interface AppHeaderProps {
   currentView: ViewType;
   onViewChange: (view: ViewType) => void;
-  user: User;
+  user: UserDisplay | null;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   isSearchFocused: boolean;
@@ -109,11 +109,13 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             )}
             
             <ThemeToggle />
-            <UserProfile 
-              user={user} 
-              onExportData={onExportData}
-              onImportData={onImportData}
-            />
+            {user && (
+              <UserProfile 
+                user={user} 
+                onExportData={onExportData}
+                onImportData={onImportData}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -8,7 +8,8 @@ import { ViewToggle } from './ViewToggle';
 import { ContextualHelp } from './ContextualHelp';
 import { AlternatingBaseline } from './AlternatingBaseline';
 import AdminDashboard from './AdminDashboard';
-import { Excellence, Experience, User } from '../types';
+import { Excellence, Experience } from '../types';
+import { UserDisplay } from '../types/user';
 import { Plus } from 'lucide-react';
 import '../components/AdminDashboard.css';
 
@@ -22,7 +23,7 @@ interface MainContentProps {
   excellences: Excellence[];
   filteredExcellences: Excellence[];
   experiences: Experience[];
-  user: User;
+  user: UserDisplay | null;
   onAddExcellence: (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => void;
   onUpdateExcellence: (id: string, updates: Partial<Excellence>) => void;
   onDeleteExcellence: (id: string) => void;
@@ -66,7 +67,7 @@ export const MainContent: React.FC<MainContentProps> = ({
   // Sinon, afficher l'interface utilisateur normale
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {currentView === 'observatoire' && (
+      {currentView === 'observatoire' && user && (
         <Observatoire 
           excellences={excellences}
           experiences={experiences}

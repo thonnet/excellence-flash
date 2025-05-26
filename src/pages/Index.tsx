@@ -1,12 +1,17 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AppHeader } from '../components/AppHeader';
 import { MainContent } from '../components/MainContent';
 import { AppModals } from '../components/AppModals';
 import { useAppState } from '../hooks/useAppState';
+import { useAuth } from '../hooks/useAuth';
 import '../components/AdminSwitch.css';
 
 const Index = () => {
+  const navigate = useNavigate();
+  const { loading: authLoading, user: authUser } = useAuth();
+  
   const {
     // States
     currentView,
@@ -39,6 +44,30 @@ const Index = () => {
     handleImportData,
     handleExportData,
   } = useAppState();
+
+  // Rediriger vers la page d'authentification si pas connecté
+  React.useEffect(() => {
+    if (!authLoading && !authUser) {
+      navigate('/auth');
+    }
+  }, [authLoading, authUser, navigate]);
+
+  // Afficher un loader pendant le chargement de l'authentification
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg-primary)' }}>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p style={{ color: 'var(--text-muted)' }}>Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Ne pas afficher le contenu si pas d'utilisateur
+  if (!user) {
+    return null;
+  }
 
   const handleImportDataClick = () => {
     setIsImportModalOpen(true);

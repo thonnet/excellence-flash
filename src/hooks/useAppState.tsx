@@ -1,17 +1,19 @@
 
-import { useState } from 'react';
-import { Excellence, Experience, User } from '../types';
-import { mockExcellences, mockExperiences, mockUser } from '../data/mockData';
+import { useState, useEffect } from 'react';
+import { Excellence, Experience } from '../types';
+import { UserDisplay } from '../types/user';
+import { mockExcellences, mockExperiences } from '../data/mockData';
+import { useAuth } from './useAuth';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
 
 export const useAppState = () => {
+  const { userProfile, loading: authLoading } = useAuth();
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
   const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
   const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
-  const [user, setUser] = useState<User>({...mockUser, role: 'admin'});
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
@@ -92,18 +94,18 @@ export const useAppState = () => {
     experienceViewMode,
     excellences,
     experiences,
-    user,
+    user: userProfile,
     searchQuery,
     isExperienceFormOpen,
     isImportModalOpen,
     isSearchFocused,
     isAdminMode,
     filteredExcellences,
+    authLoading,
     
     // Setters
     setCurrentView,
     setExperienceViewMode,
-    setUser,
     setSearchQuery,
     setIsExperienceFormOpen,
     setIsImportModalOpen,
