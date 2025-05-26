@@ -33,12 +33,12 @@ export const useAdminStats = () => {
         .from('profiles')
         .select('id, created_at, last_sign_in_at');
 
-      // 2. Statistiques excellences (table hypothétique)
+      // 2. Statistiques excellences
       const { data: excellences } = await supabase
         .from('excellences')
         .select('id, created_at');
 
-      // 3. Statistiques expériences (table hypothétique)
+      // 3. Statistiques expériences
       const { data: experiences } = await supabase
         .from('experiences')
         .select('id, created_at');

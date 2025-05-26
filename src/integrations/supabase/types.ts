@@ -24,6 +24,83 @@ export type Database = {
         }
         Relationships: []
       }
+      excellences: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      experiences: {
+        Row: {
+          created_at: string
+          date_experienced: string
+          description: string | null
+          excellence_id: string
+          id: string
+          image_caption: string | null
+          image_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_experienced?: string
+          description?: string | null
+          excellence_id: string
+          id?: string
+          image_caption?: string | null
+          image_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_experienced?: string
+          description?: string | null
+          excellence_id?: string
+          id?: string
+          image_caption?: string | null
+          image_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experiences_excellence_id_fkey"
+            columns: ["excellence_id"]
+            isOneToOne: false
+            referencedRelation: "excellences"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           ai_insights_enabled: boolean | null
