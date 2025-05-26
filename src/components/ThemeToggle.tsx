@@ -3,20 +3,32 @@ import React, { useState, useEffect } from 'react';
 import { Moon, Sun } from 'lucide-react';
 
 export const ThemeToggle: React.FC = () => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(() => {
+    // Initialiser à partir du localStorage ou par défaut sombre
+    const saved = localStorage.getItem('theme');
+    return saved ? saved === 'dark' : true;
+  });
 
   useEffect(() => {
-    // Appliquer le thème au document avec l'attribut data-theme
+    console.log('ThemeToggle: Applying theme', isDark ? 'dark' : 'light');
+    
+    // Appliquer le thème
     if (isDark) {
       document.documentElement.setAttribute('data-theme', 'dark');
       document.documentElement.classList.remove('light');
+      localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
       document.documentElement.classList.add('light');
+      localStorage.setItem('theme', 'light');
     }
+    
+    // Forcer un rafraîchissement des styles
+    document.documentElement.style.setProperty('--force-refresh', Math.random().toString());
   }, [isDark]);
 
   const toggleTheme = () => {
+    console.log('ThemeToggle: Switching from', isDark ? 'dark' : 'light', 'to', !isDark ? 'dark' : 'light');
     setIsDark(!isDark);
   };
 
