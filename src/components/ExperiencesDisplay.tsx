@@ -28,6 +28,13 @@ export const ExperiencesDisplay: React.FC<ExperiencesDisplayProps> = ({
     return excellence?.category || '';
   };
 
+  const getCategoryIconClass = (category: string) => {
+    if (category === 'manifestee') return 'category-icon--manifestee';
+    if (category === 'principe') return 'category-icon--principe';
+    if (category === 'quete') return 'category-icon--quete';
+    return 'category-icon--manifestee';
+  };
+
   // Filter and sort experiences
   const filteredAndSortedExperiences = useMemo(() => {
     let filtered = experiences;
@@ -157,20 +164,11 @@ const ExperiencesKanban: React.FC<{ experiences: Experience[]; excellences: Exce
 
   const groupedExperiences = groupExperiencesByCategory();
 
-  const getCategoryIcon = (category: string) => {
-    const iconColor = category === 'manifestee' ? '#8B9657' : 
-                      category === 'principe' ? '#A7C7E7' : 
-                      category === 'quete' ? '#FFB366' : '#999999';
-    
-    return (
-      <Tag 
-        size={16}
-        style={{ 
-          color: iconColor,
-          marginRight: '8px'
-        }}
-      />
-    );
+  const getCategoryIconClass = (category: string) => {
+    if (category === 'manifestee') return 'category-icon--manifestee';
+    if (category === 'principe') return 'category-icon--principe';
+    if (category === 'quete') return 'category-icon--quete';
+    return 'category-icon--manifestee';
   };
 
   if (experiences.length === 0) {
@@ -200,7 +198,7 @@ const ExperiencesKanban: React.FC<{ experiences: Experience[]; excellences: Exce
             <div className="category-header" style={{ marginBottom: '16px' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  {getCategoryIcon(category)}
+                  <Tag className={`category-icon ${getCategoryIconClass(category)} mr-2`} size={16} />
                   <h3 className="font-medium" style={{ color: 'var(--text-primary)' }}>
                     {categoryData.title}
                   </h3>
@@ -288,20 +286,11 @@ const ExperiencesList: React.FC<{ experiences: Experience[]; excellences: Excell
     });
   };
 
-  const getCategoryIcon = (category: string) => {
-    const iconColor = category === 'manifestee' ? '#8B9657' : 
-                      category === 'principe' ? '#A7C7E7' : 
-                      category === 'quete' ? '#FFB366' : '#999999';
-    
-    return (
-      <Tag 
-        size={16}
-        style={{ 
-          color: iconColor,
-          marginRight: '8px'
-        }}
-      />
-    );
+  const getCategoryIconClass = (category: string) => {
+    if (category === 'manifestee') return 'category-icon--manifestee';
+    if (category === 'principe') return 'category-icon--principe';
+    if (category === 'quete') return 'category-icon--quete';
+    return 'category-icon--manifestee';
   };
 
   if (sortedDates.length === 0) {
@@ -359,7 +348,7 @@ const ExperiencesList: React.FC<{ experiences: Experience[]; excellences: Excell
                       {excellence && (
                         <div className="flex items-center space-x-2">
                           <div className="flex items-center">
-                            {getCategoryIcon(excellence.category)}
+                            <Tag className={`category-icon ${getCategoryIconClass(excellence.category)} mr-2`} size={16} />
                             <span 
                               className="text-xs font-medium"
                               style={{ color: 'var(--text-secondary)' }}

@@ -230,8 +230,8 @@ const Index = () => {
 
         {currentView === 'experiences' && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
+            <div className="page-header">
+              <div className="title-section">
                 <div className="flex items-center space-x-4">
                   <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Expériences</h2>
                   <ContextualHelp pageType="experiences" />
@@ -240,7 +240,7 @@ const Index = () => {
                   <AlternatingBaseline baselines={experiencesBaselines} />
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="view-controls">
                 <ViewToggle
                   currentView={experienceViewMode}
                   onViewChange={(view) => setExperienceViewMode(view as ExperienceViewMode)}
@@ -248,7 +248,7 @@ const Index = () => {
                 />
                 <button 
                   onClick={() => setIsExperienceFormOpen(true)}
-                  className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 text-white rounded-lg hover:opacity-90 transition-colors ml-4"
                   style={{ backgroundColor: 'var(--accent-orange)' }}
                 >
                   <Plus size={16} />

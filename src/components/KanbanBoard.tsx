@@ -8,7 +8,7 @@ import { ContextualHelp } from './ContextualHelp';
 import { ExcellenceListView } from './ExcellenceListView';
 import { ExcellenceDetailModal } from './ExcellenceDetailModal';
 import { ExcellenceEditModal } from './ExcellenceEditModal';
-import { Plus } from 'lucide-react';
+import { Plus, Tag } from 'lucide-react';
 import { useIsMobile } from '../hooks/use-mobile';
 
 interface KanbanBoardProps {
@@ -58,6 +58,19 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const handleEditExcellence = (excellence: Excellence) => {
     setSelectedExcellence(excellence);
     setIsEditModalOpen(true);
+  };
+
+  const getCategoryIconClass = (category: string) => {
+    if (category.includes('manifestée') || category.includes('manifestee')) {
+      return 'category-icon--manifestee';
+    }
+    if (category.includes('principe')) {
+      return 'category-icon--principe';
+    }
+    if (category.includes('quête') || category.includes('quete')) {
+      return 'category-icon--quete';
+    }
+    return 'category-icon--manifestee';
   };
 
   // Drag & Drop handlers for desktop
@@ -129,7 +142,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   return (
     <div className="space-y-6">
       {/* View Toggle Controls */}
-      <div className="flex justify-center">
+      <div className="view-controls">
         <ViewToggle
           currentView={viewMode}
           onViewChange={(view) => setViewMode(view as 'kanban' | 'list')}
@@ -166,7 +179,8 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                         className="flex-1 cursor-help"
                         title={category.description}
                       >
-                        <h3 className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>
+                        <h3 className="font-bold text-lg flex items-center" style={{ color: 'var(--text-primary)' }}>
+                          <Tag className={`category-icon ${getCategoryIconClass(categoryKey)} mr-2`} size={16} />
                           <span className="font-bold">{category.title}</span>
                           <span className="font-normal ml-2" style={{ color: 'var(--text-secondary)' }}>
                             {categoryExcellences.length}

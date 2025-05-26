@@ -73,28 +73,11 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
     }
   };
 
-  // Fonction corrigée pour déterminer la classe CSS selon la catégorie
-  const getCategoryClass = (category: string) => {
-    if (category === 'manifestee') return 'category-icon--manifestee';
-    if (category === 'principe') return 'category-icon--principe';
-    if (category === 'quete') return 'category-icon--quete';
-    return '';
-  };
-
-  const getCategoryIcon = () => {
-    const iconColor = excellence.category === 'manifestee' ? '#8B9657' : 
-                      excellence.category === 'principe' ? '#A7C7E7' : 
-                      excellence.category === 'quete' ? '#FFB366' : '#999999';
-    
-    return (
-      <Tag 
-        size={16}
-        style={{ 
-          color: iconColor,
-          marginRight: '8px'
-        }}
-      />
-    );
+  const getCategoryIconClass = () => {
+    if (excellence.category === 'manifestee') return 'category-icon--manifestee';
+    if (excellence.category === 'principe') return 'category-icon--principe';
+    if (excellence.category === 'quete') return 'category-icon--quete';
+    return 'category-icon--manifestee';
   };
 
   return (
@@ -106,7 +89,7 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
     >
       {/* AFFICHAGE MINIMAL - Nom avec pictogramme de catégorie */}
       <div className="flex items-start">
-        {getCategoryIcon()}
+        <Tag className={`category-icon ${getCategoryIconClass()} mr-2 mt-0.5`} size={16} />
         <h4 className="font-medium text-sm line-clamp-2 flex-1" style={{ color: 'var(--text-primary)' }}>
           {excellence.name}
         </h4>

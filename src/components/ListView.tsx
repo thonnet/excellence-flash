@@ -35,8 +35,8 @@ export const ListView: React.FC<ListViewProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
+      <div className="page-header">
+        <div className="title-section">
           <div className="flex items-center space-x-4">
             <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Excellences</h2>
             <ContextualHelp pageType="excellences" />

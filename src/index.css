@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -59,8 +60,8 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
@@ -975,4 +976,55 @@
   .experiences-section {
     padding: 25px;
   }
+}
+
+/* NOUVEAU STANDARD - Design System */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.title-section {
+  flex: 1;
+}
+
+.view-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Mobile responsive */
+@media (max-width: 767px) {
+  .page-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .view-controls {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* COULEURS OFFICIELLES - Design System */
+.category-icon--manifestee {
+  color: #8B9657 !important; /* Vert olive - Excellence manifestée */
+}
+
+.category-icon--principe {
+  color: #A7C7E7 !important; /* Bleu clair - Principe d'excellence */
+}
+
+.category-icon--quete {
+  color: #FFB366 !important; /* Orange clair - Quête d'excellence */
+}
+
+/* Taille standardisée */
+.category-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
