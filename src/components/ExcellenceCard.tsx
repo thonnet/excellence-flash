@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Excellence } from '../types';
+import { EXCELLENCE_CATEGORIES } from '../types';
 import { Eye, Edit2, X } from 'lucide-react';
 
 interface ExcellenceCardProps {
@@ -72,6 +73,10 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
     }
   };
 
+  const getCategoryIcon = () => {
+    return <span className={`category-icon ${excellence.category}`}>🏷️</span>;
+  };
+
   return (
     <div 
       ref={cardRef}
@@ -79,10 +84,13 @@ export const ExcellenceCard: React.FC<ExcellenceCardProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* AFFICHAGE MINIMAL - Nom uniquement */}
-      <h4 className="font-medium text-sm line-clamp-2" style={{ color: 'var(--text-primary)' }}>
-        {excellence.name}
-      </h4>
+      {/* AFFICHAGE MINIMAL - Nom avec pictogramme de catégorie */}
+      <div className="flex items-start">
+        {getCategoryIcon()}
+        <h4 className="font-medium text-sm line-clamp-2 flex-1" style={{ color: 'var(--text-primary)' }}>
+          {excellence.name}
+        </h4>
+      </div>
 
       {/* DÉTAILS au survol UNIQUEMENT */}
       {isHovered && (

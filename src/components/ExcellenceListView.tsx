@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Eye, Edit2, X, ChevronUp, ChevronDown, Search } from 'lucide-react';
+import { Eye, Edit2, X, Search } from 'lucide-react';
 
 interface ExcellenceListViewProps {
   excellences: Excellence[];
@@ -12,7 +12,7 @@ interface ExcellenceListViewProps {
   getExperienceCount: (excellenceId: string) => number;
 }
 
-type SortKey = 'name' | 'category' | 'description' | 'experiences' | 'created_at';
+type SortKey = 'name' | 'category' | 'experiences' | 'created_at';
 type SortDirection = 'asc' | 'desc';
 
 export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
@@ -38,6 +38,19 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
 
   const clearSearch = () => {
     setSearchQuery('');
+  };
+
+  const getCategoryIcon = (categoryKey: string) => {
+    return <span className={`category-icon ${categoryKey}`}>🏷️</span>;
+  };
+
+  const getSortArrows = (column: SortKey) => {
+    return (
+      <div className="sort-arrows">
+        <span className={sortKey === column && sortDirection === 'asc' ? 'active' : ''}>▲</span>
+        <span className={sortKey === column && sortDirection === 'desc' ? 'active' : ''}>▼</span>
+      </div>
+    );
   };
 
   const filteredAndSortedExcellences = useMemo(() => {
@@ -69,10 +82,6 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
           aValue = EXCELLENCE_CATEGORIES[a.category].title;
           bValue = EXCELLENCE_CATEGORIES[b.category].title;
           break;
-        case 'description':
-          aValue = a.description.toLowerCase();
-          bValue = b.description.toLowerCase();
-          break;
         case 'experiences':
           aValue = getExperienceCount(a.id);
           bValue = getExperienceCount(b.id);
@@ -91,11 +100,6 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
       return 0;
     });
   }, [excellences, searchQuery, categoryFilter, sortKey, sortDirection, getExperienceCount]);
-
-  const SortIcon = ({ column }: { column: SortKey }) => {
-    if (sortKey !== column) return null;
-    return sortDirection === 'asc' ? <ChevronUp size={16} /> : <ChevronDown size={16} />;
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
@@ -117,7 +121,7 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
               placeholder="Rechercher..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-10 py-2 rounded-lg border transition-colors"
+              className="w-full pl-10 pr-10 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
               style={{
                 backgroundColor: 'var(--bg-tertiary)',
                 borderColor: searchQuery ? 'var(--accent-orange)' : 'var(--border-subtle)',
@@ -165,9 +169,9 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
                 style={{ borderColor: 'var(--border-medium)' }}
                 onClick={() => handleSort('name')}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center">
                   <span style={{ color: 'var(--text-primary)' }}>Nom</span>
-                  <SortIcon column="name" />
+                  {getSortArrows('name')}
                 </div>
               </th>
               <th 
@@ -175,29 +179,25 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
                 style={{ borderColor: 'var(--border-medium)' }}
                 onClick={() => handleSort('category')}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center">
                   <span style={{ color: 'var(--text-primary)' }}>Catégorie</span>
-                  <SortIcon column="category" />
+                  {getSortArrows('category')}
                 </div>
               </th>
               <th 
-                className="text-left p-4 cursor-pointer border-b"
+                className="text-left p-4 border-b"
                 style={{ borderColor: 'var(--border-medium)' }}
-                onClick={() => handleSort('description')}
               >
-                <div className="flex items-center space-x-2">
-                  <span style={{ color: 'var(--text-primary)' }}>Description</span>
-                  <SortIcon column="description" />
-                </div>
+                <span style={{ color: 'var(--text-primary)' }}>Description</span>
               </th>
               <th 
                 className="text-left p-4 cursor-pointer border-b"
                 style={{ borderColor: 'var(--border-medium)' }}
                 onClick={() => handleSort('experiences')}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center">
                   <span style={{ color: 'var(--text-primary)' }}>Nb Expériences</span>
-                  <SortIcon column="experiences" />
+                  {getSortArrows('experiences')}
                 </div>
               </th>
               <th 
@@ -205,9 +205,9 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
                 style={{ borderColor: 'var(--border-medium)' }}
                 onClick={() => handleSort('created_at')}
               >
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center">
                   <span style={{ color: 'var(--text-primary)' }}>Date création</span>
-                  <SortIcon column="created_at" />
+                  {getSortArrows('created_at')}
                 </div>
               </th>
               <th 
@@ -250,9 +250,12 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
                     </span>
                   </td>
                   <td className="p-4">
-                    <span style={{ color: 'var(--text-secondary)' }}>
-                      {EXCELLENCE_CATEGORIES[excellence.category].title}
-                    </span>
+                    <div className="flex items-center">
+                      {getCategoryIcon(excellence.category)}
+                      <span style={{ color: 'var(--text-secondary)' }}>
+                        {EXCELLENCE_CATEGORIES[excellence.category].title}
+                      </span>
+                    </div>
                   </td>
                   <td className="p-4 max-w-xs">
                     <span 

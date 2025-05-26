@@ -2,7 +2,7 @@
 import React from 'react';
 import { Excellence, Experience } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { X, Calendar, Tag } from 'lucide-react';
+import { X, Calendar } from 'lucide-react';
 
 interface ExcellenceDetailModalProps {
   excellence: Excellence;
@@ -30,6 +30,10 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
     });
   };
 
+  const getCategoryIcon = () => {
+    return <span className={`category-icon ${excellence.category}`}>🏷️</span>;
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div 
@@ -48,14 +52,11 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
             <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
               {excellence.name}
             </h2>
-            <div 
-              className="inline-block px-3 py-1 rounded text-sm font-medium"
-              style={{
-                backgroundColor: category.bgColor,
-                color: category.color
-              }}
-            >
-              {category.title}
+            <div className="flex items-center">
+              {getCategoryIcon()}
+              <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                {category.title}
+              </span>
             </div>
           </div>
           <button
@@ -84,17 +85,30 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
               <h3 className="text-lg font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
                 Description
               </h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              <div 
+                className={`excellence-description category-${excellence.category}`}
+                style={{ 
+                  color: 'var(--text-secondary)',
+                  lineHeight: '1.5',
+                  paddingLeft: '15px',
+                  borderLeft: `3px solid var(--category-color)`
+                }}
+              >
                 {excellence.description}
-              </p>
+              </div>
             </div>
           )}
 
           {/* Expériences associées */}
           <div>
-            <h3 className="text-lg font-medium mb-3" style={{ color: 'var(--text-primary)' }}>
-              Expériences associées ({relatedExperiences.length})
-            </h3>
+            <div className="flex items-baseline mb-3">
+              <h3 className="experiences-title">
+                Expériences d'amplification associées
+              </h3>
+              <span className="experiences-count">
+                {relatedExperiences.length}
+              </span>
+            </div>
             
             {relatedExperiences.length > 0 ? (
               <div className="space-y-3">
@@ -103,8 +117,8 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
                     key={experience.id}
                     className="p-4 rounded-lg border"
                     style={{ 
-                      backgroundColor: 'var(--bg-tertiary)',
-                      borderColor: 'var(--border-subtle)'
+                      backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                      borderColor: '#444444'
                     }}
                   >
                     <div className="flex items-start justify-between mb-2">
@@ -118,29 +132,9 @@ export const ExcellenceDetailModal: React.FC<ExcellenceDetailModalProps> = ({
                     </div>
                     
                     {experience.description && (
-                      <p className="text-sm mb-3" style={{ color: 'var(--text-secondary)' }}>
+                      <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
                         {experience.description}
                       </p>
-                    )}
-                    
-                    {experience.tags.length > 0 && (
-                      <div className="flex items-center space-x-2">
-                        <Tag size={12} style={{ color: 'var(--text-muted)' }} />
-                        <div className="flex flex-wrap gap-1">
-                          {experience.tags.map(tag => (
-                            <span 
-                              key={tag}
-                              className="px-2 py-1 text-xs rounded"
-                              style={{ 
-                                backgroundColor: 'var(--bg-hover)',
-                                color: 'var(--text-muted)'
-                              }}
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
                     )}
                   </div>
                 ))}
