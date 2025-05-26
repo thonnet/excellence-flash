@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { X } from 'lucide-react';
+import { X, Tag } from 'lucide-react';
 
 interface AddExcellenceModalProps {
   isOpen: boolean;
@@ -44,6 +44,22 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
     setDescription('');
     setCategory('manifestee');
     onClose();
+  };
+
+  const getCategoryIcon = (categoryKey: string) => {
+    const iconColor = categoryKey === 'manifestee' ? '#8B9657' : 
+                      categoryKey === 'principe' ? '#A7C7E7' : 
+                      categoryKey === 'quete' ? '#FFB366' : '#999999';
+    
+    return (
+      <Tag 
+        size={16}
+        style={{ 
+          color: iconColor,
+          marginRight: '8px'
+        }}
+      />
+    );
   };
 
   if (!isOpen) return null;
@@ -125,7 +141,7 @@ export const AddExcellenceModal: React.FC<AddExcellenceModalProps> = ({
                   />
                   <div>
                     <div className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-                      <span className="category-icon" style={{ color: cat.color }}>🏷️</span>
+                      {getCategoryIcon(key)}
                       <span className="ml-2">{cat.title}</span>
                     </div>
                     <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
