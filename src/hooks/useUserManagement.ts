@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '../integrations/supabase/client';
 import { useToast } from './use-toast';
@@ -61,84 +62,34 @@ export const useUserManagement = () => {
     }
     
     try {
-      // Vérifier d'abord si l'utilisateur actuel est admin
-      const { data: currentUser } = await supabase.auth.getUser();
-      if (!currentUser.user) {
-        setMessage('Vous devez être connecté pour créer un utilisateur');
-        setIsCreating(false);
-        return;
-      }
-
-      // Vérifier le rôle de l'utilisateur actuel
-      const { data: currentProfile, error: profileError } = await supabase
+      // Insérer directement dans la table profiles avec un UUID généré
+      const tempUserId = crypto.randomUUID();
+      
+      const { error: directInsertError } = await supabase
         .from('profiles')
-        .select('role')
-        .eq('id', currentUser.user.id)
-        .single();
+        .insert({
+          id: tempUserId,
+          email: userData.email,
+          full_name: userData.fullName,
+          role: userData.role
+        });
 
-      if (profileError || !currentProfile) {
-        console.error('Erreur profile:', profileError);
-        setMessage('Impossible de vérifier vos permissions');
-        setIsCreating(false);
+      if (directInsertError) {
+        console.error('Erreur insertion directe:', directInsertError);
+        setMessage('Erreur lors de la création: ' + directInsertError.message);
+        toast({
+          title: "Erreur de création",
+          description: directInsertError.message,
+          variant: "destructive",
+        });
         return;
       }
 
-      if (currentProfile.role !== 'admin') {
-        setMessage('Seuls les administrateurs peuvent créer des utilisateurs');
-        setIsCreating(false);
-        return;
-      }
-
-      // Maintenant essayer de créer l'utilisateur via l'API d'authentification
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-        email: userData.email,
-        password: 'TempPassword123!', // Mot de passe temporaire
-        options: {
-          data: {
-            full_name: userData.fullName,
-            role: userData.role
-          }
-        }
+      setMessage(`Profil créé avec succès pour ${userData.email}.`);
+      toast({
+        title: "Profil créé",
+        description: `Profil créé pour ${userData.email}`,
       });
-
-      if (signUpError) {
-        console.error('Erreur signUp:', signUpError);
-        
-        // Si l'API signUp ne fonctionne pas, essayons l'approche directe
-        const tempUserId = crypto.randomUUID();
-        
-        const { error: directInsertError } = await supabase
-          .from('profiles')
-          .insert({
-            id: tempUserId,
-            email: userData.email,
-            full_name: userData.fullName,
-            role: userData.role
-          });
-
-        if (directInsertError) {
-          console.error('Erreur insertion directe:', directInsertError);
-          setMessage('Erreur lors de la création: ' + directInsertError.message);
-          toast({
-            title: "Erreur de création",
-            description: directInsertError.message,
-            variant: "destructive",
-          });
-          return;
-        }
-
-        setMessage(`Profil créé avec succès pour ${userData.email}. L'utilisateur devra s'inscrire via l'interface normale.`);
-        toast({
-          title: "Profil créé",
-          description: `Profil créé pour ${userData.email}`,
-        });
-      } else {
-        setMessage(`Utilisateur créé avec succès! ${userData.email} peut maintenant se connecter.`);
-        toast({
-          title: "Utilisateur créé",
-          description: `${userData.email} peut maintenant se connecter`,
-        });
-      }
 
       // Recharger la liste
       fetchUsers();
