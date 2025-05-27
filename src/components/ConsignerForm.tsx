@@ -3,6 +3,9 @@ import React, { useState, useMemo } from 'react';
 import { Excellence } from '../types';
 import { ExcellenceSelector } from './ExcellenceSelector';
 import { QuickTips } from './QuickTips';
+import { ConsignerBasicInfo } from './forms/ConsignerBasicInfo';
+import { AutoSuggestions } from './forms/AutoSuggestions';
+import { ConsignerActions } from './forms/ConsignerActions';
 
 interface ConsignerFormProps {
   excellences: Excellence[];
@@ -73,162 +76,35 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Section Informations de Base */}
-      <section 
-        className="p-8 rounded-lg"
-        style={{ backgroundColor: '#2a2a2a' }}
-      >
-        <h3 className="text-lg font-semibold mb-6" style={{ color: '#ee5a01' }}>
-          📝 Informations de base
-        </h3>
+      <ConsignerBasicInfo
+        title={title}
+        description={description}
+        dateExperienced={dateExperienced}
+        onTitleChange={setTitle}
+        onDescriptionChange={setDescription}
+        onDateChange={setDateExperienced}
+        onSubmit={handleSubmit}
+      />
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: '#ccc' }}>
-              Titre de l'expérience <span style={{ color: '#ee5a01' }}>*</span>
-            </label>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Ex: Présentation client réussie, Discussion enrichissante..."
-              className="w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none"
-              style={{
-                backgroundColor: '#333',
-                borderColor: '#555',
-                color: 'white'
-              }}
-              onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#ee5a01'}
-              onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#555'}
-            />
-          </div>
+      <AutoSuggestions
+        suggestions={suggestions}
+        selectedExcellences={selectedExcellences}
+        onApplySuggestion={applySuggestion}
+      />
 
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: '#ccc' }}>
-              Description détaillée
-            </label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Décrivez ce que vous avez vécu, appris, les défis relevés..."
-              rows={5}
-              maxLength={500}
-              className="w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none resize-none"
-              style={{
-                backgroundColor: '#333',
-                borderColor: '#555',
-                color: 'white'
-              }}
-              onFocus={(e) => (e.target as HTMLTextAreaElement).style.borderColor = '#ee5a01'}
-              onBlur={(e) => (e.target as HTMLTextAreaElement).style.borderColor = '#555'}
-            />
-            <div className="text-right text-xs mt-1" style={{ color: '#999' }}>
-              {description.length} / 500 caractères
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2" style={{ color: '#ccc' }}>
-              Date de l'expérience
-            </label>
-            <input
-              type="date"
-              value={dateExperienced}
-              onChange={(e) => setDateExperienced(e.target.value)}
-              className="px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none"
-              style={{
-                backgroundColor: '#333',
-                borderColor: '#555',
-                color: 'white'
-              }}
-              onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#ee5a01'}
-              onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#555'}
-            />
-          </div>
-        </form>
-      </section>
-
-      {/* Auto-suggestions */}
-      {suggestions.length > 0 && (
-        <section 
-          className="p-4 rounded-lg border"
-          style={{ 
-            backgroundColor: 'rgba(238,90,1,0.1)',
-            borderColor: '#ee5a01'
-          }}
-        >
-          <h4 className="text-sm font-medium mb-3" style={{ color: '#ee5a01' }}>
-            🤖 Suggestions basées sur votre description
-          </h4>
-          <div className="flex flex-wrap gap-2">
-            {suggestions.map((excellence) => (
-              <button
-                key={excellence.id}
-                onClick={() => applySuggestion(excellence.id)}
-                className="px-3 py-1 rounded-full text-sm font-medium transition-colors"
-                style={{
-                  backgroundColor: selectedExcellences.includes(excellence.id) ? '#0195ee' : '#ee5a01',
-                  color: 'white'
-                }}
-              >
-                {excellence.name}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Sélection des Excellences */}
       <ExcellenceSelector
         excellences={excellences}
         selectedExcellences={selectedExcellences}
         onSelectionChange={setSelectedExcellences}
       />
 
-      {/* Quick Tips */}
       <QuickTips />
 
-      {/* Actions */}
-      <section className="text-center py-8 border-t" style={{ borderColor: '#333' }}>
-        <button
-          onClick={handleSubmit}
-          disabled={!isFormValid}
-          className="px-8 py-4 rounded-lg text-lg font-semibold mr-4 transition-colors"
-          style={{
-            backgroundColor: isFormValid ? '#ee5a01' : '#555',
-            color: isFormValid ? 'white' : '#999',
-            cursor: isFormValid ? 'pointer' : 'not-allowed'
-          }}
-          onMouseEnter={(e) => {
-            if (isFormValid) (e.target as HTMLButtonElement).style.backgroundColor = '#d44f01';
-          }}
-          onMouseLeave={(e) => {
-            if (isFormValid) (e.target as HTMLButtonElement).style.backgroundColor = '#ee5a01';
-          }}
-        >
-          💾 Enregistrer l'expérience
-        </button>
-
-        <button
-          onClick={onCancel}
-          className="px-8 py-4 rounded-lg border-2 transition-colors"
-          style={{
-            backgroundColor: 'transparent',
-            borderColor: '#555',
-            color: '#999'
-          }}
-          onMouseEnter={(e) => {
-            (e.target as HTMLButtonElement).style.borderColor = '#999';
-            (e.target as HTMLButtonElement).style.color = 'white';
-          }}
-          onMouseLeave={(e) => {
-            (e.target as HTMLButtonElement).style.borderColor = '#555';
-            (e.target as HTMLButtonElement).style.color = '#999';
-          }}
-        >
-          ❌ Annuler
-        </button>
-      </section>
+      <ConsignerActions
+        isFormValid={isFormValid}
+        onSubmit={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
+        onCancel={onCancel}
+      />
     </div>
   );
 };
