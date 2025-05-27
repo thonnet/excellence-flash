@@ -135,10 +135,6 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
     console.log('Lier expérience:', experience);
   };
 
-  const handleDelete = (experience: Experience) => {
-    console.log('Supprimer expérience:', experience);
-  };
-
   const isFiltered = debouncedSearchQuery.trim() !== '' || selectedExcellences.length > 0 || selectedPeriod !== 'all';
 
   // Loading state avec skeleton
@@ -181,7 +177,6 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
           onView={handleView}
           onEdit={handleEdit}
           onLink={handleLink}
-          onDelete={handleDelete}
           onConsigner={() => onModeChange('consigner')}
           isFiltered={isFiltered}
         />

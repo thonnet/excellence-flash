@@ -6,12 +6,14 @@ interface AutoSuggestionsProps {
   suggestions: Excellence[];
   selectedExcellences: string[];
   onApplySuggestion: (excellenceId: string) => void;
+  disabled?: boolean;
 }
 
 export const AutoSuggestions: React.FC<AutoSuggestionsProps> = ({
   suggestions,
   selectedExcellences,
-  onApplySuggestion
+  onApplySuggestion,
+  disabled = false
 }) => {
   if (suggestions.length === 0) {
     return null;
@@ -19,7 +21,7 @@ export const AutoSuggestions: React.FC<AutoSuggestionsProps> = ({
 
   return (
     <section 
-      className="p-4 rounded-lg border"
+      className={`p-4 rounded-lg border transition-opacity ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
       style={{ 
         backgroundColor: 'rgba(238,90,1,0.1)',
         borderColor: '#ee5a01'
@@ -32,11 +34,13 @@ export const AutoSuggestions: React.FC<AutoSuggestionsProps> = ({
         {suggestions.map((excellence) => (
           <button
             key={excellence.id}
-            onClick={() => onApplySuggestion(excellence.id)}
-            className="px-3 py-1 rounded-full text-sm font-medium transition-colors"
+            onClick={() => !disabled && onApplySuggestion(excellence.id)}
+            disabled={disabled}
+            className="px-3 py-1 rounded-full text-sm font-medium transition-colors disabled:cursor-not-allowed"
             style={{
               backgroundColor: selectedExcellences.includes(excellence.id) ? '#0195ee' : '#ee5a01',
-              color: 'white'
+              color: 'white',
+              opacity: disabled ? 0.6 : 1
             }}
           >
             {excellence.name}
