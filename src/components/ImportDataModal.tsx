@@ -49,7 +49,7 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
     setImportStatus({ type: 'info', message: 'Importation en cours...' });
 
     try {
-      const data = await parseFileContent(file);
+      const data: ImportData = await parseFileContent(file);
 
       if (!validateData(data)) {
         throw new Error('Format de données invalide. Le fichier doit contenir des excellences et/ou des expériences.');
