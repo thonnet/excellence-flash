@@ -1,5 +1,6 @@
-
 import React, { useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { Navigate } from 'react-router-dom';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { KanbanView } from '../components/KanbanView';
 import { ListView } from '../components/ListView';
@@ -10,7 +11,6 @@ import { Navigation } from '../components/Navigation';
 import { UserProfile } from '../components/UserProfile';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { ViewToggle } from '../components/ViewToggle';
-import { DataImportExport } from '../components/DataImportExport';
 import { ContextualHelp } from '../components/ContextualHelp';
 import { AlternatingBaseline } from '../components/AlternatingBaseline';
 import { Excellence, Experience, User } from '../types';
@@ -21,14 +21,31 @@ type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
 type ExperienceViewMode = 'list' | 'gallery';
 
 const Index = () => {
+  const { user, loading } = useAuth();
+  
+  // Rediriger vers la page d'authentification si pas connecté
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <ExcellenceFlashLogo size={64} className="mx-auto mb-4" />
+          <p className="text-lg">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
   const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
   const [excellences, setExcellences] = useState<Excellence[]>(mockExcellences);
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
-  const [user, setUser] = useState<User>(mockUser);
+  const [userState, setUserState] = useState<User>(mockUser);
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const filteredExcellences = excellences.filter(excellence => 
@@ -73,34 +90,12 @@ const Index = () => {
     return experiences.filter(exp => exp.excellence_id === excellenceId).length;
   };
 
-  const handleImportData = (importedExcellences: Excellence[], importedExperiences: Experience[]) => {
-    const newExcellences = [...excellences];
-    const newExperiences = [...experiences];
-
-    importedExcellences.forEach(importedExc => {
-      if (!newExcellences.find(exc => exc.id === importedExc.id)) {
-        newExcellences.push(importedExc);
-      }
-    });
-
-    importedExperiences.forEach(importedExp => {
-      if (!newExperiences.find(exp => exp.id === importedExp.id)) {
-        newExperiences.push(importedExp);
-      }
-    });
-
-    setExcellences(newExcellences);
-    setExperiences(newExperiences);
-    
-    console.log(`Importé: ${importedExcellences.length} excellences, ${importedExperiences.length} expériences`);
-  };
-
   const handleExportData = () => {
     console.log('Export data triggered');
   };
 
   const handleImportDataClick = () => {
-    setIsImportModalOpen(true);
+    console.log('Import data triggered');
   };
 
   const experiencesBaselines = [
@@ -177,7 +172,7 @@ const Index = () => {
               </div>
               <ThemeToggle />
               <UserProfile 
-                user={user} 
+                user={userState} 
                 onExportData={handleExportData}
                 onImportData={handleImportDataClick}
               />
@@ -202,7 +197,7 @@ const Index = () => {
           <Observatoire 
             excellences={excellences}
             experiences={experiences}
-            user={user}
+            user={userState}
           />
         )}
 
@@ -273,25 +268,6 @@ const Index = () => {
           onAdd={handleAddExperience}
           onClose={() => setIsExperienceFormOpen(false)}
         />
-      )}
-
-      {/* Import Modal */}
-      {isImportModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg">
-            <DataImportExport
-              excellences={excellences}
-              experiences={experiences}
-              onImportData={handleImportData}
-            />
-            <button 
-              onClick={() => setIsImportModalOpen(false)}
-              className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
       )}
     </div>
   );
