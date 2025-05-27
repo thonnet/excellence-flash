@@ -1,14 +1,14 @@
+
 import React, { useState } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { ExcellenceCard } from './ExcellenceCard';
 import { AddExcellenceModal } from './AddExcellenceModal';
 import { ViewToggle } from './ViewToggle';
-import { ContextualHelp } from './ContextualHelp';
 import { ExcellenceListView } from './ExcellenceListView';
 import { ExcellenceDetailModal } from './ExcellenceDetailModal';
 import { ExcellenceEditModal } from './ExcellenceEditModal';
-import { Plus, Star } from 'lucide-react';
+import { KanbanColumn } from './KanbanColumn';
+import { MobileContextMenu } from './MobileContextMenu';
 import { useIsMobile } from '../hooks/use-mobile';
 
 interface KanbanBoardProps {
@@ -58,19 +58,6 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const handleEditExcellence = (excellence: Excellence) => {
     setSelectedExcellence(excellence);
     setIsEditModalOpen(true);
-  };
-
-  const getCategoryIconClass = (category: string) => {
-    if (category.includes('manifestée') || category.includes('manifestee')) {
-      return 'category-icon--manifestee';
-    }
-    if (category.includes('principe')) {
-      return 'category-icon--principe';
-    }
-    if (category.includes('quête') || category.includes('quete')) {
-      return 'category-icon--quete';
-    }
-    return 'category-icon--manifestee';
   };
 
   // Drag & Drop handlers for desktop
@@ -155,103 +142,28 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 kanban-mobile-optimized">
           {Object.entries(EXCELLENCE_CATEGORIES).map(([categoryKey, category]) => {
             const categoryExcellences = getExcellencesByCategory(categoryKey as 'manifestee' | 'principe' | 'quete');
-            const isDragOver = dragOverColumn === categoryKey;
             
             return (
-              <div 
-                key={categoryKey} 
-                className={`kanban-column ${isDragOver ? 'drag-over' : ''}`}
-                onDragOver={(e) => handleDragOver(e, categoryKey)}
+              <KanbanColumn
+                key={categoryKey}
+                categoryKey={categoryKey as 'manifestee' | 'principe' | 'quete'}
+                excellences={categoryExcellences}
+                onAddClick={handleAddClick}
+                onViewExcellence={handleViewExcellence}
+                onEditExcellence={handleEditExcellence}
+                onUpdateExcellence={onUpdateExcellence}
+                onDeleteExcellence={onDeleteExcellence}
+                getExperienceCount={getExperienceCount}
+                draggedExcellence={draggedExcellence}
+                dragOverColumn={dragOverColumn}
+                onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, categoryKey as 'manifestee' | 'principe' | 'quete')}
-              >
-                {/* Column Header */}
-                <div 
-                  className="kanban-header"
-                  style={{
-                    backgroundColor: 'var(--bg-tertiary)',
-                    borderBottom: '2px solid var(--border-medium)'
-                  }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2 flex-1">
-                      <div 
-                        className="flex-1 cursor-help"
-                        title={category.description}
-                      >
-                        <h3 className="font-bold text-lg flex items-center" style={{ color: 'var(--text-primary)' }}>
-                          <Star className={`category-icon ${getCategoryIconClass(categoryKey)} mr-2`} size={16} />
-                          <span className="font-bold">{category.title}</span>
-                          <span className="font-normal ml-2" style={{ color: 'var(--text-secondary)' }}>
-                            {categoryExcellences.length}
-                          </span>
-                        </h3>
-                      </div>
-                      <ContextualHelp pageType={categoryKey as 'manifestee' | 'principe' | 'quete'} />
-                    </div>
-                    <button
-                      onClick={() => handleAddClick(categoryKey as 'manifestee' | 'principe' | 'quete')}
-                      className="p-2 rounded-lg transition-colors ml-2"
-                      style={{ 
-                        color: 'var(--text-secondary)',
-                        backgroundColor: 'transparent'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
-                    >
-                      <Plus size={20} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Excellence Cards Container */}
-                <div 
-                  className="kanban-content"
-                  style={{
-                    backgroundColor: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-subtle)',
-                    borderTop: 'none'
-                  }}
-                >
-                  {categoryExcellences.map(excellence => (
-                    <div
-                      key={excellence.id}
-                      draggable={!isMobile}
-                      onDragStart={(e) => handleDragStart(e, excellence)}
-                      onDragEnd={handleDragEnd}
-                      onTouchStart={(e) => handleTouchStart(e, excellence)}
-                      onTouchEnd={handleTouchEnd}
-                      className={`${draggedExcellence?.id === excellence.id ? 'dragging' : ''}`}
-                    >
-                      <ExcellenceCard
-                        excellence={excellence}
-                        experienceCount={getExperienceCount(excellence.id)}
-                        onUpdate={onUpdateExcellence}
-                        onDelete={onDeleteExcellence}
-                        onView={handleViewExcellence}
-                        onEdit={handleEditExcellence}
-                      />
-                    </div>
-                  ))}
-                  
-                  {categoryExcellences.length === 0 && (
-                    <div className="text-center py-8" style={{ color: 'var(--text-muted)' }}>
-                      <p className="text-sm">Aucune excellence pour le moment</p>
-                      <button
-                        onClick={() => handleAddClick(categoryKey as 'manifestee' | 'principe' | 'quete')}
-                        className="text-xs mt-2 hover:underline"
-                        style={{ color: 'var(--text-secondary)' }}
-                      >
-                        Ajouter la première
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
+                onDrop={handleDrop}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              />
             );
           })}
         </div>
@@ -270,57 +182,11 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       )}
 
       {/* Mobile Context Menu */}
-      {showContextMenu && (
-        <div 
-          className="fixed bg-white border border-gray-300 rounded-lg shadow-lg z-50 py-2"
-          style={{
-            left: showContextMenu.x - 100,
-            top: showContextMenu.y - 50,
-            backgroundColor: 'var(--bg-tertiary)',
-            borderColor: 'var(--border-medium)'
-          }}
-        >
-          {Object.entries(EXCELLENCE_CATEGORIES).map(([categoryKey, category]) => (
-            <button
-              key={categoryKey}
-              onClick={() => handleCategoryChange(showContextMenu.excellence, categoryKey as 'manifestee' | 'principe' | 'quete')}
-              disabled={showContextMenu.excellence.category === categoryKey}
-              className={`w-full text-left px-4 py-2 hover:bg-gray-100 ${
-                showContextMenu.excellence.category === categoryKey ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
-              style={{ 
-                color: 'var(--text-primary)',
-                backgroundColor: 'transparent'
-              }}
-              onMouseEnter={(e) => {
-                if (showContextMenu.excellence.category !== categoryKey) {
-                  e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
-            >
-              {category.title}
-            </button>
-          ))}
-          <button
-            onClick={closeContextMenu}
-            className="w-full text-left px-4 py-2 text-sm"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            Annuler
-          </button>
-        </div>
-      )}
-
-      {/* Overlay to close context menu */}
-      {showContextMenu && (
-        <div 
-          className="fixed inset-0 z-40"
-          onClick={closeContextMenu}
-        />
-      )}
+      <MobileContextMenu
+        contextMenu={showContextMenu}
+        onCategoryChange={handleCategoryChange}
+        onClose={closeContextMenu}
+      />
 
       {/* Add Excellence Modal */}
       <AddExcellenceModal
