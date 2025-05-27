@@ -21,7 +21,7 @@ export const AutoSuggestions: React.FC<AutoSuggestionsProps> = ({
 
   return (
     <section 
-      className={`p-4 rounded-lg border transition-opacity ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
+      className={`p-4 rounded-lg border smooth-element transition-opacity ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
       style={{ 
         backgroundColor: 'rgba(238,90,1,0.1)',
         borderColor: '#ee5a01'
@@ -36,7 +36,7 @@ export const AutoSuggestions: React.FC<AutoSuggestionsProps> = ({
             key={excellence.id}
             onClick={() => !disabled && onApplySuggestion(excellence.id)}
             disabled={disabled}
-            className="px-3 py-1 rounded-full text-sm font-medium transition-colors disabled:cursor-not-allowed"
+            className="button-press px-3 py-1 rounded-full text-sm font-medium transition-all disabled:cursor-not-allowed interactive-element"
             style={{
               backgroundColor: selectedExcellences.includes(excellence.id) ? '#0195ee' : '#ee5a01',
               color: 'white',

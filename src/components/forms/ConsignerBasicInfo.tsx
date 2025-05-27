@@ -24,7 +24,7 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
 }) => {
   return (
     <section 
-      className="p-8 rounded-lg"
+      className="p-8 rounded-lg smooth-element"
       style={{ backgroundColor: '#2a2a2a' }}
     >
       <h3 className="text-lg font-semibold mb-6" style={{ color: '#ee5a01' }}>
@@ -42,7 +42,7 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
             onChange={(e) => onTitleChange(e.target.value)}
             placeholder="Ex: Présentation client réussie, Discussion enrichissante..."
             disabled={disabled}
-            className="w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none"
+            className="form-input w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none interactive-element"
             style={{
               backgroundColor: disabled ? '#222' : '#333',
               borderColor: '#555',
@@ -65,7 +65,7 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
             rows={5}
             maxLength={500}
             disabled={disabled}
-            className="w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none resize-none"
+            className="form-textarea w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none resize-none interactive-element"
             style={{
               backgroundColor: disabled ? '#222' : '#333',
               borderColor: '#555',
@@ -89,7 +89,7 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
             value={dateExperienced}
             onChange={(e) => onDateChange(e.target.value)}
             disabled={disabled}
-            className="px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none"
+            className="form-input px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none interactive-element"
             style={{
               backgroundColor: disabled ? '#222' : '#333',
               borderColor: '#555',
