@@ -4,6 +4,9 @@ import { ExperiencePageLayout } from './ExperiencePageLayout';
 import { ExperienceHeader } from './ExperienceHeader';
 import { ExperiencesFilters } from './ExperiencesFilters';
 import { ExperiencesGrid } from './ExperiencesGrid';
+import { ExperienceDetailModal } from './ExperienceDetailModal';
+import { ExperienceEditModal } from './ExperienceEditModal';
+import { ExperienceLinkModal } from './ExperienceLinkModal';
 import { LoadingSpinner, SkeletonCard } from './LoadingSpinner';
 import { useExperiences } from '../hooks/useExperiences';
 import { useExcellences } from '../hooks/useExcellences';
@@ -17,13 +20,26 @@ interface ExplorerExperiencesProps {
 
 export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onModeChange }) => {
   const { experiences, isLoading } = useExperiences();
-  const { excellences } = useExcellences();
+  const { excellences, updateExcellence } = useExcellences();
   
   // États des filtres avec optimisations
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedExcellences, setSelectedExcellences] = useState<string[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState('all');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // États des modales
+  const [detailModal, setDetailModal] = useState<{ isOpen: boolean; experience: Experience | null }>({
+    isOpen: false,
+    experience: null
+  });
+  const [editModal, setEditModal] = useState<{ isOpen: boolean; experience: Experience | null }>({
+    isOpen: false,
+    experience: null
+  });
+  const [linkModal, setLinkModal] = useState<{ isOpen: boolean; experience: Experience | null }>({
+    isOpen: false,
+    experience: null
+  });
 
   // Debounced search pour optimiser les performances
   const debouncedSearchQuery = useDebounce(searchQuery, 300);
@@ -31,6 +47,8 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
   // Refs pour focus management
   const pageRef = useRef<HTMLDivElement>(null);
   const keyboardShortcuts = useRef<KeyboardShortcuts | null>(null);
+
+  const isModalOpen = detailModal.isOpen || editModal.isOpen || linkModal.isOpen;
 
   // Initialisation raccourcis clavier
   useEffect(() => {
@@ -41,7 +59,11 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
       onNavigateToConsigner: () => onModeChange('consigner'),
       onNavigateToExplorer: () => onModeChange('explorer'),
       onSave: () => {},
-      onCloseModal: () => setIsModalOpen(false)
+      onCloseModal: () => {
+        if (detailModal.isOpen) setDetailModal({ isOpen: false, experience: null });
+        if (editModal.isOpen) setEditModal({ isOpen: false, experience: null });
+        if (linkModal.isOpen) setLinkModal({ isOpen: false, experience: null });
+      }
     });
 
     keyboardShortcuts.current.activate();
@@ -122,17 +144,30 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
   };
 
   const handleView = (experience: Experience) => {
-    console.log('Voir expérience:', experience);
-    setIsModalOpen(true);
+    console.log('Ouvrir détail expérience:', experience.title);
+    setDetailModal({ isOpen: true, experience });
   };
 
   const handleEdit = (experience: Experience) => {
-    console.log('Éditer expérience:', experience);
-    setIsModalOpen(true);
+    console.log('Éditer expérience:', experience.title);
+    setEditModal({ isOpen: true, experience });
   };
 
   const handleLink = (experience: Experience) => {
-    console.log('Lier expérience:', experience);
+    console.log('Lier expérience:', experience.title);
+    setLinkModal({ isOpen: true, experience });
+  };
+
+  const handleSaveEdit = (id: string, updates: Partial<Experience>) => {
+    console.log('Sauvegarder modifications expérience:', id, updates);
+    // TODO: Implémenter la sauvegarde des modifications d'expérience
+    // Cette fonctionnalité nécessitera une mutation dans useExperiences
+  };
+
+  const handleLinkExperience = (experienceId: string, excellenceId: string) => {
+    console.log('Lier expérience à excellence:', experienceId, excellenceId);
+    // TODO: Implémenter le lien expérience-excellence
+    // Cette fonctionnalité nécessitera une mutation dans useExperiences
   };
 
   const isFiltered = debouncedSearchQuery.trim() !== '' || selectedExcellences.length > 0 || selectedPeriod !== 'all';
@@ -180,6 +215,36 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
           onConsigner={() => onModeChange('consigner')}
           isFiltered={isFiltered}
         />
+
+        {/* Modales */}
+        {detailModal.experience && (
+          <ExperienceDetailModal
+            experience={detailModal.experience}
+            excellences={excellences}
+            isOpen={detailModal.isOpen}
+            onClose={() => setDetailModal({ isOpen: false, experience: null })}
+          />
+        )}
+
+        {editModal.experience && (
+          <ExperienceEditModal
+            experience={editModal.experience}
+            excellences={excellences}
+            isOpen={editModal.isOpen}
+            onClose={() => setEditModal({ isOpen: false, experience: null })}
+            onSave={handleSaveEdit}
+          />
+        )}
+
+        {linkModal.experience && (
+          <ExperienceLinkModal
+            experience={linkModal.experience}
+            excellences={excellences}
+            isOpen={linkModal.isOpen}
+            onClose={() => setLinkModal({ isOpen: false, experience: null })}
+            onLink={handleLinkExperience}
+          />
+        )}
       </div>
     </ExperiencePageLayout>
   );
