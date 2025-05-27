@@ -1,18 +1,13 @@
-
 import { Excellence, Experience, User } from '../types';
 
 export const mockUser: User = {
-  id: 'user-1',
-  email: 'jean.dupont@example.com',
-  full_name: 'Jean Dupont',
-  company_name: '',
-  billing_type: 'individual',
-  subscription_status: 'pro',
-  plan_type: 'pro',
-  theme_preference: 'dark',
-  ai_insights_enabled: true,
-  created_at: '2024-01-15T10:00:00Z',
-  updated_at: '2024-01-15T10:00:00Z'
+  id: "1",
+  email: "utilisateur@example.com",
+  full_name: "Jean Dupont",
+  is_admin: false,
+  plan_type: "gratuit",
+  created_at: "2024-01-01T00:00:00Z",
+  updated_at: "2024-01-01T00:00:00Z"
 };
 
 export const mockExcellences: Excellence[] = [
