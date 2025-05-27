@@ -9,149 +9,18 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      excellences: {
-        Row: {
-          category: string
-          created_at: string
-          description: string | null
-          id: string
-          name: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          category?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          name: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          category?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          name?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "excellences_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      experiences: {
+      auth: {
         Row: {
           created_at: string
-          date_experienced: string
-          description: string | null
-          excellence_id: string
-          id: string
-          image_caption: string | null
-          image_url: string | null
-          title: string
-          updated_at: string
-          user_id: string
+          id: number
         }
         Insert: {
           created_at?: string
-          date_experienced?: string
-          description?: string | null
-          excellence_id: string
-          id?: string
-          image_caption?: string | null
-          image_url?: string | null
-          title: string
-          updated_at?: string
-          user_id: string
+          id?: number
         }
         Update: {
           created_at?: string
-          date_experienced?: string
-          description?: string | null
-          excellence_id?: string
-          id?: string
-          image_caption?: string | null
-          image_url?: string | null
-          title?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "experiences_excellence_id_fkey"
-            columns: ["excellence_id"]
-            isOneToOne: false
-            referencedRelation: "excellences"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "experiences_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      profiles: {
-        Row: {
-          ai_insights_enabled: boolean
-          billing_type: string
-          company_name: string | null
-          created_at: string
-          email: string | null
-          full_name: string
-          id: string
-          last_sign_in_at: string | null
-          permissions: Json | null
-          plan_type: string
-          role: Database["public"]["Enums"]["app_role"]
-          subscription_status: string
-          theme_preference: string
-          updated_at: string
-          vat_number: string | null
-        }
-        Insert: {
-          ai_insights_enabled?: boolean
-          billing_type?: string
-          company_name?: string | null
-          created_at?: string
-          email?: string | null
-          full_name?: string
-          id: string
-          last_sign_in_at?: string | null
-          permissions?: Json | null
-          plan_type?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          subscription_status?: string
-          theme_preference?: string
-          updated_at?: string
-          vat_number?: string | null
-        }
-        Update: {
-          ai_insights_enabled?: boolean
-          billing_type?: string
-          company_name?: string | null
-          created_at?: string
-          email?: string | null
-          full_name?: string
-          id?: string
-          last_sign_in_at?: string | null
-          permissions?: Json | null
-          plan_type?: string
-          role?: Database["public"]["Enums"]["app_role"]
-          subscription_status?: string
-          theme_preference?: string
-          updated_at?: string
-          vat_number?: string | null
+          id?: number
         }
         Relationships: []
       }
@@ -160,17 +29,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_current_user_role: {
-        Args: Record<PropertyKey, never>
-        Returns: Database["public"]["Enums"]["app_role"]
-      }
-      is_current_user_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
-      app_role: "user" | "admin"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -285,8 +147,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      app_role: ["user", "admin"],
-    },
+    Enums: {},
   },
 } as const
