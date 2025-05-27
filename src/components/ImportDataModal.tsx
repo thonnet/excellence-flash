@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, HelpCircle } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { ImportData, ImportStatus } from '../types/import';
 import { parseFileContent, validateData, getFileFormat } from '../utils/fileParser';
@@ -12,12 +12,14 @@ interface ImportDataModalProps {
   isOpen: boolean;
   onClose: () => void;
   onImportComplete?: () => void;
+  onShowHelp?: () => void;
 }
 
 export const ImportDataModal: React.FC<ImportDataModalProps> = ({
   isOpen,
   onClose,
-  onImportComplete
+  onImportComplete,
+  onShowHelp
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const [isImporting, setIsImporting] = useState(false);
@@ -89,6 +91,12 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
     }
   };
 
+  const handleShowHelp = () => {
+    if (onShowHelp) {
+      onShowHelp();
+    }
+  };
+
   return (
     <>
       {/* Backdrop */}
@@ -117,20 +125,39 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
             <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
               Importer des données
             </h2>
-            <button
-              onClick={handleClose}
-              disabled={isImporting}
-              className="p-1 rounded-md transition-colors"
-              style={{ color: 'var(--text-muted)' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
-            >
-              <X size={20} />
-            </button>
+            <div className="flex items-center space-x-2">
+              {onShowHelp && (
+                <button
+                  onClick={handleShowHelp}
+                  disabled={isImporting}
+                  className="p-1 rounded-md transition-colors"
+                  style={{ color: 'var(--text-muted)' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
+                  title="Guide d'importation"
+                >
+                  <HelpCircle size={20} />
+                </button>
+              )}
+              <button
+                onClick={handleClose}
+                disabled={isImporting}
+                className="p-1 rounded-md transition-colors"
+                style={{ color: 'var(--text-muted)' }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }}
+              >
+                <X size={20} />
+              </button>
+            </div>
           </div>
 
           {/* Content */}
@@ -139,6 +166,17 @@ export const ImportDataModal: React.FC<ImportDataModalProps> = ({
               Sélectionnez un fichier contenant vos excellences et expériences.
               <br />
               <strong>Formats supportés :</strong> JSON, CSV, Excel (.xlsx/.xls), Markdown (.md)
+              {onShowHelp && (
+                <>
+                  <br />
+                  <button
+                    onClick={handleShowHelp}
+                    className="text-blue-500 hover:text-blue-400 underline mt-1 inline-block"
+                  >
+                    Voir le guide de formatage des données
+                  </button>
+                </>
+              )}
             </div>
 
             <ImportFileInput

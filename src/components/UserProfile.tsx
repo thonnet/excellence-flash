@@ -11,12 +11,14 @@ interface UserProfileProps {
   user: User;
   onExportData?: () => void;
   onImportData?: () => void;
+  onShowImportHelp?: () => void;
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ 
   user, 
   onExportData,
-  onImportData 
+  onImportData,
+  onShowImportHelp
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
@@ -49,6 +51,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     }
   };
 
+  const handleShowImportHelp = () => {
+    setIsImportModalOpen(false);
+    if (onShowImportHelp) {
+      onShowImportHelp();
+    }
+  };
+
   return (
     <div className="relative">
       <UserProfileButton
@@ -76,6 +85,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         isOpen={isImportModalOpen}
         onClose={() => setIsImportModalOpen(false)}
         onImportComplete={handleImportComplete}
+        onShowHelp={handleShowImportHelp}
       />
     </div>
   );
