@@ -9,7 +9,7 @@ export const useExperiences = () => {
   const queryClient = useQueryClient();
 
   // Fetch experiences
-  const { data: experiences = [], isLoading } = useQuery({
+  const { data: experiences = [], isLoading, refetch } = useQuery({
     queryKey: ['experiences'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -65,6 +65,7 @@ export const useExperiences = () => {
   return {
     experiences,
     isLoading,
+    refetch,
     addExperience: addExperienceMutation.mutate,
     getExperienceCount,
   };

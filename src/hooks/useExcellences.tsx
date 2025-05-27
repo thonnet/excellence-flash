@@ -10,7 +10,7 @@ export const useExcellences = () => {
   const queryClient = useQueryClient();
 
   // Fetch excellences
-  const { data: excellences = [], isLoading } = useQuery({
+  const { data: excellences = [], isLoading, refetch } = useQuery({
     queryKey: ['excellences'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -120,6 +120,7 @@ export const useExcellences = () => {
   return {
     excellences,
     isLoading,
+    refetch,
     addExcellence: addExcellenceMutation.mutate,
     updateExcellence: updateExcellenceMutation.mutate,
     deleteExcellence: deleteExcellenceMutation.mutate,
