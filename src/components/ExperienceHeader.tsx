@@ -10,6 +10,16 @@ interface ExperienceHeaderProps {
 export const ExperienceHeader: React.FC<ExperienceHeaderProps> = ({ mode, onModeChange }) => {
   const isExplorer = mode === 'explorer';
   
+  const handleConsignerClick = () => {
+    console.log('Consigner button clicked, changing mode to consigner');
+    onModeChange('consigner');
+  };
+
+  const handleBackClick = () => {
+    console.log('Back button clicked, changing mode to explorer');
+    onModeChange('explorer');
+  };
+  
   return (
     <div className="page-header">
       <div className="flex items-start justify-between">
@@ -18,7 +28,7 @@ export const ExperienceHeader: React.FC<ExperienceHeaderProps> = ({ mode, onMode
             {!isExplorer && (
               <NavigationButton
                 variant="back"
-                onClick={() => onModeChange('explorer')}
+                onClick={handleBackClick}
               >
                 ← Retour
               </NavigationButton>
@@ -38,7 +48,7 @@ export const ExperienceHeader: React.FC<ExperienceHeaderProps> = ({ mode, onMode
         {isExplorer && (
           <NavigationButton
             variant="primary"
-            onClick={() => onModeChange('consigner')}
+            onClick={handleConsignerClick}
           >
             ⚡ Consigner une expérience
           </NavigationButton>
