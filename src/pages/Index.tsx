@@ -7,10 +7,14 @@ import { Header } from '../components/Header';
 import { MainContent } from '../components/MainContent';
 import { ExperienceForm } from '../components/ExperienceForm';
 import { useAppState } from '../hooks/useAppState';
+import { useExcellences } from '../hooks/useExcellences';
+import { useExperiences } from '../hooks/useExperiences';
 
 const Index = () => {
   const { user, loading } = useAuth();
   const appState = useAppState();
+  const { isLoading: excellencesLoading } = useExcellences();
+  const { isLoading: experiencesLoading } = useExperiences();
   
   // Rediriger vers la page d'authentification si pas connecté
   if (loading) {
@@ -26,6 +30,18 @@ const Index = () => {
 
   if (!user) {
     return <Navigate to="/auth" replace />;
+  }
+
+  // Show loading while data is being fetched
+  if (excellencesLoading || experiencesLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <ExcellenceFlashLogo size={64} className="mx-auto mb-4" />
+          <p className="text-lg">Chargement de vos données...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
