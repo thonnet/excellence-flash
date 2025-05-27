@@ -1,9 +1,8 @@
-
-
 import React, { useState } from 'react';
 import { User } from '../types';
 import { Settings, LogOut, User as UserIcon, Download, Upload, Camera, Key } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { ChangePasswordModal } from './ChangePasswordModal';
 
 interface UserProfileProps {
   user: User;
@@ -17,6 +16,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   onImportData 
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
   const { signOut } = useAuth();
 
   const getInitials = (name: string) => {
@@ -243,7 +243,14 @@ export const UserProfile: React.FC<UserProfileProps> = ({
           </div>
         </>
       )}
+
+      {/* Change Password Modal */}
+      {isChangePasswordModalOpen && (
+        <ChangePasswordModal
+          isOpen={isChangePasswordModalOpen}
+          onClose={() => setIsChangePasswordModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
-
