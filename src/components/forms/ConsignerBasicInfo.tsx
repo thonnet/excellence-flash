@@ -49,8 +49,8 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
               color: disabled ? '#666' : 'white',
               cursor: disabled ? 'not-allowed' : 'text'
             }}
-            onFocus={(e) => !disabled && (e.target as HTMLInputElement).style.borderColor = '#ee5a01'}
-            onBlur={(e) => !disabled && (e.target as HTMLInputElement).style.borderColor = '#555'}
+            onFocus={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#ee5a01')}
+            onBlur={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#555')}
           />
         </div>
 
@@ -72,8 +72,8 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
               color: disabled ? '#666' : 'white',
               cursor: disabled ? 'not-allowed' : 'text'
             }}
-            onFocus={(e) => !disabled && (e.target as HTMLTextAreaElement).style.borderColor = '#ee5a01'}
-            onBlur={(e) => !disabled && (e.target as HTMLTextAreaElement).style.borderColor = '#555'}
+            onFocus={(e) => !disabled && ((e.target as HTMLTextAreaElement).style.borderColor = '#ee5a01')}
+            onBlur={(e) => !disabled && ((e.target as HTMLTextAreaElement).style.borderColor = '#555')}
           />
           <div className="text-right text-xs mt-1" style={{ color: '#999' }}>
             {description.length} / 500 caractères
@@ -96,8 +96,8 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
               color: disabled ? '#666' : 'white',
               cursor: disabled ? 'not-allowed' : 'pointer'
             }}
-            onFocus={(e) => !disabled && (e.target as HTMLInputElement).style.borderColor = '#ee5a01'}
-            onBlur={(e) => !disabled && (e.target as HTMLInputElement).style.borderColor = '#555'}
+            onFocus={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#ee5a01')}
+            onBlur={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#555')}
           />
         </div>
       </form>

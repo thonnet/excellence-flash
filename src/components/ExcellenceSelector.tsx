@@ -116,8 +116,8 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
             color: disabled ? '#666' : 'white',
             cursor: disabled ? 'not-allowed' : 'text'
           }}
-          onFocus={(e) => !disabled && (e.target as HTMLInputElement).style.borderColor = '#0195ee'}
-          onBlur={(e) => !disabled && (e.target as HTMLInputElement).style.borderColor = '#555'}
+          onFocus={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#0195ee')}
+          onBlur={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#555')}
         />
       </div>
 
@@ -190,10 +190,10 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
                           opacity: disabled ? 0.6 : 1
                         }}
                         onMouseEnter={(e) => {
-                          if (!isSelected && !disabled) (e.target as HTMLDivElement).style.borderColor = '#0195ee';
+                          if (!isSelected && !disabled) ((e.target as HTMLDivElement).style.borderColor = '#0195ee');
                         }}
                         onMouseLeave={(e) => {
-                          if (!isSelected && !disabled) (e.target as HTMLDivElement).style.borderColor = '#555';
+                          if (!isSelected && !disabled) ((e.target as HTMLDivElement).style.borderColor = '#555');
                         }}
                       >
                         <div
