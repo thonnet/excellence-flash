@@ -40,26 +40,30 @@ export const ListView: React.FC<ListViewProps> = ({
           <div className="flex items-center space-x-4">
             <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Vos Excellences</h2>
             <ContextualHelp pageType="excellences" />
-            {/* Desktop button */}
-            <button
-              onClick={() => setIsAddModalOpen(true)}
-              className="btn-create-excellence hidden lg:flex"
-              title="Créer une nouvelle excellence"
-            >
-              <Plus size={16} />
-            </button>
           </div>
           <div className="mt-1 h-6">
             <AlternatingBaseline baselines={excellencesBaselines} />
           </div>
         </div>
+        <div className="view-controls">
+          {/* Desktop button - intégré à droite des contrôles */}
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="excellence-add-btn-desktop hidden md:flex"
+            title="Ajouter une nouvelle excellence"
+            aria-label="Ajouter une nouvelle excellence"
+          >
+            <Plus size={20} />
+          </button>
+        </div>
       </div>
 
-      {/* Mobile/Tablet FAB */}
+      {/* Mobile FAB */}
       <button
         onClick={() => setIsAddModalOpen(true)}
-        className="btn-create-excellence lg:hidden"
-        title="Créer une nouvelle excellence"
+        className="excellence-add-btn-mobile md:hidden"
+        title="Ajouter une nouvelle excellence"
+        aria-label="Ajouter une nouvelle excellence"
       >
         <Plus size={24} />
       </button>

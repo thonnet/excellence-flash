@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { User } from '../types';
-import { Settings, LogOut, User as UserIcon, Download, Upload, Camera, Key } from 'lucide-react';
+import { Settings, LogOut, User as UserIcon, Upload, Camera, Key } from 'lucide-react';
 import { getInitials, getPlanColor, getPlanLabel } from '../utils/userProfileUtils';
 
 interface UserProfileDropdownProps {
@@ -115,21 +115,6 @@ export const UserProfileDropdown: React.FC<UserProfileDropdownProps> = ({
           >
             <Key size={16} style={{ color: 'var(--text-muted)' }} />
             <span className="text-sm">Changer mot de passe</span>
-          </button>
-          
-          <button 
-            className="w-full flex items-center space-x-3 px-4 py-3 text-left transition-colors"
-            style={{ color: 'var(--text-primary)' }}
-            onClick={onExportData}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
-          >
-            <Download size={16} style={{ color: 'var(--text-muted)' }} />
-            <span className="text-sm">Exporter mes données</span>
           </button>
 
           <button 

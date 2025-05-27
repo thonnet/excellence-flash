@@ -408,6 +408,62 @@
   }
 }
 
+/* ========================================
+   NOUVEAUX BOUTONS EXCELLENCE - DESIGN SPÉCIFIQUE
+   ======================================== */
+
+/* BOUTON DESKTOP - Intégré dans la barre */
+.excellence-add-btn-desktop {
+  width: 44px;
+  height: 44px;
+  background: #333333;
+  border: 2px solid #ee5a01;
+  border-radius: 8px;
+  color: #ee5a01;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 12px;
+}
+
+.excellence-add-btn-desktop:hover {
+  background: #ee5a01;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(238, 90, 1, 0.4);
+}
+
+/* BOUTON MOBILE - Floating Action Button */
+.excellence-add-btn-mobile {
+  width: 56px;
+  height: 56px;
+  background: #ee5a01;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(238, 90, 1, 0.4);
+  transition: all 0.3s ease;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.excellence-add-btn-mobile:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(238, 90, 1, 0.6);
+}
+
 /* BOUTONS INFORMATION */
 .info-button {
   width: 20px;
