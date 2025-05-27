@@ -1,7 +1,9 @@
 
+
 import React, { useState } from 'react';
 import { User } from '../types';
 import { Settings, LogOut, User as UserIcon, Download, Upload, Camera, Key } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
 
 interface UserProfileProps {
   user: User;
@@ -15,6 +17,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   onImportData 
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { signOut } = useAuth();
 
   const getInitials = (name: string) => {
     return name
@@ -38,6 +41,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({
       case 'pro': return 'Pro';
       case 'premium': return 'Premium';
       default: return 'Gratuit';
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      setIsDropdownOpen(false);
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
     }
   };
 
@@ -215,6 +227,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               style={{ borderColor: 'var(--border-subtle)' }}
             >
               <button 
+                onClick={handleSignOut}
                 className="w-full flex items-center space-x-3 px-4 py-3 text-left transition-colors group"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
@@ -233,3 +246,4 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     </div>
   );
 };
+
