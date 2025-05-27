@@ -9,6 +9,7 @@ interface ConsignerBasicInfoProps {
   onDescriptionChange: (description: string) => void;
   onDateChange: (date: string) => void;
   onSubmit: (e: React.FormEvent) => void;
+  disabled?: boolean;
 }
 
 export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
@@ -18,12 +19,16 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
   onTitleChange,
   onDescriptionChange,
   onDateChange,
-  onSubmit
+  onSubmit,
+  disabled = false
 }) => {
   return (
     <section 
-      className="p-8 rounded-lg"
-      style={{ backgroundColor: '#2a2a2a' }}
+      className="p-8 rounded-lg transition-opacity"
+      style={{ 
+        backgroundColor: 'var(--bg-secondary)',
+        opacity: disabled ? 0.7 : 1
+      }}
     >
       <h3 className="text-lg font-semibold mb-6" style={{ color: '#ee5a01' }}>
         📝 Informations de base
@@ -31,7 +36,7 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
 
       <form onSubmit={onSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#ccc' }}>
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
             Titre de l'expérience <span style={{ color: '#ee5a01' }}>*</span>
           </label>
           <input
@@ -39,19 +44,20 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
             value={title}
             onChange={(e) => onTitleChange(e.target.value)}
             placeholder="Ex: Présentation client réussie, Discussion enrichissante..."
-            className="w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none"
+            disabled={disabled}
+            className="w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              backgroundColor: '#333',
-              borderColor: '#555',
-              color: 'white'
+              backgroundColor: 'var(--bg-tertiary)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-primary)'
             }}
-            onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#ee5a01'}
-            onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#555'}
+            onFocus={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#ee5a01')}
+            onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = 'var(--border-subtle)'}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#ccc' }}>
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
             Description détaillée
           </label>
           <textarea
@@ -60,36 +66,38 @@ export const ConsignerBasicInfo: React.FC<ConsignerBasicInfoProps> = ({
             placeholder="Décrivez ce que vous avez vécu, appris, les défis relevés..."
             rows={5}
             maxLength={500}
-            className="w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none resize-none"
+            disabled={disabled}
+            className="w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none resize-none disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              backgroundColor: '#333',
-              borderColor: '#555',
-              color: 'white'
+              backgroundColor: 'var(--bg-tertiary)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-primary)'
             }}
-            onFocus={(e) => (e.target as HTMLTextAreaElement).style.borderColor = '#ee5a01'}
-            onBlur={(e) => (e.target as HTMLTextAreaElement).style.borderColor = '#555'}
+            onFocus={(e) => !disabled && ((e.target as HTMLTextAreaElement).style.borderColor = '#ee5a01')}
+            onBlur={(e) => (e.target as HTMLTextAreaElement).style.borderColor = 'var(--border-subtle)'}
           />
-          <div className="text-right text-xs mt-1" style={{ color: '#999' }}>
+          <div className="text-right text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
             {description.length} / 500 caractères
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2" style={{ color: '#ccc' }}>
+          <label className="block text-sm font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
             Date de l'expérience
           </label>
           <input
             type="date"
             value={dateExperienced}
             onChange={(e) => onDateChange(e.target.value)}
-            className="px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none"
+            disabled={disabled}
+            className="px-4 py-3 rounded-lg border-2 transition-all focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              backgroundColor: '#333',
-              borderColor: '#555',
-              color: 'white'
+              backgroundColor: 'var(--bg-tertiary)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-primary)'
             }}
-            onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#ee5a01'}
-            onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#555'}
+            onFocus={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#ee5a01')}
+            onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = 'var(--border-subtle)'}
           />
         </div>
       </form>
