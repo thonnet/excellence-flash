@@ -6,11 +6,9 @@ import { useAuth } from './useAuth';
 import { Excellence, Experience, User } from '../types';
 
 type ViewType = 'kanban' | 'list' | 'observatoire' | 'experiences';
-type ExperienceViewMode = 'list' | 'gallery';
 
 export const useAppState = () => {
   const [currentView, setCurrentView] = useState<ViewType>('kanban');
-  const [experienceViewMode, setExperienceViewMode] = useState<ExperienceViewMode>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [isExperienceFormOpen, setIsExperienceFormOpen] = useState(false);
 
@@ -57,8 +55,6 @@ export const useAppState = () => {
   return {
     currentView,
     setCurrentView,
-    experienceViewMode,
-    setExperienceViewMode,
     excellences: filteredExcellences,
     experiences,
     userState,

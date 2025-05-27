@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { ExcellenceFlashLogo } from '../components/ExcellenceFlashLogo';
 import { Header } from '../components/Header';
 import { MainContent } from '../components/MainContent';
@@ -12,10 +12,18 @@ import { useExperiences } from '../hooks/useExperiences';
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const location = useLocation();
   const appState = useAppState();
   const { isLoading: excellencesLoading } = useExcellences();
   const { isLoading: experiencesLoading } = useExperiences();
   
+  // Set current view based on route
+  useEffect(() => {
+    if (location.pathname.startsWith('/experiences')) {
+      appState.setCurrentView('experiences');
+    }
+  }, [location.pathname, appState.setCurrentView]);
+
   // Rediriger vers la page d'authentification si pas connecté
   if (loading) {
     return (
@@ -58,8 +66,6 @@ const Index = () => {
 
       <MainContent
         currentView={appState.currentView}
-        experienceViewMode={appState.experienceViewMode}
-        onExperienceViewModeChange={appState.setExperienceViewMode}
         excellences={appState.excellences}
         experiences={appState.experiences}
         user={appState.userState}
@@ -69,6 +75,7 @@ const Index = () => {
         onAddExperience={appState.handleAddExperience}
         getExperienceCount={appState.getExperienceCount}
         onOpenExperienceForm={() => appState.setIsExperienceFormOpen(true)}
+        setCurrentView={appState.setCurrentView}
       />
 
       {/* Experience Form Modal */}
