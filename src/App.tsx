@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import HelpExcellences from "./pages/HelpExcellences";
 import HelpExperiences from "./pages/HelpExperiences";
+import HelpImport from "./pages/HelpImport";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/aide/excellences" element={<HelpExcellences />} />
             <Route path="/aide/experiences" element={<HelpExperiences />} />
+            <Route path="/aide/import" element={<HelpImport />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

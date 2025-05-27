@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import { ChangePasswordModal } from './ChangePasswordModal';
@@ -24,6 +24,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const { signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
@@ -53,9 +54,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
   const handleShowImportHelp = () => {
     setIsImportModalOpen(false);
-    if (onShowImportHelp) {
-      onShowImportHelp();
-    }
+    navigate('/aide/import');
   };
 
   return (
