@@ -10,7 +10,6 @@ interface ExperiencesGridProps {
   onView: (experience: Experience) => void;
   onEdit: (experience: Experience) => void;
   onLink: (experience: Experience) => void;
-  onDelete: (experience: Experience) => void;
   onConsigner: () => void;
   isFiltered: boolean;
 }
@@ -21,7 +20,6 @@ export const ExperiencesGrid: React.FC<ExperiencesGridProps> = ({
   onView,
   onEdit,
   onLink,
-  onDelete,
   onConsigner,
   isFiltered
 }) => {
@@ -44,7 +42,6 @@ export const ExperiencesGrid: React.FC<ExperiencesGridProps> = ({
           onView={onView}
           onEdit={onEdit}
           onLink={onLink}
-          onDelete={onDelete}
         />
       ))}
     </div>
