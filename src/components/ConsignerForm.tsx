@@ -98,8 +98,8 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
                 borderColor: '#555',
                 color: 'white'
               }}
-              onFocus={(e) => e.target.style.borderColor = '#ee5a01'}
-              onBlur={(e) => e.target.style.borderColor = '#555'}
+              onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#ee5a01'}
+              onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#555'}
             />
           </div>
 
@@ -119,8 +119,8 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
                 borderColor: '#555',
                 color: 'white'
               }}
-              onFocus={(e) => e.target.style.borderColor = '#ee5a01'}
-              onBlur={(e) => e.target.style.borderColor = '#555'}
+              onFocus={(e) => (e.target as HTMLTextAreaElement).style.borderColor = '#ee5a01'}
+              onBlur={(e) => (e.target as HTMLTextAreaElement).style.borderColor = '#555'}
             />
             <div className="text-right text-xs mt-1" style={{ color: '#999' }}>
               {description.length} / 500 caractères
@@ -141,8 +141,8 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
                 borderColor: '#555',
                 color: 'white'
               }}
-              onFocus={(e) => e.target.style.borderColor = '#ee5a01'}
-              onBlur={(e) => e.target.style.borderColor = '#555'}
+              onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#ee5a01'}
+              onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#555'}
             />
           </div>
         </form>
@@ -200,10 +200,10 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
             cursor: isFormValid ? 'pointer' : 'not-allowed'
           }}
           onMouseEnter={(e) => {
-            if (isFormValid) e.target.style.backgroundColor = '#d44f01';
+            if (isFormValid) (e.target as HTMLButtonElement).style.backgroundColor = '#d44f01';
           }}
           onMouseLeave={(e) => {
-            if (isFormValid) e.target.style.backgroundColor = '#ee5a01';
+            if (isFormValid) (e.target as HTMLButtonElement).style.backgroundColor = '#ee5a01';
           }}
         >
           💾 Enregistrer l'expérience
@@ -218,12 +218,12 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
             color: '#999'
           }}
           onMouseEnter={(e) => {
-            e.target.style.borderColor = '#999';
-            e.target.style.color = 'white';
+            (e.target as HTMLButtonElement).style.borderColor = '#999';
+            (e.target as HTMLButtonElement).style.color = 'white';
           }}
           onMouseLeave={(e) => {
-            e.target.style.borderColor = '#555';
-            e.target.style.color = '#999';
+            (e.target as HTMLButtonElement).style.borderColor = '#555';
+            (e.target as HTMLButtonElement).style.color = '#999';
           }}
         >
           ❌ Annuler

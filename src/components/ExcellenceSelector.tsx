@@ -105,8 +105,8 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
             borderColor: '#555',
             color: 'white'
           }}
-          onFocus={(e) => e.target.style.borderColor = '#0195ee'}
-          onBlur={(e) => e.target.style.borderColor = '#555'}
+          onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#0195ee'}
+          onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#555'}
         />
       </div>
 
@@ -176,10 +176,10 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
                           borderColor: isSelected ? '#0195ee' : '#555'
                         }}
                         onMouseEnter={(e) => {
-                          if (!isSelected) e.target.style.borderColor = '#0195ee';
+                          if (!isSelected) (e.target as HTMLDivElement).style.borderColor = '#0195ee';
                         }}
                         onMouseLeave={(e) => {
-                          if (!isSelected) e.target.style.borderColor = '#555';
+                          if (!isSelected) (e.target as HTMLDivElement).style.borderColor = '#555';
                         }}
                       >
                         <div
