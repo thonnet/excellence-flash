@@ -1,5 +1,4 @@
 
-
 import { useState } from 'react';
 import { useExcellences } from './useExcellences';
 import { useExperiences } from './useExperiences';
@@ -17,8 +16,8 @@ export const useAppState = () => {
 
   // Use Supabase hooks for real data
   const { user } = useAuth();
-  const { excellences: allExcellences, addExcellence, updateExcellence, deleteExcellence } = useExcellences();
-  const { experiences, addExperience, getExperienceCount } = useExperiences();
+  const { excellences: allExcellences, addExcellence, updateExcellence, deleteExcellence, refetch: refetchExcellences } = useExcellences();
+  const { experiences, addExperience, getExperienceCount, refetch: refetchExperiences } = useExperiences();
 
   // Create user object from auth user data
   const userState: User = user ? {
@@ -49,7 +48,10 @@ export const useAppState = () => {
   };
 
   const handleImportDataClick = () => {
-    console.log('Import data triggered');
+    // Refresh data after import
+    refetchExcellences();
+    refetchExperiences();
+    console.log('Import data completed - data refreshed');
   };
 
   return {
@@ -73,4 +75,3 @@ export const useAppState = () => {
     handleImportDataClick,
   };
 };
-

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { User } from '../types';
 import { useAuth } from '../hooks/useAuth';
 import { ChangePasswordModal } from './ChangePasswordModal';
+import { ImportDataModal } from './ImportDataModal';
 import { UserProfileButton } from './UserProfileButton';
 import { UserProfileDropdown } from './UserProfileDropdown';
 
@@ -19,6 +20,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const { signOut } = useAuth();
 
   const handleSignOut = async () => {
@@ -33,6 +35,18 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   const handleChangePasswordClick = () => {
     setIsChangePasswordModalOpen(true);
     setIsDropdownOpen(false);
+  };
+
+  const handleImportDataClick = () => {
+    setIsImportModalOpen(true);
+    setIsDropdownOpen(false);
+  };
+
+  const handleImportComplete = () => {
+    // Refresh data after import
+    if (onImportData) {
+      onImportData();
+    }
   };
 
   return (
@@ -50,12 +64,18 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         onSignOut={handleSignOut}
         onChangePassword={handleChangePasswordClick}
         onExportData={onExportData}
-        onImportData={onImportData}
+        onImportData={handleImportDataClick}
       />
 
       <ChangePasswordModal
         isOpen={isChangePasswordModalOpen}
         onClose={() => setIsChangePasswordModalOpen(false)}
+      />
+
+      <ImportDataModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        onImportComplete={handleImportComplete}
       />
     </div>
   );
