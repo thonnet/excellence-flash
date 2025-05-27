@@ -364,54 +364,7 @@
 .btn-discrete--medium { width: 32px; height: 32px; font-size: 1rem; }
 .btn-discrete--large { width: 56px; height: 56px; font-size: 1.5rem; }
 
-/* BOUTON CRÉATION EXCELLENCE */
-.btn-create-excellence {
-  background: #4a4a4a;
-  border: 1px solid #ee5a01;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  font-weight: bold;
-}
-
-.btn-create-excellence:hover {
-  background: #555555;
-  border: 2px solid #ee5a01;
-}
-
-/* Desktop */
-@media (min-width: 1024px) {
-  .btn-create-excellence {
-    width: 32px;
-    height: 32px;
-    position: relative;
-    font-size: 1rem;
-  }
-}
-
-/* Mobile/Tablet */
-@media (max-width: 1023px) {
-  .btn-create-excellence {
-    width: 56px;
-    height: 56px;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    font-size: 1.5rem;
-  }
-}
-
-/* ========================================
-   NOUVEAUX BOUTONS EXCELLENCE - DESIGN SPÉCIFIQUE
-   ======================================== */
-
-/* BOUTON DESKTOP - Intégré dans la barre */
+/* BOUTONS AJOUT EXCELLENCE - VUE LISTE UNIQUEMENT */
 .excellence-add-btn-desktop {
   width: 44px;
   height: 44px;
@@ -426,7 +379,6 @@
   transition: all 0.3s ease;
   font-weight: bold;
   font-size: 20px;
-  margin-left: 12px;
   flex-shrink: 0;
 }
 

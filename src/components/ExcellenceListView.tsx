@@ -1,13 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { Excellence } from '../types';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Eye, Edit2, X, Search, Star } from 'lucide-react';
+import { Eye, Edit2, X, Search, Star, Plus } from 'lucide-react';
+import { AddExcellenceModal } from './AddExcellenceModal';
 
 interface ExcellenceListViewProps {
   excellences: Excellence[];
   onView: (excellence: Excellence) => void;
   onEdit: (excellence: Excellence) => void;
   onDelete: (id: string) => void;
+  onAddExcellence: (excellence: Omit<Excellence, 'id' | 'created_at' | 'updated_at'>) => void;
   getExperienceCount: (excellenceId: string) => number;
 }
 
@@ -19,12 +21,14 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
   onView,
   onEdit,
   onDelete,
+  onAddExcellence,
   getExperienceCount
 }) => {
   const [sortKey, setSortKey] = useState<SortKey>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -142,24 +146,46 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
           </div>
         </div>
 
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="px-3 py-2 rounded-lg border"
-          style={{
-            backgroundColor: 'var(--bg-tertiary)',
-            borderColor: 'var(--border-subtle)',
-            color: 'var(--text-primary)'
-          }}
-        >
-          <option value="all">Toutes les catégories</option>
-          {Object.entries(EXCELLENCE_CATEGORIES).map(([key, category]) => (
-            <option key={key} value={key}>
-              {category.title}
-            </option>
-          ))}
-        </select>
+        <div className="flex items-center gap-3">
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg border"
+            style={{
+              backgroundColor: 'var(--bg-tertiary)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-primary)'
+            }}
+          >
+            <option value="all">Toutes les catégories</option>
+            {Object.entries(EXCELLENCE_CATEGORIES).map(([key, category]) => (
+              <option key={key} value={key}>
+                {category.title}
+              </option>
+            ))}
+          </select>
+
+          {/* Desktop button - à droite du sélecteur */}
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="excellence-add-btn-desktop hidden md:flex"
+            title="Ajouter une nouvelle excellence"
+            aria-label="Ajouter une nouvelle excellence"
+          >
+            <Plus size={20} />
+          </button>
+        </div>
       </div>
+
+      {/* Mobile FAB */}
+      <button
+        onClick={() => setIsAddModalOpen(true)}
+        className="excellence-add-btn-mobile md:hidden"
+        title="Ajouter une nouvelle excellence"
+        aria-label="Ajouter une nouvelle excellence"
+      >
+        <Plus size={24} />
+      </button>
 
       {/* Table */}
       <div className="overflow-x-auto">
@@ -321,6 +347,15 @@ export const ExcellenceListView: React.FC<ExcellenceListViewProps> = ({
           {searchQuery && ` pour "${searchQuery}"`}
           {categoryFilter !== 'all' && ` dans la catégorie "${EXCELLENCE_CATEGORIES[categoryFilter as keyof typeof EXCELLENCE_CATEGORIES].title}"`}
         </div>
+      )}
+
+      {/* Add Excellence Modal */}
+      {isAddModalOpen && (
+        <AddExcellenceModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          onAdd={onAddExcellence}
+        />
       )}
     </div>
   );
