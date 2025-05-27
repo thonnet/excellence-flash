@@ -99,7 +99,7 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
     // TODO: Implémenter fonctionnalité de liaison
   };
 
-  const isFiltered = searchQuery || selectedExcellences.length > 0 || selectedPeriod !== 'all';
+  const isFiltered = searchQuery.trim() !== '' || selectedExcellences.length > 0 || selectedPeriod !== 'all';
 
   return (
     <ExperiencePageLayout>
