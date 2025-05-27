@@ -264,6 +264,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           onView={handleViewExcellence}
           onEdit={handleEditExcellence}
           onDelete={onDeleteExcellence}
+          onAddExcellence={onAddExcellence}
           getExperienceCount={getExperienceCount}
         />
       )}
