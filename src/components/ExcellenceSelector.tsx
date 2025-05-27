@@ -93,7 +93,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   );
 
   return (
-    <section 
+    <div 
       className={`p-8 rounded-lg transition-opacity ${disabled ? 'opacity-50 pointer-events-none' : ''}`} 
       style={{ backgroundColor: '#2a2a2a' }}
     >
@@ -259,6 +259,6 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 };
