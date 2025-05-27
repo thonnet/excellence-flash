@@ -4,7 +4,8 @@ import { Excellence } from '../types';
 import { KanbanBoard } from './KanbanBoard';
 import { ContextualHelp } from './ContextualHelp';
 import { AlternatingBaseline } from './AlternatingBaseline';
-import { ViewToggle } from './ViewToggle';
+import { AddExcellenceModal } from './AddExcellenceModal';
+import { Plus } from 'lucide-react';
 
 interface KanbanViewProps {
   excellences: Excellence[];
@@ -23,6 +24,8 @@ export const KanbanView: React.FC<KanbanViewProps> = ({
   onDeleteExcellence,
   getExperienceCount
 }) => {
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
+
   const excellencesBaselines = [
     "Conscientisez vos capacités pour les mobiliser intentionnellement",
     "Rassemblez vos forces distinctives en un lieu unique",
@@ -42,7 +45,28 @@ export const KanbanView: React.FC<KanbanViewProps> = ({
             <AlternatingBaseline baselines={excellencesBaselines} />
           </div>
         </div>
+        <div className="view-controls">
+          {/* Desktop button - intégré à droite des contrôles */}
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="excellence-add-btn-desktop hidden md:flex"
+            title="Ajouter une nouvelle excellence"
+            aria-label="Ajouter une nouvelle excellence"
+          >
+            <Plus size={20} />
+          </button>
+        </div>
       </div>
+
+      {/* Mobile FAB */}
+      <button
+        onClick={() => setIsAddModalOpen(true)}
+        className="excellence-add-btn-mobile md:hidden"
+        title="Ajouter une nouvelle excellence"
+        aria-label="Ajouter une nouvelle excellence"
+      >
+        <Plus size={24} />
+      </button>
       
       <KanbanBoard
         excellences={excellences}
@@ -52,6 +76,15 @@ export const KanbanView: React.FC<KanbanViewProps> = ({
         onDeleteExcellence={onDeleteExcellence}
         getExperienceCount={getExperienceCount}
       />
+
+      {/* Add Excellence Modal */}
+      {isAddModalOpen && (
+        <AddExcellenceModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          onAdd={onAddExcellence}
+        />
+      )}
     </div>
   );
 };

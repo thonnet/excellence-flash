@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -428,6 +427,7 @@
   font-weight: bold;
   font-size: 20px;
   margin-left: 12px;
+  flex-shrink: 0;
 }
 
 .excellence-add-btn-desktop:hover {
@@ -462,6 +462,25 @@
 .excellence-add-btn-mobile:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 25px rgba(238, 90, 1, 0.6);
+}
+
+/* Assurer la visibilité sur tous les écrans */
+@media (min-width: 768px) {
+  .excellence-add-btn-desktop {
+    display: flex !important;
+  }
+  .excellence-add-btn-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .excellence-add-btn-desktop {
+    display: none !important;
+  }
+  .excellence-add-btn-mobile {
+    display: flex !important;
+  }
 }
 
 /* BOUTONS INFORMATION */
