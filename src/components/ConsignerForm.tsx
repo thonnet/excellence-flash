@@ -11,12 +11,16 @@ interface ConsignerFormProps {
   excellences: Excellence[];
   onSave: (data: any) => void;
   onCancel: () => void;
+  onChange?: () => void;
+  disabled?: boolean;
 }
 
 export const ConsignerForm: React.FC<ConsignerFormProps> = ({
   excellences,
   onSave,
-  onCancel
+  onCancel,
+  onChange,
+  disabled = false
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -54,12 +58,33 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
   const applySuggestion = (excellenceId: string) => {
     if (!selectedExcellences.includes(excellenceId)) {
       setSelectedExcellences(prev => [...prev, excellenceId]);
+      onChange?.();
     }
+  };
+
+  const handleFieldChange = (field: string, value: any) => {
+    switch (field) {
+      case 'title':
+        setTitle(value);
+        break;
+      case 'description':
+        setDescription(value);
+        break;
+      case 'date':
+        setDateExperienced(value);
+        break;
+    }
+    onChange?.();
+  };
+
+  const handleExcellenceSelectionChange = (newSelection: string[]) => {
+    setSelectedExcellences(newSelection);
+    onChange?.();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || disabled) return;
 
     const experienceData = {
       title: title.trim(),
@@ -72,7 +97,7 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
     onSave(experienceData);
   };
 
-  const isFormValid = title.trim().length > 0;
+  const isFormValid = title.trim().length > 0 && selectedExcellences.length > 0;
 
   return (
     <div className="space-y-6">
@@ -80,10 +105,11 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
         title={title}
         description={description}
         dateExperienced={dateExperienced}
-        onTitleChange={setTitle}
-        onDescriptionChange={setDescription}
-        onDateChange={setDateExperienced}
+        onTitleChange={(value) => handleFieldChange('title', value)}
+        onDescriptionChange={(value) => handleFieldChange('description', value)}
+        onDateChange={(value) => handleFieldChange('date', value)}
         onSubmit={handleSubmit}
+        disabled={disabled}
       />
 
       <AutoSuggestions
@@ -95,7 +121,8 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
       <ExcellenceSelector
         excellences={excellences}
         selectedExcellences={selectedExcellences}
-        onSelectionChange={setSelectedExcellences}
+        onSelectionChange={handleExcellenceSelectionChange}
+        disabled={disabled}
       />
 
       <QuickTips />
@@ -104,6 +131,7 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
         isFormValid={isFormValid}
         onSubmit={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
         onCancel={onCancel}
+        disabled={disabled}
       />
     </div>
   );
