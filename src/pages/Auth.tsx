@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { ExcellenceFlashLogo } from '@/components/ExcellenceFlashLogo';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { toast } from 'sonner';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -18,8 +19,14 @@ const Auth = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   
-  const { signIn, signUp } = useAuth();
+  const { user, signIn, signUp } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +37,9 @@ const Auth = () => {
     
     if (error) {
       setError('Erreur de connexion. Vérifiez vos identifiants.');
+      console.error('Sign in error:', error);
     } else {
+      toast.success('Connexion réussie!');
       navigate('/');
     }
     
@@ -39,6 +48,17 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      setError('Veuillez remplir tous les champs obligatoires.');
+      return;
+    }
+    
+    if (password.length < 6) {
+      setError('Le mot de passe doit contenir au moins 6 caractères.');
+      return;
+    }
+    
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -47,8 +67,10 @@ const Auth = () => {
     
     if (error) {
       setError('Erreur lors de l\'inscription. Cet email est peut-être déjà utilisé.');
+      console.error('Sign up error:', error);
     } else {
-      setSuccess('Inscription réussie ! Vous pouvez maintenant vous connecter.');
+      setSuccess('Inscription réussie ! Vérifiez votre email pour confirmer votre compte.');
+      toast.success('Inscription réussie! Vérifiez votre email.');
     }
     
     setLoading(false);

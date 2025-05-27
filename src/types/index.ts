@@ -2,14 +2,8 @@
 export interface User {
   id: string;
   email: string;
-  full_name: string;
-  company_name?: string;
-  billing_type: 'individual' | 'business';
-  vat_number?: string;
-  subscription_status: 'free' | 'pro' | 'premium';
-  plan_type: 'free' | 'pro' | 'premium';
-  theme_preference: 'dark' | 'light';
-  ai_insights_enabled: boolean;
+  full_name?: string;
+  is_admin: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -33,7 +27,7 @@ export interface Experience {
   image_url?: string;
   image_caption?: string;
   date_experienced: string;
-  tags: string[]; // Maintenu pour compatibilité mais non utilisé
+  tags: string[];
   created_at: string;
   updated_at: string;
 }
