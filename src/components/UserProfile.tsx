@@ -53,6 +53,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     }
   };
 
+  const handleChangePasswordClick = () => {
+    setIsChangePasswordModalOpen(true);
+    setIsDropdownOpen(false);
+  };
+
   return (
     <div className="relative">
       <button
@@ -163,6 +168,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               </button>
 
               <button 
+                onClick={handleChangePasswordClick}
                 className="w-full flex items-center space-x-3 px-4 py-3 text-left transition-colors"
                 style={{ color: 'var(--text-primary)' }}
                 onMouseEnter={(e) => {
@@ -245,12 +251,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({
       )}
 
       {/* Change Password Modal */}
-      {isChangePasswordModalOpen && (
-        <ChangePasswordModal
-          isOpen={isChangePasswordModalOpen}
-          onClose={() => setIsChangePasswordModalOpen(false)}
-        />
-      )}
+      <ChangePasswordModal
+        isOpen={isChangePasswordModalOpen}
+        onClose={() => setIsChangePasswordModalOpen(false)}
+      />
     </div>
   );
 };
