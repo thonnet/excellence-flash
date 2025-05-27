@@ -1,17 +1,19 @@
-
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { HelpPage } from '../components/HelpPage';
 
-interface HelpImportProps {
-  onBack: () => void;
-}
+const HelpImport: React.FC = () => {
+  const navigate = useNavigate();
 
-export const HelpImport: React.FC<HelpImportProps> = ({ onBack }) => {
+  const handleBack = () => {
+    navigate(-1); // Go back to previous page
+  };
+
   return (
     <HelpPage
       title="Guide d'importation de données"
       subtitle="Formats supportés et structure des données"
-      onBack={onBack}
+      onBack={handleBack}
     >
       <div className="space-y-8">
         {/* Introduction */}
@@ -247,3 +249,5 @@ abc123,Présentation client,Présentation réussie,2024-01-15,"présentation,cli
     </HelpPage>
   );
 };
+
+export default HelpImport;
