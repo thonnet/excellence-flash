@@ -1,22 +1,29 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Excellence } from '../types';
 import { ExcellenceSelector } from './ExcellenceSelector';
 import { QuickTips } from './QuickTips';
 import { ConsignerBasicInfo } from './forms/ConsignerBasicInfo';
 import { AutoSuggestions } from './forms/AutoSuggestions';
 import { ConsignerActions } from './forms/ConsignerActions';
+import { useDebounce } from '../hooks/useDebounce';
 
 interface ConsignerFormProps {
   excellences: Excellence[];
   onSave: (data: any) => void;
   onCancel: () => void;
+  disabled?: boolean;
+  onValidityChange?: (isValid: boolean) => void;
+  onSaveRef?: (saveFunction: () => void) => void;
 }
 
 export const ConsignerForm: React.FC<ConsignerFormProps> = ({
   excellences,
   onSave,
-  onCancel
+  onCancel,
+  disabled = false,
+  onValidityChange,
+  onSaveRef
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -25,9 +32,13 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
   );
   const [selectedExcellences, setSelectedExcellences] = useState<string[]>([]);
 
-  // Auto-suggestions basées sur mots-clés
+  // Debounced values pour optimiser les suggestions
+  const debouncedTitle = useDebounce(title, 300);
+  const debouncedDescription = useDebounce(description, 300);
+
+  // Auto-suggestions basées sur mots-clés avec debouncing
   const suggestions = useMemo(() => {
-    const text = (title + ' ' + description).toLowerCase();
+    const text = (debouncedTitle + ' ' + debouncedDescription).toLowerCase();
     const suggestionRules = {
       'présent|client|parler|communication': ['Communication', 'Persuasion'],
       'créa|innov|idée|solution': ['Inventivité', 'Innovation'],
@@ -49,33 +60,47 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
     return Array.from(suggestedNames)
       .map(name => excellences.find(exc => exc.name.toLowerCase().includes(name.toLowerCase())))
       .filter(Boolean) as Excellence[];
-  }, [title, description, excellences]);
+  }, [debouncedTitle, debouncedDescription, excellences]);
 
-  const applySuggestion = (excellenceId: string) => {
+  const applySuggestion = useCallback((excellenceId: string) => {
     if (!selectedExcellences.includes(excellenceId)) {
       setSelectedExcellences(prev => [...prev, excellenceId]);
     }
-  };
+  }, [selectedExcellences]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || disabled) return;
 
     const experienceData = {
       title: title.trim(),
       description: description.trim(),
       date_experienced: dateExperienced,
-      excellence_id: selectedExcellences[0] || '', // Pour la compatibilité, prendre la première
+      excellence_id: selectedExcellences[0] || '',
       tags: []
     };
 
     onSave(experienceData);
-  };
+  }, [title, description, dateExperienced, selectedExcellences, onSave, disabled]);
 
-  const isFormValid = title.trim().length > 0;
+  const isFormValid = title.trim().length > 0 && !disabled;
+
+  // Notification de validité du formulaire
+  useEffect(() => {
+    onValidityChange?.(isFormValid);
+  }, [isFormValid, onValidityChange]);
+
+  // Référence de la fonction de sauvegarde pour les raccourcis clavier
+  useEffect(() => {
+    onSaveRef?.(() => {
+      if (isFormValid) {
+        handleSubmit({ preventDefault: () => {} } as React.FormEvent);
+      }
+    });
+  }, [handleSubmit, isFormValid, onSaveRef]);
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 transition-opacity ${disabled ? 'opacity-70' : ''}`}>
       <ConsignerBasicInfo
         title={title}
         description={description}
@@ -84,18 +109,21 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
         onDescriptionChange={setDescription}
         onDateChange={setDateExperienced}
         onSubmit={handleSubmit}
+        disabled={disabled}
       />
 
       <AutoSuggestions
         suggestions={suggestions}
         selectedExcellences={selectedExcellences}
         onApplySuggestion={applySuggestion}
+        disabled={disabled}
       />
 
       <ExcellenceSelector
         excellences={excellences}
         selectedExcellences={selectedExcellences}
         onSelectionChange={setSelectedExcellences}
+        disabled={disabled}
       />
 
       <QuickTips />
@@ -104,6 +132,7 @@ export const ConsignerForm: React.FC<ConsignerFormProps> = ({
         isFormValid={isFormValid}
         onSubmit={() => handleSubmit({ preventDefault: () => {} } as React.FormEvent)}
         onCancel={onCancel}
+        disabled={disabled}
       />
     </div>
   );

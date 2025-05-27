@@ -1,0 +1,249 @@
+
+/* ===========================================
+   POLISH FINAL - PAGES EXPÉRIENCES
+   =========================================== */
+
+/* === RESPONSIVE FINAL === */
+@media (max-width: 767px) {
+  .page-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .consign-btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px; /* Éviter zoom iOS */
+  }
+  
+  .filters-container {
+    padding: 15px;
+    gap: 10px;
+  }
+  
+  .experience-card {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .excellence-item {
+    padding: 12px;
+    min-height: 44px; /* Touch targets minimum */
+  }
+  
+  .form-input, .form-textarea {
+    font-size: 16px; /* Éviter zoom iOS sur focus */
+    padding: 12px;
+  }
+  
+  .modal-content {
+    margin: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .excellence-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .controls-bar {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .excellence-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  .filters-container {
+    padding: 20px;
+  }
+  
+  .experience-card {
+    padding: 18px;
+  }
+  
+  .controls-bar {
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .excellence-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .main-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .controls-bar {
+    gap: 25px;
+  }
+}
+
+/* === MICRO-INTERACTIONS SUBTILES === */
+.smooth-element {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.button-press {
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.button-press:active {
+  transform: scale(0.98);
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === LOADING STATES SIMPLES === */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-subtle);
+  border-top: 2px solid var(--accent-orange);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.skeleton-card {
+  background: var(--bg-secondary);
+  height: 120px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255,255,255,0.1), 
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* === FOCUS MANAGEMENT === */
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
+  border-color: var(--accent-orange);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
+}
+
+.interactive-element:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 2px;
+}
+
+/* === ÉTATS AMÉLIORÉS === */
+.button:disabled,
+.form-input:disabled,
+.form-textarea:disabled,
+.form-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.interactive-element:hover {
+  transition: all 0.2s ease;
+}
+
+/* === OPTIMISATIONS TACTILES === */
+@media (hover: none) and (pointer: coarse) {
+  .card-hover:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .button-press:active {
+    transform: scale(0.95);
+    background-color: var(--bg-hover);
+  }
+  
+  .interactive-element {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* === ANIMATIONS CONDITIONNELLES === */
+@media (prefers-reduced-motion: reduce) {
+  .smooth-element,
+  .card-hover,
+  .button-press,
+  .fade-in {
+    transition: none;
+    animation: none;
+  }
+  
+  .loading-spinner {
+    animation: none;
+    border-top-color: var(--accent-orange);
+  }
+}
+
+/* === CONTRASTE AMÉLIORÉ === */
+@media (prefers-contrast: high) {
+  .form-input,
+  .form-textarea,
+  .form-select {
+    border-width: 2px;
+  }
+  
+  .button {
+    border-width: 2px;
+  }
+  
+  .card-hover {
+    border-width: 2px;
+  }
+}
