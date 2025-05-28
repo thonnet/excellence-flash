@@ -23,11 +23,10 @@ const Index = () => {
       console.log('Setting view to experiences for path:', location.pathname);
       appState.setCurrentView('experiences');
     }
-  }, [location.pathname, appState]);
+  }, [location.pathname]);
 
-  // Loading state
+  // Rediriger vers la page d'authentification si pas connecté
   if (loading) {
-    console.log('Auth loading...');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -38,15 +37,12 @@ const Index = () => {
     );
   }
 
-  // Not authenticated
   if (!user) {
-    console.log('User not authenticated, redirecting to auth');
     return <Navigate to="/auth" replace />;
   }
 
-  // Data loading
+  // Show loading while data is being fetched
   if (excellencesLoading || experiencesLoading) {
-    console.log('Data loading...', { excellencesLoading, experiencesLoading });
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -57,7 +53,7 @@ const Index = () => {
     );
   }
 
-  console.log('Rendering main app. Current view:', appState.currentView, 'Path:', location.pathname);
+  console.log('Current view:', appState.currentView, 'Path:', location.pathname);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>

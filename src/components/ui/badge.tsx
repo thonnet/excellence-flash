@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { Icon } from './icon'
+import { Star } from 'lucide-react'
 
 import { cn } from "@/lib/utils"
 
@@ -17,9 +17,9 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
-        manifestee: "border-transparent text-white excellence-tag manifestee",
-        principe: "border-transparent text-white excellence-tag principe", 
-        quete: "border-transparent text-white excellence-tag quete",
+        manifestee: "border-transparent bg-green-100 text-green-800",
+        principe: "border-transparent bg-blue-100 text-blue-800", 
+        quete: "border-transparent bg-orange-100 text-orange-800",
       },
     },
     defaultVariants: {
@@ -46,7 +46,7 @@ function Badge({ className, variant, showIcon = false, category, ...props }: Bad
   return (
     <div className={cn(badgeVariants({ variant }), className)} {...props}>
       {showIcon && category && (
-        <Icon name="excellences" className={`category-icon ${getCategoryIconClass(category)} mr-1`} size={12} />
+        <Star className={`category-icon ${getCategoryIconClass(category)} mr-1`} size={12} />
       )}
       {props.children}
     </div>
