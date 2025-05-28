@@ -18,8 +18,19 @@ export const Icon: React.FC<IconProps> = ({
   const IconComponent = icons[name];
   
   if (!IconComponent) {
-    console.warn(`Icon "${name}" not found`);
-    return null;
+    console.warn(`Icon "${name}" not found in icons library`);
+    // Fallback: afficher un carré simple si l'icône n'existe pas
+    return (
+      <svg 
+        width={size} 
+        height={size} 
+        viewBox={viewBox} 
+        className={className}
+        fill="currentColor"
+      >
+        <rect x="100" y="100" width="300" height="300" />
+      </svg>
+    );
   }
   
   return <IconComponent size={size} className={className} viewBox={viewBox} />;
