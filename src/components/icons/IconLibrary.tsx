@@ -1,3 +1,4 @@
+
 import { 
   Eye, 
   Home, 
@@ -17,8 +18,7 @@ import {
   Plus,
   HelpCircle,
   LayoutList,
-  LayoutKanban,
-  LayoutGallery,
+  LayoutGrid,
   Clock4,
   PanelLeft,
   Sun,
@@ -30,19 +30,27 @@ import {
   Info
 } from 'lucide-react';
 
+// Import des icônes personnalisées
+import { KanbanIcon } from './KanbanIcon';
+import { GalleryIcon } from './GalleryIcon';
+import { CompactIcon } from './CompactIcon';
+import { ListIcon } from './ListIcon';
+import { TimelineIcon } from './TimelineIcon';
+import { CalendarIcon } from './CalendarIcon';
+
 // Navigation
 const NextIcon = ChevronRight;
 const BackIcon = ChevronLeft;
 const HomeIcon = Home;
 const SearchIcon = Search;
 
-// Vues d'affichage
-const KanbanIcon = LayoutKanban;
-const ListIcon = LayoutList;
-const GalleryIcon = LayoutGallery;
-const TimelineIcon = Clock4;
-const CompactIcon = PanelLeft;
-const CalendarIcon = Calendar;
+// Vues d'affichage - utilisation des icônes personnalisées
+const KanbanViewIcon = KanbanIcon;
+const ListViewIcon = ListIcon;
+const GalleryViewIcon = GalleryIcon;
+const TimelineViewIcon = TimelineIcon;
+const CompactViewIcon = CompactIcon;
+const CalendarViewIcon = CalendarIcon;
 
 // Actions
 const SaveIcon = Save;
@@ -77,12 +85,12 @@ export {
   SearchIcon,
   
   // Vues d'affichage
-  KanbanIcon,
-  ListIcon,
-  GalleryIcon,
-  TimelineIcon,
-  CompactIcon,
-  CalendarIcon,
+  KanbanViewIcon,
+  ListViewIcon,
+  GalleryViewIcon,
+  TimelineViewIcon,
+  CompactViewIcon,
+  CalendarViewIcon,
   
   // Actions
   SaveIcon,
@@ -118,12 +126,12 @@ export const icons = {
   search: SearchIcon,
   
   // Vues d'affichage
-  kanban: KanbanIcon,
-  list: ListIcon,
-  gallery: GalleryIcon,
-  timeline: TimelineIcon,
-  compact: CompactIcon,
-  calendar: CalendarIcon,
+  kanban: KanbanViewIcon,
+  list: ListViewIcon,
+  gallery: GalleryViewIcon,
+  timeline: TimelineViewIcon,
+  compact: CompactViewIcon,
+  calendar: CalendarViewIcon,
   
   // Actions
   save: SaveIcon,
