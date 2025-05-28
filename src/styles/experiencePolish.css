@@ -36,6 +36,12 @@
 .add-btn:hover {
   background: #d64f01;
   transform: translateY(-1px);
+  outline: 1px solid #ee5a01;
+}
+
+.add-btn:focus {
+  outline: 1px solid #ee5a01;
+  outline-offset: 2px;
 }
 
 /* Groupe de filtres excellences */
@@ -63,10 +69,15 @@
   padding: 2px 6px;
   cursor: pointer;
   flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+  border-color: #505050;
 }
 
 .filter-select:focus {
-  outline: none;
+  outline: 1px solid #ee5a01;
   border-color: #ee5a01;
 }
 
@@ -91,12 +102,18 @@
 .filter-chip:hover {
   background: #505050;
   border-color: #606060;
+  outline: 1px solid #ee5a01;
 }
 
 .filter-chip.active {
   background: #0195ee;
   color: white;
   border-color: #0195ee;
+}
+
+.filter-chip.active:hover {
+  background: #0175cc;
+  outline: 1px solid #0195ee;
 }
 
 /* Container de recherche rétractable */
@@ -125,15 +142,19 @@
   padding: 4px 8px;
   font-size: 11px;
   color: white;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .search-input::placeholder {
   color: #666666;
 }
 
+.search-input:hover {
+  border-color: #505050;
+}
+
 .search-input:focus {
-  outline: none;
+  outline: 1px solid #ee5a01;
   border-color: #ee5a01;
 }
 
@@ -168,6 +189,11 @@
 .search-toggle:hover {
   background: #404040;
   border-color: #505050;
+  outline: 1px solid #ee5a01;
+}
+
+.search-toggle:focus {
+  outline: 1px solid #ee5a01;
 }
 
 /* === GRID DES EXPÉRIENCES OPTIMISÉ === */
@@ -210,10 +236,13 @@
   border: 1px solid #404040;
   border-radius: 4px;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .experience-card-compact:hover {
+  background: #3a3a3a;
   border-color: #505050;
+  outline: 1px solid #ee5a01;
   transform: translateY(-1px);
 }
 
@@ -303,6 +332,24 @@
 .experience-action-btn:hover {
   background: #404040;
   color: #ee5a01;
+  outline: 1px solid #ee5a01;
+}
+
+.experience-action-btn:focus {
+  outline: 1px solid #ee5a01;
+}
+
+/* === BARRE DE STATUT OPTIONNELLE === */
+.status-bar {
+  height: 24px;
+  background: #2a2a2a;
+  border-top: 1px solid #404040;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: #b0b0b0;
+  flex-shrink: 0;
 }
 
 /* === RESPONSIVE FINAL === */
@@ -342,93 +389,11 @@
     grid-template-columns: 1fr;
     gap: 6px;
   }
-  
-  .page-header {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-  
-  .consign-btn {
-    width: 100%;
-    padding: 14px 20px;
-    font-size: 16px; /* Éviter zoom iOS */
-  }
-  
-  .filters-container {
-    padding: 15px;
-    gap: 10px;
-  }
-  
-  .experience-card {
-    padding: 15px;
-    margin-bottom: 15px;
-  }
-  
-  .excellence-item {
-    padding: 12px;
-    min-height: 44px; /* Touch targets minimum */
-  }
-  
-  .form-input, .form-textarea {
-    font-size: 16px; /* Éviter zoom iOS sur focus */
-    padding: 12px;
-  }
-  
-  .modal-content {
-    margin: 20px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  
-  .excellence-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .controls-bar {
-    flex-direction: column;
-    gap: 15px;
-    align-items: stretch;
-  }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .experiences-grid {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-  
-  .excellence-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-  
-  .filters-container {
-    padding: 20px;
-  }
-  
-  .experience-card {
-    padding: 18px;
-  }
-  
-  .controls-bar {
-    gap: 20px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .excellence-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-  
-  .main-layout {
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  
-  .controls-bar {
-    gap: 25px;
   }
 }
 
@@ -468,8 +433,8 @@
 .loading-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid var(--border-subtle);
-  border-top: 2px solid var(--accent-orange);
+  border: 2px solid #404040;
+  border-top: 2px solid #ee5a01;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -480,7 +445,7 @@
 }
 
 .skeleton-card {
-  background: var(--bg-secondary);
+  background: #2a2a2a;
   height: 120px;
   border-radius: 8px;
   position: relative;
@@ -510,18 +475,18 @@
 .form-input:focus,
 .form-textarea:focus,
 .form-select:focus {
-  outline: 2px solid var(--accent-orange);
+  outline: 1px solid #ee5a01;
   outline-offset: 2px;
-  border-color: var(--accent-orange);
+  border-color: #ee5a01;
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--accent-orange);
+  outline: 1px solid #ee5a01;
   outline-offset: 2px;
 }
 
 .interactive-element:focus-visible {
-  outline: 2px solid var(--accent-orange);
+  outline: 1px solid #ee5a01;
   outline-offset: 2px;
 }
 
@@ -548,12 +513,17 @@
   
   .button-press:active {
     transform: scale(0.95);
-    background-color: var(--bg-hover);
+    background-color: #404040;
   }
   
   .interactive-element {
     min-height: 44px;
     min-width: 44px;
+  }
+  
+  .experience-action-btn {
+    min-height: 32px;
+    min-width: 32px;
   }
 }
 
@@ -569,7 +539,7 @@
   
   .loading-spinner {
     animation: none;
-    border-top-color: var(--accent-orange);
+    border-top-color: #ee5a01;
   }
 }
 

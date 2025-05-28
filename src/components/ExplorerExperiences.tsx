@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { ExperiencePageLayout } from './ExperiencePageLayout';
 import { ExperienceHeader } from './ExperienceHeader';
@@ -7,6 +6,7 @@ import { ExperiencesGrid } from './ExperiencesGrid';
 import { ExperienceDetailModal } from './ExperienceDetailModal';
 import { ExperienceEditModal } from './ExperienceEditModal';
 import { ExperienceLinkModal } from './ExperienceLinkModal';
+import { ExperienceStatusBar } from './ExperienceStatusBar';
 import { LoadingSpinner, SkeletonCard } from './LoadingSpinner';
 import { useExperiences } from '../hooks/useExperiences';
 import { useExcellences } from '../hooks/useExcellences';
@@ -79,6 +79,34 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
       isModalOpen
     });
   }, [isModalOpen]);
+
+  // Enhanced filter tracking for status bar
+  const getActiveFilters = () => {
+    const filters: string[] = [];
+    
+    if (debouncedSearchQuery.trim()) {
+      filters.push(`Recherche: "${debouncedSearchQuery}"`);
+    }
+    
+    if (selectedExcellences.length > 0) {
+      const excellenceNames = selectedExcellences
+        .map(id => excellences.find(exc => exc.id === id)?.name)
+        .filter(Boolean);
+      filters.push(`Excellences: ${excellenceNames.join(', ')}`);
+    }
+    
+    if (selectedPeriod !== 'all') {
+      const periodLabels = {
+        'today': 'Aujourd\'hui',
+        'week': 'Cette semaine', 
+        'month': 'Ce mois',
+        'quarter': 'Ce trimestre'
+      };
+      filters.push(`Période: ${periodLabels[selectedPeriod as keyof typeof periodLabels] || selectedPeriod}`);
+    }
+    
+    return filters;
+  };
 
   // Logique de filtrage optimisée
   const filteredExperiences = useMemo(() => {
@@ -172,7 +200,7 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
 
   const isFiltered = debouncedSearchQuery.trim() !== '' || selectedExcellences.length > 0 || selectedPeriod !== 'all';
 
-  // Loading state avec skeleton
+  // Loading state with skeleton
   if (isLoading) {
     return (
       <ExperiencePageLayout>
@@ -191,7 +219,7 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
 
   return (
     <ExperiencePageLayout>
-      <div ref={pageRef} className="fade-in">
+      <div ref={pageRef} className="fade-in h-full flex flex-col">
         <ExperienceHeader mode="explorer" onModeChange={onModeChange} />
         
         <ExperiencesFilters
@@ -206,15 +234,23 @@ export const ExplorerExperiences: React.FC<ExplorerExperiencesProps> = ({ onMode
           experienceCount={filteredExperiences.length}
         />
 
-        <ExperiencesGrid
-          experiences={filteredExperiences}
-          excellences={excellences}
-          onView={handleView}
-          onEdit={handleEdit}
-          onLink={handleLink}
-          onConsigner={() => onModeChange('consigner')}
-          isFiltered={isFiltered}
-        />
+        <div className="flex-1 flex flex-col min-h-0">
+          <ExperiencesGrid
+            experiences={filteredExperiences}
+            excellences={excellences}
+            onView={handleView}
+            onEdit={handleEdit}
+            onLink={handleLink}
+            onConsigner={() => onModeChange('consigner')}
+            isFiltered={isFiltered}
+          />
+          
+          <ExperienceStatusBar
+            totalCount={experiences.length}
+            filteredCount={filteredExperiences.length}
+            activeFilters={getActiveFilters()}
+          />
+        </div>
 
         {/* Modales */}
         {detailModal.experience && (
