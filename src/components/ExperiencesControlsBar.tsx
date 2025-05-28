@@ -65,7 +65,9 @@ export const ExperiencesControlsBar: React.FC<ExperiencesControlsBarProps> = ({
             className={`filter-chip ${selectedSort === 'category' ? 'active' : ''}`}
             onClick={() => onSortChange('category')}
           >
-            <ExcellencesIcon size={14} style={{ marginRight: '4px' }} />
+            <span className="chip-icon-wrapper">
+              <ExcellencesIcon size={14} />
+            </span>
             Catégorie
           </button>
           <button
