@@ -21,7 +21,7 @@ export const ExcellenceMenuIcon: React.FC<ExcellenceMenuIconProps> = ({
       className={className}
       style={{ fill: 'currentColor', ...style }}
     >
-      <path d="M12 2L15 9H21L16 14L18 21L12 17L6 21L8 14L3 9H9L12 2Z"/>
+      <path d="M12 3L16 10H20L15 15L17 22L12 18L7 22L9 15L4 10H8L12 3Z"/>
     </svg>
   );
 };

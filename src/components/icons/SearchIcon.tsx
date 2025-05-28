@@ -19,10 +19,10 @@ export const SearchIcon: React.FC<SearchIconProps> = ({
       width={size}
       height={size}
       className={className}
-      style={{ fill: 'currentColor', ...style }}
+      style={{ fill: 'none', stroke: 'currentColor', strokeWidth: '2', ...style }}
     >
-      <circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" strokeWidth="2"/>
-      <path d="m21 21-4.35-4.35" fill="none" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.35-4.35"/>
     </svg>
   );
 };
