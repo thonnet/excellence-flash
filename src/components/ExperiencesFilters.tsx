@@ -1,10 +1,6 @@
 
 import React, { useState } from 'react';
 import { Excellence } from '../types';
-import { X } from 'lucide-react';
-import { Button } from './ui/button';
-import { SearchIcon } from './icons/SearchIcon';
-import { ExcellenceMenuIcon } from './icons/ExcellenceMenuIcon';
 
 interface ExperiencesFiltersProps {
   searchQuery: string;
@@ -27,31 +23,34 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
   onClearFilters,
   experienceCount
 }) => {
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-
-  const toggleSearch = () => {
-    setIsSearchExpanded(!isSearchExpanded);
-    if (isSearchExpanded) {
-      onSearchChange('');
-    }
-  };
-
-  const hasActiveFilters = searchQuery || selectedExcellences.length > 0;
-
   return (
-    <div className="filters-section">
-      {/* Groupe Excellence simple */}
-      <div className="filter-group">
-        <ExcellenceMenuIcon size={14} />
-        <span className="filter-label">Excellences</span>
+    <div style={{
+      padding: '9px 18px',
+      background: '#2a2a2a',
+      borderBottom: '1px solid #404040',
+      display: 'flex',
+      gap: '14px',
+      alignItems: 'center',
+      height: '51px'
+    }}>
+      {/* Excellence simple */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+        <span style={{ fontSize: '14px', color: '#b0b0b0' }}>🔷 Excellences</span>
         <select
-          className="form-select"
+          style={{
+            background: '#1a1a1a',
+            border: '1px solid #404040',
+            color: 'white',
+            padding: '5px 9px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            height: '30px'
+          }}
           value={selectedExcellences.length > 0 ? selectedExcellences[0] : 'all'}
           onChange={(e) => {
-            // Clear all selections first
-            selectedExcellences.forEach(id => onExcellenceToggle(id));
-            // Add new selection if not 'all'
-            if (e.target.value !== 'all') {
+            if (e.target.value === 'all') {
+              selectedExcellences.forEach(id => onExcellenceToggle(id));
+            } else {
               onExcellenceToggle(e.target.value);
             }
           }}
@@ -65,38 +64,43 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
         </select>
       </div>
 
-      {/* Recherche rétractable */}
-      <div className={`search-container ${isSearchExpanded ? 'expanded' : ''}`}>
-        {isSearchExpanded && (
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Rechercher..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            autoFocus
-          />
-        )}
-        <button className="search-toggle" onClick={toggleSearch}>
-          <SearchIcon size={14} />
-        </button>
+      {/* Recherche simple */}
+      <div style={{ marginLeft: 'auto' }}>
+        <input
+          type="text"
+          placeholder="🔍 Rechercher..."
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          style={{
+            background: '#1a1a1a',
+            border: '1px solid #404040',
+            color: 'white',
+            padding: '5px 9px',
+            borderRadius: '4px',
+            fontSize: '13px',
+            height: '30px',
+            width: '200px'
+          }}
+        />
       </div>
 
-      {/* Compteur de résultats */}
-      {hasActiveFilters && (
-        <div className="filter-group">
-          <span className="filter-label text-xs">
-            <span style={{ color: 'var(--color-primary-orange)' }}>{experienceCount}</span> résultats
-          </span>
-          <Button
+      {/* Compteur */}
+      {(searchQuery || selectedExcellences.length > 0) && (
+        <div style={{ fontSize: '12px', color: '#b0b0b0' }}>
+          <span style={{ color: '#ee5a01' }}>{experienceCount}</span> résultats
+          <button
             onClick={onClearFilters}
-            variant="ghost"
-            size="sm"
-            className="text-xs px-2 h-6 hover:text-white"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#b0b0b0',
+              marginLeft: '8px',
+              cursor: 'pointer',
+              fontSize: '11px'
+            }}
           >
-            <X size={12} className="mr-1" />
-            Effacer
-          </Button>
+            ✕ Effacer
+          </button>
         </div>
       )}
     </div>
