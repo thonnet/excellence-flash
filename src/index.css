@@ -1,15 +1,739 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* Imports des modules CSS - MUST come before Tailwind directives */
-@import './styles/design-system.css';
-@import './styles/unified-components.css';
-@import './styles/components.css';
-@import './styles/interactions.css';
-@import './styles/layout.css';
-@import './styles/excellence.css';
-@import './styles/kanban.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ========================================
+   DESIGN SYSTEM - VARIABLES CENTRALISÉES
+   ======================================== */
+
+@layer base {
+  :root {
+    /* === COULEURS DE BASE - CHARTE OFFICIELLE === */
+    --color-primary-orange: #ee5a01;
+    --color-primary-blue: #0195ee;
+    --color-neutral-gray: #707070;
+
+    /* === COULEURS CATÉGORIES D'EXCELLENCE - CHARTE OFFICIELLE === */
+    --color-excellence-manifestee: #8B9657;  /* Vert olive */
+    --color-principe-excellence: #A7C7E7;    /* Bleu clair */
+    --color-quete-excellence: #FFB366;       /* Orange clair */
+
+    /* === INTERFACE SOBRE - NIVEAUX DE GRIS === */
+    --bg-primary: #1a1a1a;      /* Background principal très sombre */
+    --bg-secondary: #2a2a2a;    /* Cards et sections */
+    --bg-tertiary: #3a3a3a;     /* Éléments élevés */
+    --bg-hover: #4a4a4a;        /* États de survol */
+    --bg-light: #555555;        /* Éléments élevés clairs */
+    
+    --text-primary: #ffffff;     /* Texte principal */
+    --text-secondary: #cccccc;   /* Texte secondaire */
+    --text-muted: #999999;       /* Texte atténué */
+    
+    --border-subtle: #333333;    /* Bordures discrètes */
+    --border-medium: #555555;    /* Bordures normales */
+    
+    /* === COULEURS FONCTIONNELLES === */
+    --accent-orange: #ee5a01;    /* Menu actif, boutons primaires */
+    --active-orange-hover: #d64f01; /* Survol des éléments actifs */
+    --gauge-blue: #0195ee;       /* Jauges et métriques */
+    --gauge-blue-light: rgba(1, 149, 238, 0.2);
+    
+    /* === COULEURS PICTOGRAMMES CATÉGORIES === */
+    --excellence-manifestee: #8B9657;  /* Vert olive */
+    --principe-excellence: #A7C7E7;    /* Bleu clair */
+    --quete-excellence: #FFB366;       /* Orange clair */
+    
+    /* === TRANSITIONS STANDARDISÉES === */
+    --transition-fast: 200ms ease;
+    --transition-normal: 300ms ease;
+    
+    /* === OMBRES === */
+    --shadow-light: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-medium: 0 4px 16px rgba(0,0,0,0.2);
+    
+    /* === SHADCN VARIABLES === */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --radius: 0.5rem;
+  }
+
+  .light {
+    /* === MODE CLAIR - NIVEAUX DE GRIS CLAIRS === */
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f1f3f4;
+    --bg-hover: #e9ecef;
+    --bg-light: #dee2e6;
+    
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a4a4a;
+    --text-muted: #6c757d;
+    
+    --border-subtle: #e0e0e0;
+    --border-medium: #cccccc;
+    
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+}
+
+/* ========================================
+   COMPOSANTS RÉUTILISABLES
+   ======================================== */
+
+/* === PICTOGRAMMES DE CATÉGORIES - SYSTÈME CORRIGÉ === */
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.category-tag__icon {
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+.category-tag__text {
+  color: var(--text-secondary);
+}
+
+/* Classes spécifiques par catégorie - COULEURS EXACTES AVEC PRIORITÉ MAXIMALE */
+.category-icon--manifestee {
+  color: var(--color-excellence-manifestee) !important;
+  fill: var(--color-excellence-manifestee) !important;
+  filter: none !important;
+}
+
+.category-icon--principe {
+  color: var(--color-principe-excellence) !important;
+  fill: var(--color-principe-excellence) !important;
+  filter: none !important;
+}
+
+.category-icon--quete {
+  color: var(--color-quete-excellence) !important;
+  fill: var(--color-quete-excellence) !important;
+  filter: none !important;
+}
+
+/* Styles génériques pour les icônes de catégorie */
+.category-icon {
+  font-size: 0.9rem;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+/* Compatibilité avec l'ancien système - RENFORCÉE */
+.category-tag--manifestee .category-tag__icon,
+.category-icon.manifestee {
+  color: var(--color-excellence-manifestee) !important;
+  fill: var(--color-excellence-manifestee) !important;
+  filter: none !important;
+}
+
+.category-tag--principe .category-tag__icon,
+.category-icon.principe {
+  color: var(--color-principe-excellence) !important;
+  fill: var(--color-principe-excellence) !important;
+  filter: none !important;
+}
+
+.category-tag--quete .category-tag__icon,
+.category-icon.quete {
+  color: var(--color-quete-excellence) !important;
+  fill: var(--color-quete-excellence) !important;
+  filter: none !important;
+}
+
+.category-manifestee { --category-color: var(--color-excellence-manifestee); }
+.category-principe { --category-color: var(--color-principe-excellence); }
+.category-quete { --category-color: var(--color-quete-excellence); }
+
+/* ========================================
+   BARRE DE CONTRÔLES - NOUVEAU
+   ======================================== */
+
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 15px 20px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  gap: 20px;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+}
+
+.filter-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.category-filter {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-left: 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.category-filter:focus {
+  outline: none;
+  border-color: var(--accent-orange);
+}
+
+.sort-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sort-btn {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.sort-btn:hover {
+  border-color: var(--border-medium);
+  background: var(--bg-hover);
+}
+
+.sort-btn.active {
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+  background: rgba(238, 90, 1, 0.1);
+}
+
+/* ========================================
+   VUE KANBAN EXPÉRIENCES - NOUVEAU
+   ======================================== */
+
+.experiences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.category-column {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid var(--border-subtle);
+  min-height: 400px;
+}
+
+.category-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.experiences-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.experiences-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.experiences-list::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 3px;
+}
+
+.experiences-list::-webkit-scrollbar-thumb {
+  background: #707070;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.experiences-list::-webkit-scrollbar-thumb:hover {
+  background: #ee5a01;
+}
+
+/* === BOUTONS STANDARDISÉS === */
+.btn-discrete {
+  background: var(--bg-hover);
+  border: 1px solid var(--accent-orange);
+  color: var(--text-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-discrete:hover {
+  background: var(--bg-light);
+  border: 2px solid var(--accent-orange);
+}
+
+.btn-discrete--small { width: 28px; height: 28px; font-size: 0.9rem; }
+.btn-discrete--medium { width: 32px; height: 32px; font-size: 1rem; }
+.btn-discrete--large { width: 56px; height: 56px; font-size: 1.5rem; }
+
+/* BOUTONS AJOUT EXCELLENCE - VUE LISTE UNIQUEMENT */
+.excellence-add-btn-desktop {
+  width: 44px;
+  height: 44px;
+  background: #333333;
+  border: 2px solid #ee5a01;
+  border-radius: 8px;
+  color: #ee5a01;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.excellence-add-btn-desktop:hover {
+  background: #ee5a01;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(238, 90, 1, 0.4);
+}
+
+/* BOUTON MOBILE - Floating Action Button */
+.excellence-add-btn-mobile {
+  width: 56px;
+  height: 56px;
+  background: #ee5a01;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(238, 90, 1, 0.4);
+  transition: all 0.3s ease;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.excellence-add-btn-mobile:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(238, 90, 1, 0.6);
+}
+
+/* Assurer la visibilité sur tous les écrans */
+@media (min-width: 768px) {
+  .excellence-add-btn-desktop {
+    display: flex !important;
+  }
+  .excellence-add-btn-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .excellence-add-btn-desktop {
+    display: none !important;
+  }
+  .excellence-add-btn-mobile {
+    display: flex !important;
+  }
+}
+
+/* BOUTONS INFORMATION */
+.info-button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #707070;
+  background: transparent;
+  color: #707070;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.75rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.info-button:hover {
+  border-color: #ee5a01;
+  color: #ee5a01;
+  background: rgba(238, 90, 1, 0.1);
+}
+
+/* === ÉTATS === */
+.state-active {
+  color: var(--accent-orange) !important;
+}
+
+.state-focus:focus {
+  border-color: var(--accent-orange);
+  outline: none;
+}
+
+.state-hover:hover {
+  background: var(--bg-hover);
+  transition: var(--transition-fast);
+}
+
+/* ========================================
+   AMÉLIORATIONS FICHES DÉTAIL
+   ======================================== */
+
+/* === STRUCTURE EXCELLENCE/EXPÉRIENCES === */
+
+.excellence-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg-secondary);
+  padding: 25px;
+  border-bottom: 2px solid var(--border-medium);
+  z-index: 10;
+}
+
+.excellence-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.excellence-dates {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: right;
+  line-height: 1.3;
+}
+
+.excellence-category {
+  margin-bottom: 12px;
+}
+
+.excellence-description {
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding-left: 15px;
+  margin-bottom: 15px;
+}
+
+/* Filets colorés selon catégorie */
+.excellence-description--manifestee,
+.excellence-description.category-manifestee {
+  border-left: 3px solid var(--color-excellence-manifestee);
+}
+
+.excellence-description--principe,
+.excellence-description.category-principe {
+  border-left: 3px solid var(--color-principe-excellence);
+}
+
+.excellence-description--quete,
+.excellence-description.category-quete {
+  border-left: 3px solid var(--color-quete-excellence);
+}
+
+.excellence-separator {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 0 -25px;
+}
+
+.experiences-section {
+  padding: 25px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.experiences-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  position: relative;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.experiences-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gauge-blue);
+}
+
+.experiences-count {
+  font-weight: 300;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-left: 8px;
+}
+
+.experience-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* ========================================
+   KANBAN ET CARTES D'EXCELLENCE
+   ======================================== */
+
+/* Kanban Board Styling - Enhanced for Drag & Drop */
+.kanban-column {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: visible; /* Allow tooltips to overflow */
+  box-shadow: var(--shadow-light);
+  min-height: 400px;
+  height: auto; /* Allow expansion */
+}
+
+.kanban-column.drag-over {
+  border-color: var(--accent-orange);
+  background: rgba(238, 90, 1, 0.1);
+}
+
+.kanban-header {
+  padding: 16px;
+  border-radius: 8px 8px 0 0;
+  background-color: var(--bg-tertiary);
+  border-bottom: 2px solid var(--border-medium);
+  flex-shrink: 0;
+}
+
+.kanban-content {
+  padding: 12px;
+  min-height: 200px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+  position: relative;
+  padding-bottom: 60px; /* Extra space for descriptions */
+}
+
+/* Excellence Cards - Enhanced for Drag & Drop */
+.excellence-card-minimal {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 12px;
+  position: relative;
+  cursor: grab;
+  transition: all 0.2s ease;
+  min-height: 50px;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.excellence-card-minimal:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-medium);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+  z-index: 10;
+}
+
+.excellence-card-minimal.dragging {
+  opacity: 0.6;
+  transform: rotate(5deg);
+  cursor: grabbing;
+}
+
+.excellence-description-overlay {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  width: 70%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  z-index: 1000;
+  box-shadow: var(--shadow-medium);
+  margin-top: 8px;
+}
+
+.excellence-description-overlay.below {
+  top: 100%;
+}
+
+.excellence-description-overlay.above {
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.description-triangle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  z-index: 1001;
+}
+
+.triangle-above {
+  top: -6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--accent-orange);
+}
+
+.triangle-below {
+  bottom: -6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--accent-orange);
+}
+
+.excellence-actions-overlay {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  gap: 4px;
+  border-radius: 4px;
+  padding: 4px;
+  z-index: 20;
+}
+
+.action-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-medium);
+}
+
+/* Light mode adaptations for action buttons */
+.light .action-btn {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  color: #333333;
+}
+
+.light .action-btn:hover {
+  background: #e9ecef;
+  border-color: #cccccc;
+}

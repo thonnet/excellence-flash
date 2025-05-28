@@ -14,9 +14,11 @@ import { useDebounce } from '../hooks/useDebounce';
 import { KeyboardShortcuts } from '../utils/keyboardShortcuts';
 import { Experience } from '../types';
 
-// Import modular CSS files - removed non-existent files
+// Import modular CSS files
 import '../styles/experience-filters.css';
 import '../styles/experience-grid.css';
+import '../styles/experience-cards.css';
+import '../styles/experience-interactions.css';
 import '../styles/experience-responsive.css';
 
 interface ExplorerExperiencesProps {

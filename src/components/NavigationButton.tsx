@@ -12,7 +12,7 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({ variant, onC
   
   const variantStyles = {
     primary: {
-      backgroundColor: 'var(--orange-primary)',
+      backgroundColor: 'var(--accent-orange)',
       color: 'white',
       hoverStyle: 'hover:opacity-90'
     },
@@ -32,7 +32,7 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({ variant, onC
       style={{
         backgroundColor: style.backgroundColor,
         color: style.color,
-        border: variant === 'back' ? '1px solid var(--border-primary)' : 'none'
+        border: variant === 'back' ? '1px solid var(--border-subtle)' : 'none'
       }}
     >
       {children}

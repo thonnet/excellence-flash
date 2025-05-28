@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { ExcellencesIcon } from '../icons/IconLibrary'
+import { Star } from 'lucide-react'
 
 import { cn } from "@/lib/utils"
 
@@ -46,7 +46,7 @@ function Badge({ className, variant, showIcon = false, category, ...props }: Bad
   return (
     <div className={cn(badgeVariants({ variant }), className)} {...props}>
       {showIcon && category && (
-        <ExcellencesIcon className={`category-icon ${getCategoryIconClass(category)} mr-1`} size={12} />
+        <Star className={`category-icon ${getCategoryIconClass(category)} mr-1`} size={12} />
       )}
       {props.children}
     </div>

@@ -21,12 +21,17 @@ export const ConsignerActions: React.FC<ConsignerActionsProps> = ({
       <button
         onClick={onSubmit}
         disabled={!canSubmit}
-        className="btn-primary mr-4"
+        className="px-8 py-4 rounded-lg text-lg font-semibold mr-4 transition-colors"
         style={{
-          padding: '12px 24px',
-          fontSize: '16px',
-          opacity: canSubmit ? 1 : 0.5,
+          backgroundColor: canSubmit ? '#ee5a01' : '#555',
+          color: canSubmit ? 'white' : '#999',
           cursor: canSubmit ? 'pointer' : 'not-allowed'
+        }}
+        onMouseEnter={(e) => {
+          if (canSubmit) (e.target as HTMLButtonElement).style.backgroundColor = '#d44f01';
+        }}
+        onMouseLeave={(e) => {
+          if (canSubmit) (e.target as HTMLButtonElement).style.backgroundColor = '#ee5a01';
         }}
       >
         💾 Enregistrer l'expérience
@@ -35,12 +40,24 @@ export const ConsignerActions: React.FC<ConsignerActionsProps> = ({
       <button
         onClick={onCancel}
         disabled={disabled}
-        className="btn-secondary"
+        className="px-8 py-4 rounded-lg border-2 transition-colors"
         style={{
-          padding: '12px 24px',
-          fontSize: '16px',
-          opacity: disabled ? 0.5 : 1,
+          backgroundColor: 'transparent',
+          borderColor: disabled ? '#333' : '#555',
+          color: disabled ? '#666' : '#999',
           cursor: disabled ? 'not-allowed' : 'pointer'
+        }}
+        onMouseEnter={(e) => {
+          if (!disabled) {
+            (e.target as HTMLButtonElement).style.borderColor = '#999';
+            (e.target as HTMLButtonElement).style.color = 'white';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!disabled) {
+            (e.target as HTMLButtonElement).style.borderColor = '#555';
+            (e.target as HTMLButtonElement).style.color = '#999';
+          }
         }}
       >
         ❌ Annuler
