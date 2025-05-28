@@ -1,0 +1,151 @@
+
+/* ========================================
+   COMPOSANTS RÉUTILISABLES
+   ======================================== */
+
+/* === PICTOGRAMMES SVG - STYLES STANDARDISÉS === */
+.icon-svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.btn-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.pictogram {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.pictogram--small {
+  width: 12px;
+  height: 12px;
+}
+
+.pictogram--medium {
+  width: 16px;
+  height: 16px;
+}
+
+.pictogram--large {
+  width: 20px;
+  height: 20px;
+}
+
+/* === PICTOGRAMMES DE CATÉGORIES - SYSTÈME CORRIGÉ === */
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.category-tag__icon {
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+.category-tag__text {
+  color: var(--text-secondary);
+}
+
+/* Classes spécifiques par catégorie - COULEURS EXACTES AVEC PRIORITÉ MAXIMALE */
+.category-icon--manifestee {
+  color: var(--excellence-manifestee) !important;
+  fill: var(--excellence-manifestee) !important;
+  filter: none !important;
+}
+
+.category-icon--principe {
+  color: var(--principe-excellence) !important;
+  fill: var(--principe-excellence) !important;
+  filter: none !important;
+}
+
+.category-icon--quete {
+  color: var(--quete-excellence) !important;
+  fill: var(--quete-excellence) !important;
+  filter: none !important;
+}
+
+.category-icon {
+  font-size: 0.9rem;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+/* Compatibilité avec l'ancien système - RENFORCÉE */
+.category-tag--manifestee .category-tag__icon,
+.category-icon.manifestee {
+  color: var(--excellence-manifestee) !important;
+  fill: var(--excellence-manifestee) !important;
+  filter: none !important;
+}
+
+.category-tag--principe .category-tag__icon,
+.category-icon.principe {
+  color: var(--principe-excellence) !important;
+  fill: var(--principe-excellence) !important;
+  filter: none !important;
+}
+
+.category-tag--quete .category-tag__icon,
+.category-icon.quete {
+  color: var(--quete-excellence) !important;
+  fill: var(--quete-excellence) !important;
+  filter: none !important;
+}
+
+.category-manifestee { --category-color: var(--excellence-manifestee); }
+.category-principe { --category-color: var(--principe-excellence); }
+.category-quete { --category-color: var(--quete-excellence); }
+
+/* === BOUTONS STANDARDISÉS === */
+.btn-discrete {
+  background: var(--hover-bg);
+  border: 1px solid var(--orange-primary);
+  color: var(--text-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-discrete:hover {
+  background: var(--bg-tertiary);
+  border: 2px solid var(--orange-primary);
+}
+
+.btn-discrete--small { width: 28px; height: 28px; font-size: 0.9rem; }
+.btn-discrete--medium { width: 32px; height: 32px; font-size: 1rem; }
+.btn-discrete--large { width: 56px; height: 56px; font-size: 1.5rem; }
+
+/* BOUTONS INFORMATION */
+.info-button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--gray-neutral);
+  background: transparent;
+  color: var(--gray-neutral);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.75rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.info-button:hover {
+  border-color: var(--orange-primary);
+  color: var(--orange-primary);
+  background: rgba(238, 90, 1, 0.1);
+}

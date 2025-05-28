@@ -1,0 +1,126 @@
+
+/* ========================================
+   LAYOUT ET GRILLES
+   ======================================== */
+
+/* === BARRE DE CONTRÔLES === */
+.controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 15px 20px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  gap: 20px;
+}
+
+.filter-section {
+  display: flex;
+  align-items: center;
+}
+
+.filter-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.category-filter {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-left: 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.category-filter:focus {
+  outline: none;
+  border-color: var(--orange-primary);
+}
+
+.sort-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sort-btn {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.sort-btn:hover {
+  border-color: var(--border-secondary);
+  background: var(--hover-bg);
+}
+
+.sort-btn.active {
+  border-color: var(--orange-primary);
+  color: var(--orange-primary);
+  background: rgba(238, 90, 1, 0.1);
+}
+
+/* === VUE KANBAN EXPÉRIENCES === */
+.experiences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.category-column {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid var(--border-primary);
+  min-height: 400px;
+}
+
+.category-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.experiences-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.experiences-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.experiences-list::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 3px;
+}
+
+.experiences-list::-webkit-scrollbar-thumb {
+  background: var(--gray-neutral);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.experiences-list::-webkit-scrollbar-thumb:hover {
+  background: var(--orange-primary);
+}
