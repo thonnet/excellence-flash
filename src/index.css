@@ -1,11 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Imports des modules CSS */
+/* Imports des modules CSS - MUST come before Tailwind directives */
 @import './styles/design-system.css';
 @import './styles/unified-components.css';
 @import './styles/components.css';
@@ -13,3 +9,7 @@
 @import './styles/layout.css';
 @import './styles/excellence.css';
 @import './styles/kanban.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
