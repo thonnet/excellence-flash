@@ -1,11 +1,13 @@
 
 import React from 'react';
-import { GalleryIcon } from './icons/GalleryIcon';
-import { TimelineIcon } from './icons/TimelineIcon';
-import { ListIcon } from './icons/ListIcon';
-import { CompactIcon } from './icons/CompactIcon';
-import { CalendarIcon } from './icons/CalendarIcon';
-import { KanbanIcon } from './icons/KanbanIcon';
+import { 
+  GalleryIcon, 
+  TimelineIcon, 
+  ListIcon, 
+  CompactIcon, 
+  CalendarIcon, 
+  KanbanIcon 
+} from './icons/IconLibrary';
 
 type ViewMode = 'kanban' | 'list' | 'gallery' | 'timeline' | 'compact' | 'calendar';
 
@@ -25,7 +27,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({
   const viewIcons = {
     kanban: KanbanIcon,
     list: ListIcon,
-    gallery: GalleryIcon, // Fixed: now uses proper gallery icon instead of kanban
+    gallery: GalleryIcon,
     timeline: TimelineIcon,
     compact: CompactIcon,
     calendar: CalendarIcon
@@ -61,14 +63,14 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({
             key={view}
             onClick={() => onViewChange(view)}
             className={`p-2 transition-colors relative ${isActive ? 'active-view-toggle' : ''}`}
-            style={{ color: isActive ? 'var(--accent-orange)' : 'var(--text-secondary)' }}
+            style={{ color: isActive ? 'var(--orange-primary)' : 'var(--text-secondary)' }}
             title={getViewTitle(view)}
           >
             <Icon size={18} />
             {isActive && (
               <div 
                 className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-0.5"
-                style={{ backgroundColor: 'var(--accent-orange)' }}
+                style={{ backgroundColor: 'var(--orange-primary)' }}
               />
             )}
           </button>

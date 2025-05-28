@@ -2,6 +2,7 @@
 import React from 'react';
 import { User } from '../types';
 import { getInitials, getPlanLabel } from '../utils/userProfileUtils';
+import { AvatarIcon } from './icons/IconLibrary';
 
 interface UserProfileButtonProps {
   user: User;
@@ -22,15 +23,15 @@ export const UserProfileButton: React.FC<UserProfileButtonProps> = ({
         backgroundColor: 'transparent'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+        e.currentTarget.style.backgroundColor = 'var(--hover-bg)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = 'transparent';
       }}
     >
-      {/* Avatar */}
-      <div className="w-8 h-8 bg-gradient-to-br from-[#0195ee] to-[#ee5a01] rounded-full flex items-center justify-center text-white text-sm font-medium">
-        {getInitials(user.full_name || 'UU')}
+      {/* Avatar - Utilise le pictogramme SVG */}
+      <div className="w-8 h-8 bg-gradient-to-br from-[var(--blue-primary)] to-[var(--orange-primary)] rounded-full flex items-center justify-center text-white text-sm font-medium">
+        {user.full_name ? getInitials(user.full_name) : <AvatarIcon size={16} />}
       </div>
 
       {/* User Info - Hidden on mobile */}
