@@ -6,6 +6,7 @@ interface ExcellenceSelectorProps {
   excellences: Excellence[];
   selectedExcellences: string[];
   onSelectionChange: (selected: string[]) => void;
+  disabled?: boolean;
 }
 
 type SortOption = 'alphabetical' | 'usage' | 'recent';
@@ -13,7 +14,8 @@ type SortOption = 'alphabetical' | 'usage' | 'recent';
 export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   excellences,
   selectedExcellences,
-  onSelectionChange
+  onSelectionChange,
+  disabled = false
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
@@ -58,6 +60,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   }, [excellences, searchQuery, sortOptions]);
 
   const toggleExcellence = (excellenceId: string) => {
+    if (disabled) return;
     const newSelected = selectedExcellences.includes(excellenceId)
       ? selectedExcellences.filter(id => id !== excellenceId)
       : [...selectedExcellences, excellenceId];
@@ -65,6 +68,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   };
 
   const toggleCategory = (category: string) => {
+    if (disabled) return;
     setCollapsedCategories(prev => ({
       ...prev,
       [category]: !prev[category]
@@ -72,6 +76,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   };
 
   const setSortOption = (category: string, sortBy: SortOption) => {
+    if (disabled) return;
     setSortOptions(prev => ({
       ...prev,
       [category]: sortBy
@@ -79,6 +84,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   };
 
   const removeSelection = (excellenceId: string) => {
+    if (disabled) return;
     onSelectionChange(selectedExcellences.filter(id => id !== excellenceId));
   };
 
