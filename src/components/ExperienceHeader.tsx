@@ -24,7 +24,7 @@ export const ExperienceHeader: React.FC<ExperienceHeaderProps> = ({ mode, onMode
               </NavigationButton>
             )}
             <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
-              {isExplorer ? 'Explorer mes Expériences' : '⚡ Consigner une Expérience'}
+              {isExplorer ? 'Explorer mes Expériences' : 'Consigner une Expérience'}
             </h2>
           </div>
           <p className="text-lg mt-2" style={{ color: 'var(--text-secondary)' }}>
@@ -37,7 +37,7 @@ export const ExperienceHeader: React.FC<ExperienceHeaderProps> = ({ mode, onMode
         
         {isExplorer && (
           <NavigationButton
-            variant="primary"
+            variant="icon-only"
             onClick={() => onModeChange('consigner')}
           >
             Consigner une expérience
