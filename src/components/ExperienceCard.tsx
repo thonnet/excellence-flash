@@ -1,9 +1,13 @@
 
 import React from 'react';
 import { Experience, Excellence } from '../types';
-import { Eye, Edit2, Link } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+
+// Import des nouvelles icônes SVG personnalisées
+import { ViewIcon } from './icons/ViewIcon';
+import { EditIcon } from './icons/EditIcon';
+import { LinkIcon } from './icons/LinkIcon';
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -109,7 +113,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
             size="sm"
             className="text-gray-400 hover:text-white text-xs"
           >
-            <Eye size={14} className="mr-1" />
+            <ViewIcon size={14} className="mr-1" />
             Détail
           </Button>
           <Button
@@ -118,7 +122,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
             size="sm"
             className="text-gray-400 hover:text-white text-xs"
           >
-            <Edit2 size={14} className="mr-1" />
+            <EditIcon size={14} className="mr-1" />
             Éditer
           </Button>
           <Button
@@ -127,7 +131,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
             size="sm"
             className="text-gray-400 hover:text-white text-xs"
           >
-            <Link size={14} className="mr-1" />
+            <LinkIcon size={14} className="mr-1" />
             Lier
           </Button>
         </div>
