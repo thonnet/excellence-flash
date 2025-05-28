@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Excellence } from '../types';
 import { Search, X } from 'lucide-react';
 import { Button } from './ui/button';
@@ -22,21 +22,11 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
   onSearchChange,
   selectedExcellences,
   onExcellenceToggle,
-  selectedPeriod,
-  onPeriodChange,
   excellences,
   onClearFilters,
   experienceCount
 }) => {
-  const periods = [
-    { id: 'today', label: 'Aujourd\'hui' },
-    { id: 'week', label: 'Cette semaine' },
-    { id: 'month', label: 'Ce mois' },
-    { id: 'quarter', label: 'Trimestre' },
-    { id: 'all', label: 'Tout' }
-  ];
-
-  const hasActiveFilters = searchQuery || selectedExcellences.length > 0 || selectedPeriod !== 'all';
+  const hasActiveFilters = searchQuery || selectedExcellences.length > 0;
 
   return (
     <div 
@@ -97,32 +87,11 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
         </div>
       </div>
 
-      {/* Filtres Temporels */}
+      {/* Période (titre seulement) */}
       <div className="mb-6">
         <label className="block text-sm font-medium mb-3" style={{ color: '#ee5a01' }}>
           📅 Période
         </label>
-        <div className="flex flex-wrap gap-2">
-          {periods.map((period) => {
-            const isSelected = selectedPeriod === period.id;
-            
-            return (
-              <button
-                key={period.id}
-                onClick={() => onPeriodChange(period.id)}
-                className="px-4 py-2 rounded-lg text-sm transition-all duration-200"
-                style={{
-                  backgroundColor: isSelected ? '#ee5a01' : '#333',
-                  borderColor: '#555',
-                  border: '1px solid',
-                  color: isSelected ? 'white' : '#999'
-                }}
-              >
-                {period.label}
-              </button>
-            );
-          })}
-        </div>
       </div>
 
       {/* Effacer filtres */}
