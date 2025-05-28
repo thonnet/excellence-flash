@@ -25,4 +25,5 @@ export const Icon: React.FC<IconProps> = ({
   return <IconComponent size={size} className={className} viewBox={viewBox} />;
 };
 
-export { IconName, icons };
+export type { IconName };
+export { icons };
