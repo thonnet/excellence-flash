@@ -1,11 +1,6 @@
 
 import React from 'react';
-import { GalleryIcon } from './icons/GalleryIcon';
-import { TimelineIcon } from './icons/TimelineIcon';
-import { ListIcon } from './icons/ListIcon';
-import { CompactIcon } from './icons/CompactIcon';
-import { CalendarIcon } from './icons/CalendarIcon';
-import { KanbanIcon } from './icons/KanbanIcon';
+import { Icon, IconName } from './ui/icon';
 
 type ViewMode = 'kanban' | 'list' | 'gallery' | 'timeline' | 'compact' | 'calendar';
 
@@ -22,15 +17,6 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({
   availableViews,
   className = ""
 }) => {
-  const viewIcons = {
-    kanban: KanbanIcon,
-    list: ListIcon,
-    gallery: GalleryIcon, // Fixed: now uses proper gallery icon instead of kanban
-    timeline: TimelineIcon,
-    compact: CompactIcon,
-    calendar: CalendarIcon
-  };
-
   const getViewTitle = (view: ViewMode) => {
     switch (view) {
       case 'kanban':
@@ -53,22 +39,24 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({
   return (
     <div className={`flex items-center space-x-2 ${className}`}>
       {availableViews.map((view) => {
-        const Icon = viewIcons[view];
         const isActive = currentView === view;
         
         return (
           <button
             key={view}
             onClick={() => onViewChange(view)}
-            className={`p-2 transition-colors relative ${isActive ? 'active-view-toggle' : ''}`}
-            style={{ color: isActive ? 'var(--accent-orange)' : 'var(--text-secondary)' }}
+            className={`btn-icon ${isActive ? 'active-view-toggle' : ''}`}
+            style={{ 
+              color: isActive ? 'var(--orange-primary)' : 'var(--text-muted)',
+              borderColor: isActive ? 'var(--orange-primary)' : 'var(--border-primary)'
+            }}
             title={getViewTitle(view)}
           >
-            <Icon size={18} />
+            <Icon name={view as IconName} size={14} />
             {isActive && (
               <div 
                 className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-0.5"
-                style={{ backgroundColor: 'var(--accent-orange)' }}
+                style={{ backgroundColor: 'var(--orange-primary)' }}
               />
             )}
           </button>
