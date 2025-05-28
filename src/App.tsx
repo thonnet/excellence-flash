@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import HelpExcellences from "./pages/HelpExcellences";
 import HelpExperiences from "./pages/HelpExperiences";
 import HelpImport from "./pages/HelpImport";
+import { TestIconsPage } from "./components/TestIconsPage";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/aide/excellences" element={<HelpExcellences />} />
             <Route path="/aide/experiences" element={<HelpExperiences />} />
             <Route path="/aide/import" element={<HelpImport />} />
+            <Route path="/test-icons" element={<TestIconsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
