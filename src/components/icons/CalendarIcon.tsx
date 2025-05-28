@@ -4,9 +4,10 @@ import React from 'react';
 interface IconProps {
   size?: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export const CalendarIcon: React.FC<IconProps> = ({ size = 18, className = "" }) => (
+export const CalendarIcon: React.FC<IconProps> = ({ size = 18, className = "", style = {} }) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg" 
     viewBox="0 0 566.85 520.6"
@@ -14,6 +15,7 @@ export const CalendarIcon: React.FC<IconProps> = ({ size = 18, className = "" })
     height={size} 
     fill="currentColor" 
     className={className}
+    style={style}
   >
     <g>
       <path d="M566.85,124.2v37.1H73.25c-162.2,0-4.1,0-6.3,0v-29.5c0-28.9,19.6-48.4,48.5-48.4h60.9c0-10.9-.1-21.2,0-31.6.2-13.9,9.3-25.8,22.7-29.7,1.1-.5,2.3-1,3.5-1.4h9.8c.3.2.5.5.8.6,18,5.5,25.5,15.6,25.5,34.3v27.5h155.7c.3-.4.5-.5.5-.6,0-10.2,0-20.5.2-30.7.2-13.6,8.9-25.2,21.7-29.4,1.5-.5,3-1.1,4.5-1.6h9.8c.6.3,1.1.7,1.7.9,15.6,4.2,24.5,15.6,24.6,31.6v30.2h6.7c19,0,38.1-.2,57.1,0,20.4.3,37.4,13.1,43.3,32,.9,2.9,1.6,5.9,2.4,8.9v-.2Z"/>
