@@ -33,17 +33,19 @@ export const ExperiencesGrid: React.FC<ExperiencesGridProps> = ({
   }
 
   return (
-    <div className="space-y-4">
-      {experiences.map((experience) => (
-        <ExperienceCard
-          key={experience.id}
-          experience={experience}
-          excellences={excellences}
-          onView={onView}
-          onEdit={onEdit}
-          onLink={onLink}
-        />
-      ))}
+    <div className="experiences-container">
+      <div className="experiences-grid">
+        {experiences.map((experience) => (
+          <ExperienceCard
+            key={experience.id}
+            experience={experience}
+            excellences={excellences}
+            onView={onView}
+            onEdit={onEdit}
+            onLink={onLink}
+          />
+        ))}
+      </div>
     </div>
   );
 };

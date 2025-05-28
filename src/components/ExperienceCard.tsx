@@ -1,9 +1,6 @@
 
 import React from 'react';
 import { Experience, Excellence } from '../types';
-import { Eye, Edit2, Link } from 'lucide-react';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -27,109 +24,79 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
     const date = new Date(dateString);
     return date.toLocaleDateString('fr-FR', {
       day: 'numeric',
-      month: 'short',
-      year: 'numeric'
+      month: 'short'
     });
   };
 
   return (
-    <div 
-      className="p-6 rounded-lg transition-all duration-200 hover:shadow-lg"
-      style={{ backgroundColor: '#2a2a2a' }}
-    >
+    <div className="experience-card-compact">
       {/* Header */}
-      <div className="mb-4">
-        <h3 className="text-lg font-medium mb-2" style={{ color: '#ffffff' }}>
+      <div className="experience-header">
+        <h3 className="experience-title">
           {experience.title}
         </h3>
-        <div className="text-sm flex items-center space-x-4" style={{ color: '#999' }}>
-          <span>📅 {formatDate(experience.date_experienced)}</span>
-          {linkedExcellence && (
-            <span>🏷️ {linkedExcellence.category}</span>
-          )}
-        </div>
+        <span className="experience-date">
+          {formatDate(experience.date_experienced)}
+        </span>
       </div>
 
-      {/* Description */}
-      <p 
-        className="text-sm mb-4 line-clamp-3"
-        style={{ color: '#ccc', lineHeight: '1.6' }}
-      >
-        {experience.description}
-      </p>
+      {/* Content */}
+      <div className="experience-content">
+        <p className="experience-description">
+          {experience.description}
+        </p>
+      </div>
 
-      {/* Excellence Tags */}
-      {linkedExcellence && (
-        <div className="mb-4">
-          <Badge
-            variant="outline"
-            className="text-xs"
-            style={{
-              backgroundColor: 'rgba(1,149,238,0.2)',
-              borderColor: '#0195ee',
-              color: '#0195ee'
-            }}
-          >
-            {linkedExcellence.name}
-          </Badge>
+      {/* Footer */}
+      <div className="experience-footer">
+        <div className="experience-tags">
+          {experience.tags && experience.tags.length > 0 && (
+            <>
+              {experience.tags.slice(0, 2).map((tag, index) => (
+                <span key={index} className="experience-tag">
+                  {tag}
+                </span>
+              ))}
+              {experience.tags.length > 2 && (
+                <span className="experience-tag">
+                  +{experience.tags.length - 2}
+                </span>
+              )}
+            </>
+          )}
+          {linkedExcellence && (
+            <span className="experience-tag" style={{ 
+              backgroundColor: '#0195ee', 
+              color: 'white' 
+            }}>
+              {linkedExcellence.name}
+            </span>
+          )}
         </div>
-      )}
 
-      {/* Tags */}
-      {experience.tags && experience.tags.length > 0 && (
-        <div className="mb-4">
-          <div className="flex flex-wrap gap-1">
-            {experience.tags.slice(0, 3).map((tag, index) => (
-              <span
-                key={index}
-                className="px-2 py-1 text-xs rounded"
-                style={{
-                  backgroundColor: '#333',
-                  color: '#999'
-                }}
-              >
-                {tag}
-              </span>
-            ))}
-            {experience.tags.length > 3 && (
-              <span className="text-xs" style={{ color: '#666' }}>
-                +{experience.tags.length - 3} autres
-              </span>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Actions */}
-      <div className="flex items-center justify-between">
-        <div className="flex space-x-2">
-          <Button
+        {/* Actions */}
+        <div className="experience-actions">
+          <button
             onClick={() => onView(experience)}
-            variant="ghost"
-            size="sm"
-            className="text-gray-400 hover:text-white text-xs"
+            className="experience-action-btn"
+            title="Voir"
           >
-            <Eye size={14} className="mr-1" />
-            Détail
-          </Button>
-          <Button
+            👁
+          </button>
+          <button
             onClick={() => onEdit(experience)}
-            variant="ghost"
-            size="sm"
-            className="text-gray-400 hover:text-white text-xs"
+            className="experience-action-btn"
+            title="Éditer"
           >
-            <Edit2 size={14} className="mr-1" />
-            Éditer
-          </Button>
-          <Button
+            ✏
+          </button>
+          <button
             onClick={() => onLink(experience)}
-            variant="ghost"
-            size="sm"
-            className="text-gray-400 hover:text-white text-xs"
+            className="experience-action-btn"
+            title="Lier"
           >
-            <Link size={14} className="mr-1" />
-            Lier
-          </Button>
+            🔗
+          </button>
         </div>
       </div>
     </div>
