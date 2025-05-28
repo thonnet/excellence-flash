@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { EXCELLENCE_CATEGORIES } from '../types';
-import { Star } from 'lucide-react';
+import { ExcellencesIcon } from './icons/IconLibrary';
 
 interface ExperiencesControlsBarProps {
   selectedCategory: string;
@@ -16,19 +16,12 @@ export const ExperiencesControlsBar: React.FC<ExperiencesControlsBarProps> = ({
   onCategoryChange,
   onSortChange
 }) => {
-  const getCategoryIconClass = (category: string) => {
-    if (category === 'manifestee') return 'category-icon--manifestee';
-    if (category === 'principe') return 'category-icon--principe';
-    if (category === 'quete') return 'category-icon--quete';
-    return 'category-icon--manifestee';
-  };
-
   return (
     <div className="controls-bar">
       <div className="filter-section">
-        <span className="filter-label">Filtrer par catégorie :</span>
+        <span className="text-label">Filtrer par catégorie :</span>
         <select
-          className="category-filter"
+          className="form-select"
           value={selectedCategory}
           onChange={(e) => onCategoryChange(e.target.value)}
         >
@@ -42,41 +35,41 @@ export const ExperiencesControlsBar: React.FC<ExperiencesControlsBarProps> = ({
       </div>
 
       <div className="sort-section">
-        <span className="filter-label">Trier par :</span>
+        <span className="text-label">Trier par :</span>
         <div className="sort-buttons">
           <button
-            className={`sort-btn ${selectedSort === 'today' ? 'active' : ''}`}
+            className={`filter-chip ${selectedSort === 'today' ? 'active' : ''}`}
             onClick={() => onSortChange('today')}
           >
             📅 Aujourd'hui
           </button>
           <button
-            className={`sort-btn ${selectedSort === 'week' ? 'active' : ''}`}
+            className={`filter-chip ${selectedSort === 'week' ? 'active' : ''}`}
             onClick={() => onSortChange('week')}
           >
             📅 Cette semaine
           </button>
           <button
-            className={`sort-btn ${selectedSort === 'month' ? 'active' : ''}`}
+            className={`filter-chip ${selectedSort === 'month' ? 'active' : ''}`}
             onClick={() => onSortChange('month')}
           >
             📅 Ce mois
           </button>
           <button
-            className={`sort-btn ${selectedSort === 'year' ? 'active' : ''}`}
+            className={`filter-chip ${selectedSort === 'year' ? 'active' : ''}`}
             onClick={() => onSortChange('year')}
           >
             📅 Cette année
           </button>
           <button
-            className={`sort-btn ${selectedSort === 'category' ? 'active' : ''}`}
+            className={`filter-chip ${selectedSort === 'category' ? 'active' : ''}`}
             onClick={() => onSortChange('category')}
           >
-            <Star className="category-icon" size={14} style={{ marginRight: '4px' }} />
+            <ExcellencesIcon size={14} style={{ marginRight: '4px' }} />
             Catégorie
           </button>
           <button
-            className={`sort-btn ${selectedSort === 'title' ? 'active' : ''}`}
+            className={`filter-chip ${selectedSort === 'title' ? 'active' : ''}`}
             onClick={() => onSortChange('title')}
           >
             🔤 Titre A-Z

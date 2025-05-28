@@ -7,6 +7,7 @@
 
 /* Imports des modules CSS */
 @import './styles/design-system.css';
+@import './styles/unified-components.css';
 @import './styles/components.css';
 @import './styles/interactions.css';
 @import './styles/layout.css';

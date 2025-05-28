@@ -19,29 +19,7 @@
 .filter-section {
   display: flex;
   align-items: center;
-}
-
-.filter-label {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.category-filter {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-primary);
-  border-radius: 6px;
-  padding: 8px 12px;
-  margin-left: 12px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-}
-
-.category-filter:focus {
-  outline: none;
-  border-color: var(--orange-primary);
+  gap: 12px;
 }
 
 .sort-section {
@@ -54,29 +32,6 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-}
-
-.sort-btn {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-primary);
-  color: var(--text-secondary);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.sort-btn:hover {
-  border-color: var(--border-secondary);
-  background: var(--hover-bg);
-}
-
-.sort-btn.active {
-  border-color: var(--orange-primary);
-  color: var(--orange-primary);
-  background: rgba(238, 90, 1, 0.1);
 }
 
 /* === VUE KANBAN EXPÉRIENCES === */

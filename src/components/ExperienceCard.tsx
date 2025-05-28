@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Experience, Excellence } from '../types';
-import '../styles/experience-cards.css';
+import { ViewIcon, EditIcon, LinkIcon } from './icons/IconLibrary';
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -17,7 +18,6 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
   onEdit,
   onLink
 }) => {
-  // Trouver l'excellence liée à cette expérience
   const linkedExcellence = excellences.find(exc => exc.id === experience.excellence_id);
 
   const formatDate = (dateString: string) => {
@@ -29,43 +29,41 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
   };
 
   return (
-    <div className="experience-card-compact">
+    <div className="info-card">
       {/* Header */}
-      <div className="experience-header">
-        <h3 className="experience-title">
+      <div className="card-header">
+        <h3 className="card-title">
           {experience.title}
         </h3>
-        <span className="experience-date">
+        <span className="card-meta">
           {formatDate(experience.date_experienced)}
         </span>
       </div>
 
       {/* Content */}
-      <div className="experience-content">
-        <p className="experience-description">
-          {experience.description}
-        </p>
+      <div className="card-content">
+        {experience.description}
       </div>
 
       {/* Footer */}
-      <div className="experience-footer">
-        <div className="experience-tags">
+      <div className="card-footer">
+        <div className="card-tags">
           {experience.tags && experience.tags.length > 0 && (
             <>
               {experience.tags.slice(0, 2).map((tag, index) => (
-                <span key={index} className="experience-tag">
+                <span key={index} className="tag">
                   {tag}
                 </span>
               ))}
               {experience.tags.length > 2 && (
-                <span className="experience-tag">
+                <span className="tag gray">
                   +{experience.tags.length - 2}
                 </span>
               )}
             </>
           )}
           {linkedExcellence && (
-            <span className="experience-tag" style={{ 
+            <span className="excellence-tag" style={{ 
               backgroundColor: '#0195ee', 
               color: 'white' 
             }}>
@@ -75,27 +73,27 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="experience-actions">
+        <div className="card-actions">
           <button
             onClick={() => onView(experience)}
-            className="experience-action-btn"
+            className="btn-icon"
             title="Voir"
           >
-            👁
+            <ViewIcon size={14} />
           </button>
           <button
             onClick={() => onEdit(experience)}
-            className="experience-action-btn"
+            className="btn-icon"
             title="Éditer"
           >
-            ✏
+            <EditIcon size={14} />
           </button>
           <button
             onClick={() => onLink(experience)}
-            className="experience-action-btn"
+            className="btn-icon"
             title="Lier"
           >
-            🔗
+            <LinkIcon size={14} />
           </button>
         </div>
       </div>
