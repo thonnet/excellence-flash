@@ -13,6 +13,7 @@ import HelpExperiences from "./pages/HelpExperiences";
 import HelpImport from "./pages/HelpImport";
 import SelectPhosphorIcons from "./pages/SelectPhosphorIcons";
 import TestSvgFormats from "./pages/TestSvgFormats";
+import TestTinySvg from "./pages/TestTinySvg";
 import { TestIconsPage } from "./components/TestIconsPage";
 
 const queryClient = new QueryClient();
