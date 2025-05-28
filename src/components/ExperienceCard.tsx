@@ -4,10 +4,11 @@ import { Experience, Excellence } from '../types';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 
-// Import des nouvelles icônes SVG personnalisées
+// Import des icônes SVG personnalisées
 import { ViewIcon } from './icons/ViewIcon';
 import { EditIcon } from './icons/EditIcon';
 import { LinkIcon } from './icons/LinkIcon';
+import { CalendarIcon } from './icons/CalendarIcon';
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -47,7 +48,10 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({
           {experience.title}
         </h3>
         <div className="text-sm flex items-center space-x-4" style={{ color: '#999' }}>
-          <span>📅 {formatDate(experience.date_experienced)}</span>
+          <span className="flex items-center">
+            <CalendarIcon size={14} className="mr-1" style={{ color: '#999' }} />
+            {formatDate(experience.date_experienced)}
+          </span>
           {linkedExcellence && (
             <span>🏷️ {linkedExcellence.category}</span>
           )}
