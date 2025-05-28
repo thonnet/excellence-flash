@@ -12,6 +12,7 @@ import HelpExcellences from "./pages/HelpExcellences";
 import HelpExperiences from "./pages/HelpExperiences";
 import HelpImport from "./pages/HelpImport";
 import SelectPhosphorIcons from "./pages/SelectPhosphorIcons";
+import TestSvgFormats from "./pages/TestSvgFormats";
 import { TestIconsPage } from "./components/TestIconsPage";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/aide/import" element={<HelpImport />} />
             <Route path="/test-icons" element={<TestIconsPage />} />
             <Route path="/select-phosphor-icons" element={<SelectPhosphorIcons />} />
+            <Route path="/test-svg-formats" element={<TestSvgFormats />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
