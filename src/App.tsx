@@ -15,6 +15,7 @@ import SelectPhosphorIcons from "./pages/SelectPhosphorIcons";
 import TestSvgFormats from "./pages/TestSvgFormats";
 import TestTinySvg from "./pages/TestTinySvg";
 import TestSvgStandard from "./pages/TestSvgStandard";
+import TestSvgOptimized from "./pages/TestSvgOptimized";
 import { TestIconsPage } from "./components/TestIconsPage";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/test-svg-formats" element={<TestSvgFormats />} />
             <Route path="/test-tinysvg" element={<TestTinySvg />} />
             <Route path="/test-svg-standard" element={<TestSvgStandard />} />
+            <Route path="/test-svg-optimized" element={<TestSvgOptimized />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
