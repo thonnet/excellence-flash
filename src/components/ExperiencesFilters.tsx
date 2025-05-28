@@ -76,7 +76,7 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
                   padding: '4px 8px'
                 }}
               >
-                {excellence.title}
+                {excellence.name}
               </Badge>
             );
           })}
