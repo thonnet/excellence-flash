@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { Experience, Excellence } from '../types';
 import { ExperienceCard } from './ExperienceCard';
 import { EmptyExperiencesState } from './EmptyExperiencesState';
+import '../styles/experience-grid.css';
 
 interface ExperiencesGridProps {
   experiences: Experience[];

@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Experience, Excellence } from '../types';
+import '../styles/experience-cards.css';
 
 interface ExperienceCardProps {
   experience: Experience;

@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { Excellence } from '../types';
+import '../styles/experience-filters.css';
 
 interface ExperiencesFiltersProps {
   searchQuery: string;

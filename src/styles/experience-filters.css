@@ -1,0 +1,197 @@
+
+/* ===========================================
+   EXPERIENCE FILTERS - BARRE DE FILTRES
+   =========================================== */
+
+/* === BARRE DE FILTRES OPTIMISÉE === */
+.filters-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 44px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #404040;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+
+/* Bouton + */
+.add-btn {
+  width: 32px;
+  height: 32px;
+  background: #ee5a01;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.add-btn:hover {
+  background: #d64f01;
+  transform: translateY(-1px);
+  outline: 1px solid #ee5a01;
+}
+
+.add-btn:focus {
+  outline: 1px solid #ee5a01;
+  outline-offset: 2px;
+}
+
+/* Groupe de filtres excellences */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.filter-label {
+  font-size: 12px;
+  color: #b0b0b0;
+  flex-shrink: 0;
+}
+
+.filter-select {
+  height: 26px;
+  background: #1e1e1e;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  color: white;
+  font-size: 10px;
+  min-width: 80px;
+  padding: 2px 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.filter-select:hover {
+  border-color: #505050;
+}
+
+.filter-select:focus {
+  outline: 1px solid #ee5a01;
+  border-color: #ee5a01;
+}
+
+/* Chips de période */
+.filter-chip {
+  height: 26px;
+  background: #404040;
+  border: 1px solid #505050;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 9px;
+  color: #cccccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-chip:hover {
+  background: #505050;
+  border-color: #606060;
+  outline: 1px solid #ee5a01;
+}
+
+.filter-chip.active {
+  background: #0195ee;
+  color: white;
+  border-color: #0195ee;
+}
+
+.filter-chip.active:hover {
+  background: #0175cc;
+  outline: 1px solid #0195ee;
+}
+
+/* Container de recherche rétractable */
+.search-container {
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-left: auto;
+  height: 26px;
+}
+
+.search-container.collapsed {
+  width: 26px;
+}
+
+.search-container.expanded {
+  width: 200px;
+}
+
+.search-input {
+  width: 100%;
+  height: 26px;
+  background: #1e1e1e;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: #666666;
+}
+
+.search-input:hover {
+  border-color: #505050;
+}
+
+.search-input:focus {
+  outline: 1px solid #ee5a01;
+  border-color: #ee5a01;
+}
+
+.search-container.collapsed .search-input {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.search-container.expanded .search-input {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.search-toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  color: #cccccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.search-toggle:hover {
+  background: #404040;
+  border-color: #505050;
+  outline: 1px solid #ee5a01;
+}
+
+.search-toggle:focus {
+  outline: 1px solid #ee5a01;
+}
