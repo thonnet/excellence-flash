@@ -10,18 +10,18 @@ interface ExcellenceMenuIconProps {
 export const ExcellenceMenuIcon: React.FC<ExcellenceMenuIconProps> = ({ 
   className = "", 
   size = 16,
-  style
+  style = {}
 }) => {
   return (
     <svg 
-      viewBox="0 0 500 500" 
+      viewBox="0 0 24 24" 
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
       className={className}
       style={{ fill: 'currentColor', ...style }}
     >
-      <path d="M250,50L350,200H150L250,50ZM75,250L200,425H50L75,250ZM425,250L450,425H300L425,250ZM250,350L350,500H150L250,350Z"/>
+      <path d="M12 2L15 9H21L16 14L18 21L12 17L6 21L8 14L3 9H9L12 2Z"/>
     </svg>
   );
 };
