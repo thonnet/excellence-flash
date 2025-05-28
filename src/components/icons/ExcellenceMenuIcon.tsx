@@ -14,14 +14,14 @@ export const ExcellenceMenuIcon: React.FC<ExcellenceMenuIconProps> = ({
 }) => {
   return (
     <svg 
-      viewBox="0 0 24 24" 
+      viewBox="0 0 500 500" 
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
       className={className}
       style={{ fill: 'currentColor', ...style }}
     >
-      <path d="M12 3L16 10H20L15 15L17 22L12 18L7 22L9 15L4 10H8L12 3Z"/>
+      <path d="M250,50L350,200H150L250,50ZM75,250L200,425H50L75,250ZM425,250L450,425H300L425,250ZM250,350L350,500H150L250,350Z"/>
     </svg>
   );
 };
