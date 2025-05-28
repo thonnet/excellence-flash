@@ -1,0 +1,73 @@
+
+/* ========================================
+   CATEGORIES ET PICTOGRAMMES
+   ======================================== */
+
+/* === PICTOGRAMMES DE CATÉGORIES - SYSTÈME CORRIGÉ === */
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.category-tag__icon {
+  font-size: 0.9rem;
+  margin-right: 8px;
+}
+
+.category-tag__text {
+  color: var(--text-secondary);
+}
+
+/* Classes spécifiques par catégorie - COULEURS EXACTES AVEC PRIORITÉ MAXIMALE */
+.category-icon--manifestee {
+  color: var(--color-excellence-manifestee) !important;
+  fill: var(--color-excellence-manifestee) !important;
+  filter: none !important;
+}
+
+.category-icon--principe {
+  color: var(--color-principe-excellence) !important;
+  fill: var(--color-principe-excellence) !important;
+  filter: none !important;
+}
+
+.category-icon--quete {
+  color: var(--color-quete-excellence) !important;
+  fill: var(--color-quete-excellence) !important;
+  filter: none !important;
+}
+
+/* Styles génériques pour les icônes de catégorie */
+.category-icon {
+  font-size: 0.9rem;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+/* Compatibilité avec l'ancien système - RENFORCÉE */
+.category-tag--manifestee .category-tag__icon,
+.category-icon.manifestee {
+  color: var(--color-excellence-manifestee) !important;
+  fill: var(--color-excellence-manifestee) !important;
+  filter: none !important;
+}
+
+.category-tag--principe .category-tag__icon,
+.category-icon.principe {
+  color: var(--color-principe-excellence) !important;
+  fill: var(--color-principe-excellence) !important;
+  filter: none !important;
+}
+
+.category-tag--quete .category-tag__icon,
+.category-icon.quete {
+  color: var(--color-quete-excellence) !important;
+  fill: var(--color-quete-excellence) !important;
+  filter: none !important;
+}
+
+.category-manifestee { --category-color: var(--color-excellence-manifestee); }
+.category-principe { --category-color: var(--color-principe-excellence); }
+.category-quete { --category-color: var(--color-quete-excellence); }

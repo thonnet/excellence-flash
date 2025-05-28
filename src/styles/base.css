@@ -1,0 +1,29 @@
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-background text-foreground;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* === ÉTATS === */
+.state-active {
+  color: var(--accent-orange) !important;
+}
+
+.state-focus:focus {
+  border-color: var(--accent-orange);
+  outline: none;
+}
+
+.state-hover:hover {
+  background: var(--bg-hover);
+  transition: var(--transition-fast);
+}
