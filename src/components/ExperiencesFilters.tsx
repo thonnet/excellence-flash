@@ -1,10 +1,8 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Excellence } from '../types';
 import { X } from 'lucide-react';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Badge } from './ui/badge';
 import { SearchIcon } from './icons/SearchIcon';
 import { ExcellenceMenuIcon } from './icons/ExcellenceMenuIcon';
 
@@ -29,71 +27,72 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
   onClearFilters,
   experienceCount
 }) => {
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+
+  const toggleSearch = () => {
+    setIsSearchExpanded(!isSearchExpanded);
+    if (isSearchExpanded) {
+      onSearchChange('');
+    }
+  };
+
   const hasActiveFilters = searchQuery || selectedExcellences.length > 0;
 
   return (
     <div className="filters-section">
-      {/* Groupe Excellences */}
+      {/* Groupe Excellence simple */}
       <div className="filter-group">
         <ExcellenceMenuIcon size={14} />
         <span className="filter-label">Excellences</span>
-        
-        {/* Sélecteur d'excellences */}
-        <div className="flex gap-2">
-          {excellences.map(excellence => {
-            const isSelected = selectedExcellences.includes(excellence.id);
-            
-            return (
-              <Badge
-                key={excellence.id}
-                variant={isSelected ? excellence.category : 'outline'}
-                className={`filter-chip cursor-pointer transition-all ${
-                  isSelected ? 'active' : ''
-                }`}
-                onClick={() => onExcellenceToggle(excellence.id)}
-              >
-                {excellence.name}
-              </Badge>
-            );
-          })}
-        </div>
+        <select
+          className="form-select"
+          value={selectedExcellences.length > 0 ? selectedExcellences[0] : 'all'}
+          onChange={(e) => {
+            // Clear all selections first
+            selectedExcellences.forEach(id => onExcellenceToggle(id));
+            // Add new selection if not 'all'
+            if (e.target.value !== 'all') {
+              onExcellenceToggle(e.target.value);
+            }
+          }}
+        >
+          <option value="all">Toutes</option>
+          {excellences.map(excellence => (
+            <option key={excellence.id} value={excellence.id}>
+              {excellence.name}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {/* Champ de recherche aligné à droite */}
-      <div className="filter-group ml-auto">
-        <div className="relative">
-          <SearchIcon 
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-muted)]" 
-            size={14} 
-          />
-          <Input
-            value={searchQuery}
-            onChange={e => onSearchChange(e.target.value)}
+      {/* Recherche rétractable */}
+      <div className={`search-container ${isSearchExpanded ? 'expanded' : ''}`}>
+        {isSearchExpanded && (
+          <input
+            type="text"
+            className="search-input"
             placeholder="Rechercher..."
-            className="search-input pl-9 pr-8"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            autoFocus
           />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange('')}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[var(--text-muted)] hover:text-white transition-colors"
-            >
-              <X size={14} />
-            </button>
-          )}
-        </div>
+        )}
+        <button className="search-toggle" onClick={toggleSearch}>
+          <SearchIcon size={14} />
+        </button>
       </div>
 
-      {/* Indicateur de résultats */}
+      {/* Compteur de résultats */}
       {hasActiveFilters && (
         <div className="filter-group">
           <span className="filter-label text-xs">
-            <span className="text-[var(--color-primary-orange)]">{experienceCount}</span> résultats
+            <span style={{ color: 'var(--color-primary-orange)' }}>{experienceCount}</span> résultats
           </span>
           <Button
             onClick={onClearFilters}
             variant="ghost"
             size="sm"
-            className="text-[var(--text-muted)] hover:text-white h-6 px-2 text-xs"
+            className="text-xs px-2 h-6 hover:text-white"
           >
             <X size={12} className="mr-1" />
             Effacer
