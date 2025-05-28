@@ -17,21 +17,33 @@ export const ConsignerActions: React.FC<ConsignerActionsProps> = ({
   const canSubmit = isFormValid && !disabled;
 
   return (
-    <section className="text-center py-8 border-t" style={{ borderColor: '#333' }}>
+    <section 
+      className="text-center py-8 border-t transition-opacity" 
+      style={{ 
+        borderColor: 'var(--border-subtle)',
+        opacity: disabled ? 0.7 : 1
+      }}
+    >
       <button
         onClick={onSubmit}
         disabled={!canSubmit}
-        className="px-8 py-4 rounded-lg text-lg font-semibold mr-4 transition-colors"
+        className="px-8 py-4 rounded-lg text-lg font-semibold mr-4 transition-all duration-200 disabled:cursor-not-allowed"
         style={{
-          backgroundColor: canSubmit ? '#ee5a01' : '#555',
-          color: canSubmit ? 'white' : '#999',
-          cursor: canSubmit ? 'pointer' : 'not-allowed'
+          backgroundColor: canSubmit ? '#ee5a01' : 'var(--bg-hover)',
+          color: canSubmit ? 'white' : 'var(--text-muted)',
+          transform: disabled ? 'none' : 'scale(1)',
         }}
         onMouseEnter={(e) => {
-          if (canSubmit) (e.target as HTMLButtonElement).style.backgroundColor = '#d44f01';
+          if (canSubmit) {
+            (e.target as HTMLButtonElement).style.backgroundColor = '#d44f01';
+            (e.target as HTMLButtonElement).style.transform = 'translateY(-1px)';
+          }
         }}
         onMouseLeave={(e) => {
-          if (canSubmit) (e.target as HTMLButtonElement).style.backgroundColor = '#ee5a01';
+          if (canSubmit) {
+            (e.target as HTMLButtonElement).style.backgroundColor = '#ee5a01';
+            (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
+          }
         }}
       >
         💾 Enregistrer l'expérience
@@ -40,23 +52,24 @@ export const ConsignerActions: React.FC<ConsignerActionsProps> = ({
       <button
         onClick={onCancel}
         disabled={disabled}
-        className="px-8 py-4 rounded-lg border-2 transition-colors"
+        className="px-8 py-4 rounded-lg border-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
           backgroundColor: 'transparent',
-          borderColor: disabled ? '#333' : '#555',
-          color: disabled ? '#666' : '#999',
-          cursor: disabled ? 'not-allowed' : 'pointer'
+          borderColor: 'var(--border-medium)',
+          color: 'var(--text-secondary)'
         }}
         onMouseEnter={(e) => {
           if (!disabled) {
-            (e.target as HTMLButtonElement).style.borderColor = '#999';
-            (e.target as HTMLButtonElement).style.color = 'white';
+            (e.target as HTMLButtonElement).style.borderColor = 'var(--text-secondary)';
+            (e.target as HTMLButtonElement).style.color = 'var(--text-primary)';
+            (e.target as HTMLButtonElement).style.transform = 'translateY(-1px)';
           }
         }}
         onMouseLeave={(e) => {
           if (!disabled) {
-            (e.target as HTMLButtonElement).style.borderColor = '#555';
-            (e.target as HTMLButtonElement).style.color = '#999';
+            (e.target as HTMLButtonElement).style.borderColor = 'var(--border-medium)';
+            (e.target as HTMLButtonElement).style.color = 'var(--text-secondary)';
+            (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
           }
         }}
       >

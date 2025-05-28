@@ -10,57 +10,24 @@ interface ExperienceHeaderProps {
 export const ExperienceHeader: React.FC<ExperienceHeaderProps> = ({ mode, onModeChange }) => {
   const isExplorer = mode === 'explorer';
   
-  const handleConsignerClick = () => {
-    console.log('Consigner button clicked, changing mode to consigner');
-    onModeChange('consigner');
-  };
-
-  const handleBackClick = () => {
-    console.log('Back button clicked, changing mode to explorer');
-    onModeChange('explorer');
-  };
-  
   return (
-    <div 
-      className="border-b"
-      style={{ 
-        backgroundColor: '#1e1e1e',
-        borderBottomColor: '#404040',
-        paddingTop: '12px',
-        paddingBottom: '8px',
-        paddingLeft: '24px',
-        paddingRight: '24px'
-      }}
-    >
+    <div className="page-header">
       <div className="flex items-start justify-between">
         <div className="title-section flex-1">
           <div className="flex items-center space-x-4">
             {!isExplorer && (
               <NavigationButton
                 variant="back"
-                onClick={handleBackClick}
+                onClick={() => onModeChange('explorer')}
               >
                 ← Retour
               </NavigationButton>
             )}
-            <h2 
-              className="font-semibold"
-              style={{ 
-                color: 'var(--text-primary)',
-                fontSize: '18px',
-                fontWeight: '600'
-              }}
-            >
+            <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>
               {isExplorer ? 'Explorer mes Expériences' : '⚡ Consigner une Expérience'}
             </h2>
           </div>
-          <p 
-            className="mt-2"
-            style={{ 
-              color: '#b0b0b0',
-              fontSize: '11px'
-            }}
-          >
+          <p className="text-lg mt-2" style={{ color: 'var(--text-secondary)' }}>
             {isExplorer 
               ? 'Découvrez vos patterns, renforcez vos excellences'
               : 'Capturez rapidement ce que vous venez de vivre'
@@ -68,7 +35,14 @@ export const ExperienceHeader: React.FC<ExperienceHeaderProps> = ({ mode, onMode
           </p>
         </div>
         
-        {/* Bouton supprimé pour le mode explorer comme demandé */}
+        {isExplorer && (
+          <NavigationButton
+            variant="primary"
+            onClick={() => onModeChange('consigner')}
+          >
+            ⚡ Consigner une expérience
+          </NavigationButton>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { KanbanView } from './KanbanView';
 import { ListView } from './ListView';
 import { Observatoire } from './Observatoire';
@@ -38,7 +38,6 @@ export const MainContent: React.FC<MainContentProps> = ({
   setCurrentView,
 }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   
   // Determine experience mode based on URL
   const getExperienceMode = (): 'explorer' | 'consigner' => {
@@ -48,14 +47,12 @@ export const MainContent: React.FC<MainContentProps> = ({
 
   const handleExperienceModeChange = (mode: 'explorer' | 'consigner') => {
     if (mode === 'consigner') {
-      navigate('/experiences/new');
+      window.history.pushState({}, '', '/experiences/new');
     } else {
-      navigate('/experiences');
+      window.history.pushState({}, '', '/experiences');
     }
-    // Ensure the current view is set to experiences
-    if (currentView !== 'experiences') {
-      setCurrentView('experiences');
-    }
+    // Force a re-render by updating the current view
+    setCurrentView('experiences');
   };
 
   return (

@@ -1,8 +1,8 @@
+
 import React from 'react';
 import { Experience, Excellence } from '../types';
 import { ExperienceCard } from './ExperienceCard';
 import { EmptyExperiencesState } from './EmptyExperiencesState';
-import '../styles/experience-grid.css';
 
 interface ExperiencesGridProps {
   experiences: Experience[];
@@ -33,19 +33,17 @@ export const ExperiencesGrid: React.FC<ExperiencesGridProps> = ({
   }
 
   return (
-    <div className="experiences-container">
-      <div className="experiences-grid">
-        {experiences.map((experience) => (
-          <ExperienceCard
-            key={experience.id}
-            experience={experience}
-            excellences={excellences}
-            onView={onView}
-            onEdit={onEdit}
-            onLink={onLink}
-          />
-        ))}
-      </div>
+    <div className="space-y-4">
+      {experiences.map((experience) => (
+        <ExperienceCard
+          key={experience.id}
+          experience={experience}
+          excellences={excellences}
+          onView={onView}
+          onEdit={onEdit}
+          onLink={onLink}
+        />
+      ))}
     </div>
   );
 };

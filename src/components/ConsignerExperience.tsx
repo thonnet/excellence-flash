@@ -1,133 +1,133 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { ExperiencePageLayout } from './ExperiencePageLayout';
 import { ExperienceHeader } from './ExperienceHeader';
 import { ConsignerForm } from './ConsignerForm';
-import { LoadingSpinner } from './LoadingSpinner';
+import { ConfirmationModal } from './ConfirmationModal';
+import { ToastNotification } from './ToastNotification';
 import { useExcellences } from '../hooks/useExcellences';
 import { useExperiences } from '../hooks/useExperiences';
-import { KeyboardShortcuts } from '../utils/keyboardShortcuts';
+import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts';
+import { useToastNotification } from '../hooks/useToastNotification';
 
 interface ConsignerExperienceProps {
   onModeChange: (mode: 'explorer' | 'consigner') => void;
 }
 
 export const ConsignerExperience: React.FC<ConsignerExperienceProps> = ({ onModeChange }) => {
-  const { excellences, isLoading: excellencesLoading } = useExcellences();
+  const { excellences } = useExcellences();
   const { addExperience } = useExperiences();
+  const { toasts, showSuccess, showError, hideToast } = useToastNotification();
   
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [canSave, setCanSave] = useState(false);
-  
-  // Refs pour focus management
-  const pageRef = useRef<HTMLDivElement>(null);
-  const keyboardShortcuts = useRef<KeyboardShortcuts | null>(null);
-
-  // Fonction de sauvegarde référencée pour les raccourcis
-  const handleSaveRef = useRef<(() => void) | null>(null);
 
   const handleSave = async (experienceData: any) => {
-    if (isSaving) return;
-    
     setIsSaving(true);
     try {
       await addExperience(experienceData);
-      onModeChange('explorer');
+      setHasUnsavedChanges(false);
+      showSuccess('Expérience enregistrée avec succès');
+      
+      // Délai pour voir le message de succès avant redirection
+      setTimeout(() => {
+        onModeChange('explorer');
+      }, 1000);
     } catch (error) {
       console.error('Erreur lors de la sauvegarde:', error);
+      showError('Erreur lors de la sauvegarde');
     } finally {
       setIsSaving(false);
     }
   };
 
-  const handleCancel = () => {
+  const handleFormChange = () => {
+    if (!hasUnsavedChanges) {
+      setHasUnsavedChanges(true);
+    }
+  };
+
+  const handleBackRequest = () => {
+    if (hasUnsavedChanges) {
+      setShowExitConfirmation(true);
+    } else {
+      onModeChange('explorer');
+    }
+  };
+
+  const handleExitConfirm = () => {
+    setHasUnsavedChanges(false);
+    setShowExitConfirmation(false);
     onModeChange('explorer');
   };
 
-  // Initialisation raccourcis clavier
-  useEffect(() => {
-    keyboardShortcuts.current = new KeyboardShortcuts({
-      currentMode: 'consigner',
-      isModalOpen: false,
-      canSave,
-      onNavigateToConsigner: () => {},
-      onNavigateToExplorer: () => onModeChange('explorer'),
-      onSave: () => {
-        if (handleSaveRef.current && canSave && !isSaving) {
-          handleSaveRef.current();
-        }
-      },
-      onCloseModal: () => {}
-    });
+  const handleExitCancel = () => {
+    setShowExitConfirmation(false);
+  };
 
-    keyboardShortcuts.current.activate();
-
-    return () => {
-      keyboardShortcuts.current?.deactivate();
-    };
-  }, [onModeChange, canSave, isSaving]);
-
-  // Mise à jour du contexte des raccourcis
-  useEffect(() => {
-    keyboardShortcuts.current?.updateContext({
-      canSave,
-    });
-  }, [canSave]);
-
-  // Focus sur le titre au montage
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const titleInput = document.querySelector('input[placeholder*="titre"]') as HTMLInputElement;
-      if (titleInput) {
-        titleInput.focus();
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (excellencesLoading) {
-    return (
-      <ExperiencePageLayout>
-        <ExperienceHeader mode="consigner" onModeChange={onModeChange} />
-        <div className="flex items-center justify-center py-12">
-          <LoadingSpinner size="large" />
-          <span className="ml-3" style={{ color: 'var(--text-secondary)' }}>
-            Chargement des excellences...
-          </span>
-        </div>
-      </ExperiencePageLayout>
-    );
-  }
+  // Raccourcis clavier
+  useKeyboardShortcuts({
+    onEscape: () => handleBackRequest(),
+    onSave: () => {
+      // TODO: Trigger form submission
+      console.log('Save shortcut triggered');
+    }
+  });
 
   return (
-    <ExperiencePageLayout>
-      <div ref={pageRef} className="fade-in">
-        <ExperienceHeader mode="consigner" onModeChange={onModeChange} />
-        
-        <ConsignerForm
-          excellences={excellences}
-          onSave={handleSave}
-          onCancel={handleCancel}
-          disabled={isSaving}
-          onValidityChange={setCanSave}
-          onSaveRef={(saveFunction) => {
-            handleSaveRef.current = saveFunction;
-          }}
+    <>
+      <ExperiencePageLayout>
+        <ExperienceHeader 
+          mode="consigner" 
+          onModeChange={handleBackRequest}
         />
-
-        {isSaving && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div 
-              className="bg-white rounded-lg p-6 flex items-center space-x-3"
-              style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
-            >
-              <LoadingSpinner />
-              <span>Enregistrement en cours...</span>
+        
+        <div className="relative">
+          {isSaving && (
+            <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center z-10 rounded-lg">
+              <div 
+                className="px-4 py-2 rounded-lg flex items-center gap-2"
+                style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-primary)' }}
+              >
+                <div className="w-4 h-4 border-2 border-current border-r-transparent rounded-full animate-spin"></div>
+                <span className="text-sm">Enregistrement...</span>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    </ExperiencePageLayout>
+          )}
+          
+          <ConsignerForm
+            excellences={excellences}
+            onSave={handleSave}
+            onCancel={handleBackRequest}
+            onChange={handleFormChange}
+            disabled={isSaving}
+          />
+        </div>
+      </ExperiencePageLayout>
+
+      {/* Modal de confirmation de sortie */}
+      <ConfirmationModal
+        isOpen={showExitConfirmation}
+        title="Quitter sans sauvegarder ?"
+        message="Vous avez des modifications non sauvegardées. Souhaitez-vous vraiment quitter ?"
+        confirmText="Quitter"
+        cancelText="Continuer l'édition"
+        variant="warning"
+        onConfirm={handleExitConfirm}
+        onCancel={handleExitCancel}
+      />
+
+      {/* Notifications toast */}
+      {toasts.map((toast) => (
+        <ToastNotification
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          isVisible={toast.isVisible}
+          onClose={() => hideToast(toast.id)}
+        />
+      ))}
+    </>
   );
 };

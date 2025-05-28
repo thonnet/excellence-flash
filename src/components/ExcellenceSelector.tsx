@@ -6,7 +6,6 @@ interface ExcellenceSelectorProps {
   excellences: Excellence[];
   selectedExcellences: string[];
   onSelectionChange: (selected: string[]) => void;
-  disabled?: boolean;
 }
 
 type SortOption = 'alphabetical' | 'usage' | 'recent';
@@ -14,8 +13,7 @@ type SortOption = 'alphabetical' | 'usage' | 'recent';
 export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   excellences,
   selectedExcellences,
-  onSelectionChange,
-  disabled = false
+  onSelectionChange
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
@@ -60,7 +58,6 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   }, [excellences, searchQuery, sortOptions]);
 
   const toggleExcellence = (excellenceId: string) => {
-    if (disabled) return;
     const newSelected = selectedExcellences.includes(excellenceId)
       ? selectedExcellences.filter(id => id !== excellenceId)
       : [...selectedExcellences, excellenceId];
@@ -68,7 +65,6 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   };
 
   const toggleCategory = (category: string) => {
-    if (disabled) return;
     setCollapsedCategories(prev => ({
       ...prev,
       [category]: !prev[category]
@@ -76,7 +72,6 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   };
 
   const setSortOption = (category: string, sortBy: SortOption) => {
-    if (disabled) return;
     setSortOptions(prev => ({
       ...prev,
       [category]: sortBy
@@ -84,7 +79,6 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   };
 
   const removeSelection = (excellenceId: string) => {
-    if (disabled) return;
     onSelectionChange(selectedExcellences.filter(id => id !== excellenceId));
   };
 
@@ -93,10 +87,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
   );
 
   return (
-    <div 
-      className={`p-8 rounded-lg smooth-element transition-opacity ${disabled ? 'opacity-50 pointer-events-none' : ''}`} 
-      style={{ backgroundColor: '#2a2a2a' }}
-    >
+    <section className="p-8 rounded-lg" style={{ backgroundColor: '#2a2a2a' }}>
       <h3 className="text-lg font-semibold mb-6" style={{ color: '#ee5a01' }}>
         ⭐ Excellences mobilisées
       </h3>
@@ -106,18 +97,16 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
         <input
           type="text"
           value={searchQuery}
-          onChange={(e) => !disabled && setSearchQuery(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="🔍 Rechercher une excellence..."
-          disabled={disabled}
-          className="form-input w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none interactive-element"
+          className="w-full px-4 py-3 rounded-lg border-2 transition-colors focus:outline-none"
           style={{
-            backgroundColor: disabled ? '#222' : '#333',
+            backgroundColor: '#333',
             borderColor: '#555',
-            color: disabled ? '#666' : 'white',
-            cursor: disabled ? 'not-allowed' : 'text'
+            color: 'white'
           }}
-          onFocus={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#0195ee')}
-          onBlur={(e) => !disabled && ((e.target as HTMLInputElement).style.borderColor = '#555')}
+          onFocus={(e) => (e.target as HTMLInputElement).style.borderColor = '#0195ee'}
+          onBlur={(e) => (e.target as HTMLInputElement).style.borderColor = '#555'}
         />
       </div>
 
@@ -131,7 +120,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
             <div key={categoryKey}>
               {/* Header de catégorie */}
               <div
-                className={`flex items-center justify-between py-3 border-b transition-colors ${disabled ? '' : 'cursor-pointer'}`}
+                className="flex items-center justify-between py-3 border-b cursor-pointer"
                 style={{ borderColor: '#555' }}
                 onClick={() => toggleCategory(categoryKey)}
               >
@@ -154,13 +143,11 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
                     value={sortOptions[categoryKey]}
                     onChange={(e) => setSortOption(categoryKey, e.target.value as SortOption)}
                     onClick={(e) => e.stopPropagation()}
-                    disabled={disabled}
-                    className="form-select px-2 py-1 text-xs rounded border transition-colors"
+                    className="px-2 py-1 text-xs rounded border"
                     style={{
-                      backgroundColor: disabled ? '#222' : '#333',
+                      backgroundColor: '#333',
                       borderColor: '#555',
-                      color: disabled ? '#666' : '#999',
-                      cursor: disabled ? 'not-allowed' : 'pointer'
+                      color: '#999'
                     }}
                   >
                     <option value="alphabetical">Alphabétique</option>
@@ -175,7 +162,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
 
               {/* Grid d'excellences */}
               {!isCollapsed && (
-                <div className="excellence-grid grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 mt-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 mt-4">
                   {categoryExcellences.map((excellence) => {
                     const isSelected = selectedExcellences.includes(excellence.id);
                     
@@ -183,21 +170,20 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
                       <div
                         key={excellence.id}
                         onClick={() => toggleExcellence(excellence.id)}
-                        className={`card-hover excellence-item flex items-start gap-3 p-4 rounded-lg border-2 transition-all ${disabled ? '' : 'cursor-pointer interactive-element'}`}
+                        className="flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all"
                         style={{
                           backgroundColor: isSelected ? 'rgba(1,149,238,0.1)' : '#333',
-                          borderColor: isSelected ? '#0195ee' : '#555',
-                          opacity: disabled ? 0.6 : 1
+                          borderColor: isSelected ? '#0195ee' : '#555'
                         }}
                         onMouseEnter={(e) => {
-                          if (!isSelected && !disabled) ((e.target as HTMLDivElement).style.borderColor = '#0195ee');
+                          if (!isSelected) (e.target as HTMLDivElement).style.borderColor = '#0195ee';
                         }}
                         onMouseLeave={(e) => {
-                          if (!isSelected && !disabled) ((e.target as HTMLDivElement).style.borderColor = '#555');
+                          if (!isSelected) (e.target as HTMLDivElement).style.borderColor = '#555';
                         }}
                       >
                         <div
-                          className="flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center text-white text-xs transition-colors"
+                          className="flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center text-white text-xs"
                           style={{
                             backgroundColor: isSelected ? '#0195ee' : 'transparent',
                             borderColor: isSelected ? '#0195ee' : '#555'
@@ -229,7 +215,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
       {/* Résumé des sélections */}
       {selectedExcellenceObjects.length > 0 && (
         <div
-          className="mt-6 p-4 rounded-lg border smooth-element"
+          className="mt-6 p-4 rounded-lg border"
           style={{
             backgroundColor: 'rgba(1,149,238,0.1)',
             borderColor: '#0195ee'
@@ -242,7 +228,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
             {selectedExcellenceObjects.map((excellence) => (
               <div
                 key={excellence.id}
-                className="button-press flex items-center gap-2 px-3 py-1 rounded-full text-sm transition-all"
+                className="flex items-center gap-2 px-3 py-1 rounded-full text-sm"
                 style={{
                   backgroundColor: '#0195ee',
                   color: 'white'
@@ -251,8 +237,7 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
                 {excellence.name}
                 <button
                   onClick={() => removeSelection(excellence.id)}
-                  disabled={disabled}
-                  className="ml-1 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                  className="ml-1 hover:opacity-80"
                   style={{ color: 'white' }}
                 >
                   ×
@@ -262,6 +247,6 @@ export const ExcellenceSelector: React.FC<ExcellenceSelectorProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };

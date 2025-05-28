@@ -20,10 +20,9 @@ const Index = () => {
   // Set current view based on route
   useEffect(() => {
     if (location.pathname.startsWith('/experiences')) {
-      console.log('Setting view to experiences for path:', location.pathname);
       appState.setCurrentView('experiences');
     }
-  }, [location.pathname]);
+  }, [location.pathname, appState.setCurrentView]);
 
   // Rediriger vers la page d'authentification si pas connecté
   if (loading) {
@@ -52,8 +51,6 @@ const Index = () => {
       </div>
     );
   }
-
-  console.log('Current view:', appState.currentView, 'Path:', location.pathname);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
