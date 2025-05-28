@@ -40,7 +40,7 @@ export const ExperienceHeader: React.FC<ExperienceHeaderProps> = ({ mode, onMode
             variant="primary"
             onClick={() => onModeChange('consigner')}
           >
-            ⚡ Consigner une expérience
+            Consigner une expérience
           </NavigationButton>
         )}
       </div>
