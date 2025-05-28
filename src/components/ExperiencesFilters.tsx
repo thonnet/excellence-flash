@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
 import { Excellence } from '../types';
+import { ExcellenceMenuIcon } from './icons/ExcellenceMenuIcon';
+import { SearchIcon } from './icons/SearchIcon';
 
 interface ExperiencesFiltersProps {
   searchQuery: string;
@@ -35,7 +37,8 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
     }}>
       {/* Excellence simple */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-        <span style={{ fontSize: '14px', color: '#b0b0b0' }}>🔷 Excellences</span>
+        <ExcellenceMenuIcon size={14} style={{color: '#b0b0b0'}} />
+        <span style={{ fontSize: '14px', color: '#b0b0b0' }}>Excellences</span>
         <select
           style={{
             background: '#1a1a1a',
@@ -65,10 +68,11 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
       </div>
 
       {/* Recherche simple */}
-      <div style={{ marginLeft: 'auto' }}>
+      <div style={{ marginLeft: 'auto', position: 'relative' }}>
+        <SearchIcon size={14} style={{position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: '#b0b0b0', pointerEvents: 'none'}} />
         <input
           type="text"
-          placeholder="🔍 Rechercher..."
+          placeholder="Rechercher..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           style={{
@@ -76,6 +80,7 @@ export const ExperiencesFilters: React.FC<ExperiencesFiltersProps> = ({
             border: '1px solid #404040',
             color: 'white',
             padding: '5px 9px',
+            paddingLeft: '30px',
             borderRadius: '4px',
             fontSize: '13px',
             height: '30px',
