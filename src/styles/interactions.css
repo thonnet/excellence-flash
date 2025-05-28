@@ -1,0 +1,183 @@
+
+/* ========================================
+   ÉTATS ET INTERACTIONS
+   ======================================== */
+
+/* === ÉTATS === */
+.state-active {
+  color: var(--accent-orange) !important;
+}
+
+.state-focus:focus {
+  border-color: var(--accent-orange);
+  outline: none;
+}
+
+.state-hover:hover {
+  background: var(--bg-hover);
+  transition: var(--transition-fast);
+}
+
+/* Navigation avec filet orange pour actif */
+.active-nav-item {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* View Toggle avec filet orange pour actif */
+.active-view-toggle {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Excellence Cards - Enhanced for Drag & Drop */
+.excellence-card-minimal {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 12px;
+  position: relative;
+  cursor: grab;
+  transition: all 0.2s ease;
+  min-height: 50px;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.excellence-card-minimal:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-medium);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+  z-index: 10;
+}
+
+.excellence-card-minimal.dragging {
+  opacity: 0.6;
+  transform: rotate(5deg);
+  cursor: grabbing;
+}
+
+.excellence-description-overlay {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  width: 70%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  z-index: 1000;
+  box-shadow: var(--shadow-medium);
+  margin-top: 8px;
+}
+
+.excellence-description-overlay.below {
+  top: 100%;
+}
+
+.excellence-description-overlay.above {
+  bottom: 100%;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.description-triangle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  z-index: 1001;
+}
+
+.triangle-above {
+  top: -6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--accent-orange);
+}
+
+.triangle-below {
+  bottom: -6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--accent-orange);
+}
+
+.excellence-actions-overlay {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  gap: 4px;
+  border-radius: 4px;
+  padding: 4px;
+  z-index: 20;
+}
+
+.action-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-medium);
+}
+
+/* Light mode adaptations for action buttons */
+.light .action-btn {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  color: #333333;
+}
+
+.light .action-btn:hover {
+  background: #e9ecef;
+  border-color: #cccccc;
+}
+
+/* Alternating Baselines */
+.alternating-baseline {
+  min-height: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.baseline-text {
+  font-style: italic;
+  font-size: 0.9rem;
+  transition: opacity 0.3s ease;
+  user-select: none;
+}
+
+.baseline-text.visible {
+  opacity: 1;
+}
+
+.baseline-text.hidden {
+  opacity: 0;
+}
+
+/* Sort Arrows */
+.sort-arrows {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.6rem;
+  line-height: 0.7;
+  color: #666;
+  margin-left: 8px;
+}
+
+.sort-arrows .active {
+  color: var(--accent-orange);
+}
