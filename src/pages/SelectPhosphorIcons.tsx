@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { 
-  Diamond, DiamondsFour, Gem, Crown, Star, Trophy, Medal, Sparkle,
+  Diamond, DiamondsFour, CrystalBall, Crown, Star, Trophy, Medal, Sparkle,
   MagnifyingGlass, Scan, Binoculars, Crosshair,
   Plus, X, CaretDown, List, Gear, User, Eye, PencilSimple, Trash, Link,
   FloppyDisk, FunnelSimple, SortAscending, Image, Info
@@ -11,7 +10,7 @@ const SelectPhosphorIcons: React.FC = () => {
   const excellenceIcons = [
     { name: 'Diamond', component: Diamond, import: 'Diamond' },
     { name: 'DiamondsFour', component: DiamondsFour, import: 'DiamondsFour' },
-    { name: 'Gem', component: Gem, import: 'Gem' },
+    { name: 'CrystalBall', component: CrystalBall, import: 'CrystalBall' },
     { name: 'Crown', component: Crown, import: 'Crown' },
     { name: 'Star', component: Star, import: 'Star' },
     { name: 'Trophy', component: Trophy, import: 'Trophy' },
