@@ -36,6 +36,7 @@ const App = () => (
             <Route path="/test-icons" element={<TestIconsPage />} />
             <Route path="/select-phosphor-icons" element={<SelectPhosphorIcons />} />
             <Route path="/test-svg-formats" element={<TestSvgFormats />} />
+            <Route path="/test-tinysvg" element={<TestTinySvg />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
