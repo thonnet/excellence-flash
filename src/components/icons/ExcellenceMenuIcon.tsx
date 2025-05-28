@@ -13,15 +13,16 @@ export const ExcellenceMenuIcon: React.FC<ExcellenceMenuIconProps> = ({
   style = {}
 }) => {
   return (
-    <svg 
-      viewBox="0 0 16 16" 
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
+    <span 
       className={className}
-      style={{ fill: 'currentColor', ...style }}
+      style={{ 
+        fontSize: `${size}px`,
+        display: 'inline-block',
+        lineHeight: '1',
+        ...style 
+      }}
     >
-      <path d="M8 0L12 6H4L8 0ZM2 8L6 14H0L2 8ZM14 8L16 14H10L14 8ZM8 10L12 16H4L8 10Z"/>
-    </svg>
+      ◆
+    </span>
   );
 };
