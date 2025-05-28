@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -144,6 +145,33 @@
 /* ========================================
    COMPOSANTS RÉUTILISABLES
    ======================================== */
+
+/* === BOUTON ADD PERSONNALISÉ === */
+.btn-add {
+  background: transparent;
+  border: 1px solid #ee5a01;
+  color: white;
+  width: 37px;
+  height: 37px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-add:hover {
+  background: #ee5a01;
+  color: white;
+}
+
+.btn-add svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
 
 /* === PICTOGRAMMES DE CATÉGORIES - SYSTÈME CORRIGÉ === */
 .category-tag {

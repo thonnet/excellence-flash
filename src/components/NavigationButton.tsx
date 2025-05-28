@@ -1,13 +1,25 @@
 
 import React from 'react';
+import { PlusIcon } from './icons/PlusIcon';
 
 interface NavigationButtonProps {
-  variant: 'primary' | 'back';
+  variant: 'primary' | 'back' | 'add';
   onClick: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const NavigationButton: React.FC<NavigationButtonProps> = ({ variant, onClick, children }) => {
+  if (variant === 'add') {
+    return (
+      <button
+        onClick={onClick}
+        className="btn-add"
+      >
+        <PlusIcon />
+      </button>
+    );
+  }
+
   const baseClasses = "px-6 py-3 rounded-lg transition-all duration-200 font-medium";
   
   const variantStyles = {
@@ -23,7 +35,7 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({ variant, onC
     }
   };
 
-  const style = variantStyles[variant];
+  const style = variantStyles[variant as 'primary' | 'back'];
 
   return (
     <button
