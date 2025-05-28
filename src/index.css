@@ -8,7 +8,9 @@
 /* Import all style modules */
 @import './styles/variables.css';
 @import './styles/components.css';
-@import './styles/filters.css';
+@import './styles/filters-bar.css';
+@import './styles/search.css';
+@import './styles/controls.css';
 @import './styles/layouts.css';
 @import './styles/interactions.css';
 @import './styles/gallery.css';
